@@ -9,8 +9,8 @@ class DataBoundUtils {
             }
             return props;
         }
-        return null;
+        return [];
     }
 }
 
-DataBoundUtils.propStringRegex = new RegExp(/\$\{ *~?[\w.]+\w *}/);
+DataBoundUtils.propStringRegex = new RegExp(/\$\{ *~?[\w.]+\w *}/g);

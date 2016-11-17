@@ -1,6 +1,6 @@
 
 TestSuites.Utils = {
-    extractPropsFromString: function test_extractPropsFromString() {
+    extractSingleProp: () => {
         const propsToTest = [
             {prop: "${myProp}", expected: {expectedProp: "myProp", expectedMatch: "${myProp}"}}, // 0
             {prop: "  ${myProp}  ", expected: {expectedProp: "myProp", expectedMatch: "${myProp}"}}, // 1
@@ -22,11 +22,33 @@ TestSuites.Utils = {
             let pair = propsToTest[i];
             let dbProp = DataBoundUtils.extractPropsFromString(pair.prop);
             if (pair.expected == null) {
-                assert(dbProp == null, i + ": Expecting no match, got ", dbProp);
+                assert(dbProp.length == 0, i + ": Expecting no match, got ", dbProp);
             } else {
                 dbProp = dbProp[0];
                 assert(dbProp.prop == pair.expected.expectedProp, i + ": Extracted prop should be '" + pair.expected.expectedProp + "', got '" + dbProp.prop + "'");
                 assert(dbProp.match == pair.expected.expectedMatch, i + ": Extracted match should be '" + pair.expected.expectedMatch + "', got '" + dbProp.match + "'");
+            }
+        }
+    },
+    extractMultipleProps: () => {
+        let cases = [
+            {str: "no props at all", expectedCount: 0},
+            {str: "${onlyProp}", expectedCount: 1, expectedMatches: [{prop: "onlyProp", match: "${onlyProp}"}]},
+            {str: "${firstProp} some middle text ${secondProp}", expectedCount: 2, expectedMatches: [{prop: "firstProp", match: "${firstProp}"}, {prop: "secondProp", match: "${secondProp}"}]},
+            {str: "${firstProp ${secondProp}}", expectedCount: 1, expectedMatches: [{prop: "secondProp", match: "${secondProp}"}]},
+            {str: "${firstProp ${secondProp}", expectedCount: 1, expectedMatches: [{prop: "secondProp", match: "${secondProp}"}]},
+        ];
+
+        for (let i = 0; i < cases.length; i++) {
+            let pair = cases[i];
+            let props = DataBoundUtils.extractPropsFromString(pair.str);
+            assert(props.length == pair.expectedCount, i + ": Expected " + pair.expectedCount + " props, got " + props.length);
+            if (pair.expectedCount > 0) {
+                for (let j=0; j<pair.expectedCount; j++) {
+                    assert(pair.expectedMatches[j].prop == props[j].prop
+                        && pair.expectedMatches[j].match == props[j].match,
+                    j + ": Expected ", pair.expectedMatches[j], + ", got ", props[j]);
+                }
             }
         }
     }
