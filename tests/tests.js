@@ -5,7 +5,9 @@ TestSuites.Utils = {
             {prop: "${myProp}", expected: "myProp"},
             {prop: "  ${myProp}  ", expected: "myProp"},
             {prop: "${  myProp  }", expected: "myProp"},
-
+            {prop: "${~rootProp}", expected: "~rootProp"},
+            {prop: "${root~Prop}", expected: ""},
+            {prop: "${rootProp~}", expected: ""}
         ];
 
         for (let i = 0; i < propsToTest.length; i++) {
