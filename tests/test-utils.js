@@ -11,9 +11,7 @@ function assert(condition, failMessage) {
 let TestSuites = {};
 
 window.addEventListener('load', function () {
-    console.log(TestSuites);
     let suites = Object.keys(TestSuites);
-    console.log(suites);
     for (let i=0; i<suites.length; i++) {
         let suiteName = suites[i];
         console.log("Starting Suite: " + suiteName);
