@@ -1,7 +1,7 @@
 
 TestSuites.Utils = {
     extractSingleProp: () => {
-        const propsToTest = [
+        const cases = [
             {prop: "${myProp}",
                 expected: {expectedProp: "myProp", expectedMatch: "${myProp}"}}, // 0
             {prop: "  ${myProp}  ",
@@ -26,17 +26,17 @@ TestSuites.Utils = {
             {prop: "${seci@lCh@r@cters}", expected: null} // 13
         ];
 
-        for (let i = 0; i < propsToTest.length; i++) {
-            let pair = propsToTest[i];
-            let dbProp = DataBoundUtils.extractPropsFromString(pair.prop);
+        for (let i = 0; i < cases.length; i++) {
+            let pair = cases[i];
+            let props = DataBoundUtils.extractPropsFromString(pair.prop);
             if (pair.expected == null) {
-                assert(dbProp.length == 0, i + ": Expecting no match, got ", dbProp);
+                assert(props.length == 0, i + ": Expecting no match, got ", props);
             } else {
-                dbProp = dbProp[0];
-                assert(dbProp.prop == pair.expected.expectedProp, i + ": Extracted prop should be '" +
-                    pair.expected.expectedProp + "', got '" + dbProp.prop + "'");
-                assert(dbProp.match == pair.expected.expectedMatch, i + ": Extracted match should be '" +
-                    pair.expected.expectedMatch + "', got '" + dbProp.match + "'");
+                props = props[0];
+                assert(props.prop == pair.expected.expectedProp, i + ": Extracted prop should be '" +
+                    pair.expected.expectedProp + "', got '" + props.prop + "'");
+                assert(props.match == pair.expected.expectedMatch, i + ": Extracted match should be '" +
+                    pair.expected.expectedMatch + "', got '" + props.match + "'");
             }
         }
     },
