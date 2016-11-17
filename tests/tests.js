@@ -2,26 +2,31 @@
 TestSuites.Utils = {
     extractPropFromString: function test_extractPropFromString() {
         const propsToTest = [
-            {prop: "${myProp}", expected: "myProp"}, // 0
-            {prop: "  ${myProp}  ", expected: "myProp"}, // 1
-            {prop: "${  myProp  }", expected: "myProp"}, // 2
-            {prop: "${~rootProp}", expected: "~rootProp"}, // 3
-            {prop: "${root~Prop}", expected: ""}, // 4
-            {prop: "${rootProp~}", expected: ""}, // 5
-            {prop: "${myProp.subProp}", expected: "myProp.subProp"}, // 6
-            {prop: "${.myProp.subProp}", expected: ".myProp.subProp"}, // 7
-            {prop: "${myProp.}", expected: ""}, // 8
-            {prop: "${~.myProp}", expected: "~.myProp"}, // 9
-            {prop: "${.~myProp}", expected: ""}, // 10
-            {prop: "not props ${aProp}", expected: "aProp"}, // 11
-            {prop: "${no spaces}", expected: ""}, // 12
-            {prop: "${seci@lCh@r@cters", expected: ""} // 13
+            {prop: "${myProp}", expected: {expectedProp: "myProp", expectedMatch: "${myProp}"}}, // 0
+            {prop: "  ${myProp}  ", expected: {expectedProp: "myProp", expectedMatch: "${myProp}"}}, // 1
+            {prop: "${  myProp  }", expected: {expectedProp: "myProp", expectedMatch: "${  myProp  }"}}, // 2
+            {prop: "${~rootProp}", expected: {expectedProp: "~rootProp", expectedMatch: "${~rootProp}"}}, // 3
+            {prop: "${root~Prop}", expected: null}, // 4
+            {prop: "${rootProp~}", expected: null}, // 5
+            {prop: "${myProp.subProp}", expected: {expectedProp: "myProp.subProp", expectedMatch: "${myProp.subProp}"}}, // 6
+            {prop: "${.myProp.subProp}", expected: {expectedProp: ".myProp.subProp", expectedMatch: "${.myProp.subProp}"}}, // 7
+            {prop: "${myProp.}", expected: null}, // 8
+            {prop: "${~.myProp}", expected: {expectedProp: "~.myProp", expectedMatch: "${~.myProp}"}}, // 9
+            {prop: "${.~myProp}", expected: null}, // 10
+            {prop: "not props ${aProp}", expected: {expectedProp: "aProp", expectedMatch: "${aProp}"}}, // 11
+            {prop: "${no spaces}", expected: null}, // 12
+            {prop: "${seci@lCh@r@cters", expected: null} // 13
         ];
 
         for (let i = 0; i < propsToTest.length; i++) {
             let pair = propsToTest[i];
             let dbProp = DataBoundUtils.extractPropFromString(pair.prop);
-            assert(dbProp == pair.expected, i + ": Extracted prop should be '" + pair.expected + "', got '" + dbProp + "'");
+            if (pair.expected == null) {
+                assert(dbProp == null, i + ": Expecting no match, got ", dbProp);
+            } else {
+                assert(dbProp.prop == pair.expected.expectedProp, i + ": Extracted prop should be '" + pair.expected.expectedProp + "', got '" + dbProp.prop + "'");
+                assert(dbProp.match == pair.expected.expectedMatch, i + ": Extracted match should be '" + pair.expected.expectedMatch + "', got '" + dbProp.match + "'");
+            }
         }
     }
 };
