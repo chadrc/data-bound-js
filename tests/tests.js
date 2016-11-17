@@ -69,3 +69,38 @@ TestSuites.Utils = {
         }
     }
 };
+
+TestSuites.BoundPropString = {
+    singlePropStringRender: () => {
+        let testStr = "Hello, World!";
+        let propStr = new DataBoundPropString("${myProp}");
+        let renderStr = propStr.renderWithContext({myProp: testStr});
+        assert(renderStr == testStr, "Expected " + testStr + ", got " + renderStr);
+    },
+    multiPropStringRender: () => {
+        let testStr = "Hello, World!";
+        let propStr = new DataBoundPropString("${firstProp} ${secondProp}");
+        let renderStr = propStr.renderWithContext({firstProp: "Hello,", secondProp: "World!"});
+        assert(renderStr == testStr, "Expected " + testStr + ", got " + renderStr);
+    },
+    selfPropStringRender: () => {
+        let testStr = "Hello, Self!";
+        let propStr = new DataBoundPropString("${.helloProp}");
+        let renderStr = propStr.renderWithContext(
+            {helloProp: "Goodbye"},
+            {helloProp: testStr},
+            {helloProp: "Hello, World!"}
+        );
+        assert(renderStr == testStr, "Expected " + testStr + ", got " + renderStr);
+    },
+    rootPropStringRender: () => {
+        let testStr = "Hello, World!";
+        let propStr = new DataBoundPropString("${~helloProp}");
+        let renderStr = propStr.renderWithContext(
+            {helloProp: "Goodbye"},
+            {helloProp: "Hello, Self!"},
+            {helloProp: testStr}
+        );
+        assert(renderStr == testStr, "Expected " + testStr + ", got " + renderStr);
+    }
+};
