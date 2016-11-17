@@ -2,12 +2,18 @@
 TestSuites.Utils = {
     extractPropFromString: function test_extractPropFromString() {
         const propsToTest = [
-            {prop: "${myProp}", expected: "myProp"},
-            {prop: "  ${myProp}  ", expected: "myProp"},
-            {prop: "${  myProp  }", expected: "myProp"},
-            {prop: "${~rootProp}", expected: "~rootProp"},
-            {prop: "${root~Prop}", expected: ""},
-            {prop: "${rootProp~}", expected: ""}
+            {prop: "${myProp}", expected: "myProp"}, // 0
+            {prop: "  ${myProp}  ", expected: "myProp"}, // 1
+            {prop: "${  myProp  }", expected: "myProp"}, // 2
+            {prop: "${~rootProp}", expected: "~rootProp"}, // 3
+            {prop: "${root~Prop}", expected: ""}, // 4
+            {prop: "${rootProp~}", expected: ""}, // 5
+            {prop: "${myProp.subProp}", expected: "myProp.subProp"}, // 6
+            {prop: "${.myProp.subProp}", expected: ".myProp.subProp"}, // 7
+            {prop: "${myProp.}", expected: ""}, // 8
+            {prop: "${~.myProp}", expected: "~.myProp"}, // 9
+            {prop: "${.~myProp}", expected: ""}, // 10
+
         ];
 
         for (let i = 0; i < propsToTest.length; i++) {
