@@ -17,8 +17,7 @@ TestSuites.Utils = {
             {prop: "${.myProp.subProp}",
                 expected: {expectedProp: ".myProp.subProp", expectedMatch: "${.myProp.subProp}"}}, // 7
             {prop: "${myProp.}", expected: null}, // 8
-            {prop: "${~.myProp}",
-                expected: {expectedProp: "~.myProp", expectedMatch: "${~.myProp}"}}, // 9
+            {prop: "${~.myProp}", expected: null}, // 9
             {prop: "${.~myProp}", expected: null}, // 10
             {prop: "not props ${aProp}",
                 expected: {expectedProp: "aProp", expectedMatch: "${aProp}"}}, // 11

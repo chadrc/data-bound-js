@@ -13,7 +13,7 @@ class DataBoundUtils {
     }
 }
 
-DataBoundUtils.propStringRegex = new RegExp(/\$\{ *~?[\w.]+\w *}/g);
+DataBoundUtils.propStringRegex = new RegExp(/\$\{ *(~(?!\.))?[\w.]+\w *}/g);
 
 class DataBoundPropString {
     constructor(str) {
