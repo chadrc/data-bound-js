@@ -13,7 +13,9 @@ TestSuites.Utils = {
             {prop: "${myProp.}", expected: ""}, // 8
             {prop: "${~.myProp}", expected: "~.myProp"}, // 9
             {prop: "${.~myProp}", expected: ""}, // 10
-
+            {prop: "not props ${aProp}", expected: "aProp"},
+            {prop: "${no spaces}", expected: ""},
+            {prop: "${seci@lCh@r@cters", expected: ""}
         ];
 
         for (let i = 0; i < propsToTest.length; i++) {
