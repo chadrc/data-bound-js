@@ -1,4 +1,6 @@
 
+TestSuites.applicationName = "DataBoundJs";
+
 TestSuites.suites.push({
     name: "Utils",
     tests: [
