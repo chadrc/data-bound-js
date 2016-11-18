@@ -8,8 +8,31 @@ function assert(condition, failMessage) {
     }
 }
 
-function runTestMethod(suiteNo, testNo) {
+function runTest(suiteNo, testNo) {
+    let suite = TestSuites.suites[suiteNo];
+    let test = suite.tests[testNo];
+    try {
+        test.method();
+        test.setSuccess();
+        return true;
+    } catch (err) {
+        test.setError(err);
+        return false;
+    }
+}
 
+function runSuite(suiteNo) {
+    let suite = TestSuites.suites[suiteNo];
+    let successCount = 0;
+    let failCount = 0;
+    for (let i=0; i<suite.tests.length; i++) {
+        if (runTest(suiteNo, i)) {
+            successCount++;
+        } else {
+            failCount++;
+        }
+    }
+    return {successCount: successCount, failCount: failCount};
 }
 
 function createTestDisplay() {
@@ -53,7 +76,9 @@ function createTestDisplay() {
         for (let j=0; j<suite.tests.length; j++) {
             let test = suite.tests[j];
 
+            let testId = "suite" + i + "-test" + j;
             let testRoot = document.createElement('div');
+            testRoot.setAttribute('id', testId);
             testRoot.setAttribute('class', 'card-block m-1 rounded card-inverse card-info');
 
             let testHeader = document.createElement('h5');
@@ -78,10 +103,23 @@ function createTestDisplay() {
             testRoot.appendChild(testHeader);
             testRoot.appendChild(testMessage);
 
+            test.setError = (msg) => {
+                $("#"+testId).switchClass('card-info', 'card-danger');
+                testMessage.innerHTML = msg;
+            };
+            test.setSuccess = () => {
+                $("#"+testId).switchClass('card-info', 'card-success');
+                testMessage.innerHTML = "Success";
+            };
+
+            testRunBtn.addEventListener('click', () => runTest(i, j));
+
             suiteTestContainer.appendChild(testRoot);
         }
 
         suiteRoot.appendChild(suiteTestContainer);
+
+        suiteRunBtn.addEventListener('click', () => runSuite(i));
 
         root.appendChild(suiteRoot);
     }
