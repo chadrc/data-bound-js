@@ -79,6 +79,10 @@ function createTestDisplay() {
 
             successAlert.removeAttribute('hidden');
             successAlert.innerHTML = successCount + " Succeeded"
+
+            if (failCount > 0) {
+                $("#"+suiteToggleId).collapse('show');
+            }
         };
 
         suiteHeader.appendChild(suiteRunBtn);
