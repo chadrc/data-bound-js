@@ -9,13 +9,13 @@ TestSuites.Utils = {
             {prop: "${  myProp  }",
                 expected: {expectedProp: "myProp", expectedMatch: "${  myProp  }"}}, // 2
             {prop: "${~rootProp}",
-                expected: {expectedProp: "~rootProp", expectedMatch: "${~rootProp}"}}, // 3
+                expected: {expectedProp: "rootProp", expectedMatch: "${~rootProp}", expectedRoot: true}}, // 3
             {prop: "${root~Prop}", expected: null}, // 4
             {prop: "${rootProp~}", expected: null}, // 5
             {prop: "${myProp.subProp}",
                 expected: {expectedProp: "myProp.subProp", expectedMatch: "${myProp.subProp}"}}, // 6
             {prop: "${.myProp.subProp}",
-                expected: {expectedProp: ".myProp.subProp", expectedMatch: "${.myProp.subProp}"}}, // 7
+                expected: {expectedProp: "myProp.subProp", expectedMatch: "${.myProp.subProp}", expectedSelf: true}}, // 7
             {prop: "${myProp.}", expected: null}, // 8
             {prop: "${~.myProp}", expected: null}, // 9
             {prop: "${.~myProp}", expected: null}, // 10
@@ -32,6 +32,12 @@ TestSuites.Utils = {
                 assert(props.length == 0, i + ": Expecting no match, got ", props);
             } else {
                 props = props[0];
+                if (pair.expectedRoot) {
+                    assert(props.rootRef == true, i + ": Expected to be root ref.");
+                }
+                if (pair.expectedSelf) {
+                    assert(props.selfRef == true, i + ": Expected to be self ref.");
+                }
                 assert(props.prop == pair.expected.expectedProp, i + ": Extracted prop should be '" +
                     pair.expected.expectedProp + "', got '" + props.prop + "'");
                 assert(props.match == pair.expected.expectedMatch, i + ": Extracted match should be '" +

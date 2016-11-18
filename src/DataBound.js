@@ -5,7 +5,18 @@ class DataBoundUtils {
         if (match && match.length > 0) {
             let props = [];
             for (let i=0; i<match.length; i++) {
-                props.push({match: match[i], prop: match[i].slice(2, -1).trim()})
+                let m = match[i];
+                let p = match[i].slice(2, -1).trim();
+                let rootRef = false;
+                let selfRef = false;
+                if (p.startsWith(".")) {
+                    selfRef = true;
+                    p = p.slice(1);
+                } else if (p.startsWith("~")) {
+                    rootRef = true;
+                    p = p.slice(1);
+                }
+                props.push({match: m, prop: p, rootRef: rootRef, selfRef: selfRef})
             }
             return props;
         }
@@ -26,10 +37,10 @@ class DataBoundPropString {
         for (let i=0; i<this.matches.length; i++) {
             let value;
             let prop = this.matches[i].prop;
-            if (prop.startsWith("~")) {
-                value = rootContext[prop.slice(1)];
-            } else if (prop.startsWith(".")) {
-                value = selfContext[prop.slice(1)];
+            if (this.matches[i].rootRef) {
+                value = rootContext[prop];
+            } else if (this.matches[i].selfRef) {
+                value = selfContext[prop];
             } else {
                 value = context[prop];
             }
