@@ -97,7 +97,7 @@ TestSuites.suites.push({
                 parentProp: {
                     nestedProp: "Nested Prop"
                 },
-                methodProp: () => {
+                methodProp() {
                     return "Method Prop";
                 }
             },
@@ -112,7 +112,7 @@ TestSuites.suites.push({
     tests: [
         {
             name: "Single Prop String Render",
-            method: (data) => {
+            method(data) {
                 let propStr = new DataBoundPropString("${myProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
                 assertExpectedValue(renderStr, data.mainContext.myProp);
@@ -120,7 +120,7 @@ TestSuites.suites.push({
         },
         {
             name: "Multi Prop String Render",
-            method: (data) => {
+            method(data) {
                 let propStr = new DataBoundPropString("${myProp} is ${helloProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
                 assertExpectedValue(renderStr, data.mainContext.myProp + " is " + data.mainContext.helloProp);
@@ -129,7 +129,7 @@ TestSuites.suites.push({
         },
         {
             name: "Self Prop String Render",
-            method: (data) => {
+            method(data) {
                 let propStr = new DataBoundPropString("${.myProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext, data.selfContext, data.rootContext);
                 assertExpectedValue(renderStr, data.selfContext.myProp);
@@ -137,7 +137,7 @@ TestSuites.suites.push({
         },
         {
             name: "Root Prop String Render",
-            method: (data) => {
+            method(data) {
                 let propStr = new DataBoundPropString("${~myProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext, data.selfContext, data.rootContext);
                 assertExpectedValue(renderStr, data.rootContext.myProp);
@@ -145,32 +145,32 @@ TestSuites.suites.push({
         },
         {
             name: "Method Call Render",
-            method: (data) => {
+            method(data) {
                 let propStr = new DataBoundPropString("${methodProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
                 assertExpectedValue(renderStr, data.mainContext.methodProp());
             }
         },
         {
-            name: "Multi same prop render",
+            name: "Multi Same Prop Render",
             todo: "Refactor prop extraction and strings so duplicated props aren't stored twice.",
-            method: (data) => {
+            method(data) {
                 let propStr = new DataBoundPropString("${myProp} ${myProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
                 assertExpectedValue(renderStr, data.mainContext.myProp + " " + data.mainContext.myProp);
             }
         },
         {
-            name: "Nested props single depth",
+            name: "Nested Props Single Depth",
             todo: "Research 'pre-compiling' nested props.",
-            method: (data) => {
+            method(data) {
                 let propStr = new DataBoundPropString("${parentProp.nestedProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
                 assertExpectedValue(renderStr, data.mainContext.parentProp.nestedProp);
             }
         },
         {
-            name: "Undefined prop",
+            name: "Undefined Prop",
             method(data) {
                 let propStr = new DataBoundPropString("${undefinedProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
@@ -178,8 +178,8 @@ TestSuites.suites.push({
             }
         },
         {
-            name: "Prop of undefined prop",
-            method: (data) => {
+            name: "Prop of Undefined Prop",
+            method(data) {
                 let propStr = new DataBoundPropString("${undefinedProp.nonexistentProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
                 assertExpectedValue(renderStr, 'undefined');
