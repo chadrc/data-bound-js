@@ -55,8 +55,7 @@ class DataBoundPropString {
             if (ctx != null && currentProp in ctx) {
                 value = ctx[currentProp];
             } else {
-                value = 'undefined';
-                break;
+                return; // undefined
             }
 
             if (value instanceof Function) {
