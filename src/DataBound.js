@@ -44,6 +44,9 @@ class DataBoundPropString {
             } else {
                 value = context[prop];
             }
+            if (value instanceof Function) {
+                value = value();
+            }
             renderStr = renderStr.replace(this.matches[i].match, value);
         }
         return renderStr;

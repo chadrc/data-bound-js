@@ -92,45 +92,58 @@ TestSuites.suites.push({
         {
             name: "Single Prop String Render",
             method: () => {
-                        let testStr = "Hello, World!";
+                        let expected = "Hello, World!";
                         let propStr = new DataBoundPropString("${myProp}");
-                        let renderStr = propStr.renderWithContext({myProp: testStr});
-                        assert(renderStr == testStr, "Expected " + testStr + ", got " + renderStr);
+                        let renderStr = propStr.renderWithContext({myProp: expected});
+                        assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
                     }
         },
         {
             name: "Multi Prop String Render",
             method: () => {
-                let testStr = "Hello, World!";
+                let expected = "Hello, World!";
                 let propStr = new DataBoundPropString("${firstProp} ${secondProp}");
                 let renderStr = propStr.renderWithContext({firstProp: "Hello,", secondProp: "World!"});
-                assert(renderStr == testStr, "Expected " + testStr + ", got " + renderStr);
+                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
             }
         },
         {
             name: "Self Prop String Render",
             method: () => {
-                let testStr = "Hello, Self!";
+                let expected = "Hello, Self!";
                 let propStr = new DataBoundPropString("${.helloProp}");
                 let renderStr = propStr.renderWithContext(
                     {helloProp: "Goodbye"},
-                    {helloProp: testStr},
+                    {helloProp: expected},
                     {helloProp: "Hello, World!"}
                 );
-                assert(renderStr == testStr, "Expected " + testStr + ", got " + renderStr);
+                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
             }
         },
         {
             name: "Root Prop String Render",
             method: () => {
-                let testStr = "Hello, World!";
+                let expected = "Hello, World!";
                 let propStr = new DataBoundPropString("${~helloProp}");
                 let renderStr = propStr.renderWithContext(
                     {helloProp: "Goodbye"},
                     {helloProp: "Hello, Self!"},
-                    {helloProp: testStr}
+                    {helloProp: expected}
                 );
-                assert(renderStr == testStr, "Expected " + testStr + ", got " + renderStr);
+                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
+            }
+        },
+        {
+            name: "Method Call Render",
+            method: () => {
+                let expected = "Method Testing";
+                let propStr = new DataBoundPropString("${methodProp}");
+                let renderStr = propStr.renderWithContext({
+                    methodProp: function () {
+                        return expected;
+                    }
+                });
+                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
             }
         }
     ]

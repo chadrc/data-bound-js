@@ -17,6 +17,7 @@ function runTest(suiteNo, testNo) {
         return true;
     } catch (err) {
         test.setError(err);
+        console.error(err);
         return false;
     }
 }
