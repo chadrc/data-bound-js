@@ -93,6 +93,7 @@ TestSuites.suites.push({
             mainContext: {
                 helloProp: "Hello World!",
                 myProp: "My Prop",
+                nullProp: null,
                 parentProp: {
                     nestedProp: "Nested Prop"
                 },
@@ -180,6 +181,22 @@ TestSuites.suites.push({
             name: "Prop of undefined prop",
             method: (data) => {
                 let propStr = new DataBoundPropString("${undefinedProp.nonexistentProp}");
+                let renderStr = propStr.renderWithContext(data.mainContext);
+                assertExpectedValue(renderStr, 'undefined');
+            }
+        },
+        {
+            name: "Null Prop",
+            method(data) {
+                let propStr = new DataBoundPropString("${nullProp}");
+                let renderStr = propStr.renderWithContext(data.mainContext);
+                assertExpectedValue(renderStr, 'null');
+            }
+        },
+        {
+            name: "Prop of Null Prop",
+            method(data) {
+                let propStr = new DataBoundPropString("${nullProp.nonexistentProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
                 assertExpectedValue(renderStr, 'undefined');
             }

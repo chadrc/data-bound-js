@@ -49,7 +49,7 @@ class DataBoundPropString {
 
             for (let j=0; j<parts.length; j++) {
                 let currentProp = parts[j];
-                if (currentProp in ctx) {
+                if (ctx != null && currentProp in ctx) {
                     value = ctx[currentProp];
                 } else {
                     value = 'undefined';
