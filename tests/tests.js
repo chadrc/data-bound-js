@@ -167,6 +167,22 @@ TestSuites.suites.push({
                 let renderStr = propStr.renderWithContext(data.mainContext);
                 assertExpectedValue(renderStr, data.mainContext.parentProp.nestedProp);
             }
+        },
+        {
+            name: "Undefined prop",
+            method(data) {
+                let propStr = new DataBoundPropString("${undefinedProp}");
+                let renderStr = propStr.renderWithContext(data.mainContext);
+                assertExpectedValue(renderStr, 'undefined');
+            }
+        },
+        {
+            name: "Prop of undefined prop",
+            method: (data) => {
+                let propStr = new DataBoundPropString("${undefinedProp.nonexistentProp}");
+                let renderStr = propStr.renderWithContext(data.mainContext);
+                assertExpectedValue(renderStr, 'undefined');
+            }
         }
     ]
 });

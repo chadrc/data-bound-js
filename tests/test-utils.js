@@ -11,7 +11,11 @@ function assert(condition, failMessage) {
 }
 
 function assertExpectedValue(value, expected, msgPrefix, msgSuffix) {
-    assert(value == expected, (msgPrefix || '') + "Expected '" + expected + "', got '" + value + "'" + (msgSuffix || ''))
+    assert(value == expected, (msgPrefix || '') + "Expected '" + expected + "', got '" + value + "'" + (msgSuffix || ''));
+}
+
+function assertExpectUndefined(value) {
+    assert(value === undefined, "Expected undefined value, got '" + value + "'");
 }
 
 // Test Setup and Display
