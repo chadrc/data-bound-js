@@ -87,6 +87,17 @@ class DataBoundAttribute {
     }
 }
 
+class DataBoundTextNode {
+    constructor(textNode) {
+        this.node = textNode;
+        this.propString = new DataBoundPropString(textNode.nodeValue);
+    }
+
+    renderWithContext(context, dataBoundContext, rootContext) {
+        this.node.nodeValue = this.propString.renderWithContext(context, dataBoundContext, rootContext);
+    }
+}
+
 class DataBoundBooleanAttribute {
     constructor(node) {
         this.nodeOwner = node.ownerElement;

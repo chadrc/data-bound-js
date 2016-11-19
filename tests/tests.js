@@ -272,6 +272,17 @@ TestSuites.suites.push({
                 booleanBinding.renderWithContext(data.context);
                 assert(!data.element.attributes.hidden, "Expected hidden attribute to not exist.");
             }
+        },
+        {
+            name: "Text Binding",
+            method(data) {
+                let textBinding = new DataBoundTextNode(data.element.childNodes[0]);
+                textBinding.renderWithContext(data.context);
+                assertExpectedValue(data.element.childNodes[0].nodeValue, "Description: " + data.context.description);
+                data.context.description = "Another description.";
+                textBinding.renderWithContext(data.context);
+                assertExpectedValue(data.element.childNodes[0].nodeValue, "Description: " + data.context.description);
+            }
         }
     ]
 });
