@@ -37,15 +37,23 @@ class DataBoundPropString {
         for (let i=0; i<this.matches.length; i++) {
             let value;
             let prop = this.matches[i].prop;
+            let parts = prop.split('.');
+            let ctx;
             if (this.matches[i].rootRef) {
-                value = rootContext[prop];
+                ctx = rootContext;
             } else if (this.matches[i].selfRef) {
-                value = selfContext[prop];
+                ctx = selfContext;
             } else {
-                value = context[prop];
+                ctx = context;
             }
-            if (value instanceof Function) {
-                value = value();
+
+            for (let j=0; j<parts.length; j++) {
+                let currentProp = parts[j];
+                value = ctx[currentProp];
+                if (value instanceof Function) {
+                    value = value();
+                }
+                ctx = value;
             }
             renderStr = renderStr.replace(this.matches[i].match, value);
         }

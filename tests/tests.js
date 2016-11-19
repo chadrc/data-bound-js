@@ -139,8 +139,32 @@ TestSuites.suites.push({
                 let expected = "Method Testing";
                 let propStr = new DataBoundPropString("${methodProp}");
                 let renderStr = propStr.renderWithContext({
-                    methodProp: function () {
+                    methodProp: () => {
                         return expected;
+                    }
+                });
+                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
+            }
+        },
+        {
+            name: "Multi same prop render",
+            method: () => {
+                let expected = "MyProp MyProp";
+                let propStr = new DataBoundPropString("${myProp} ${myProp}");
+                let renderStr = propStr.renderWithContext({
+                    myProp: "MyProp"
+                });
+                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
+            }
+        },
+        {
+            name: "Nested props single depth",
+            method: () => {
+                let expected = "Nested prop";
+                let propStr = new DataBoundPropString("${myProp.nestedProp}");
+                let renderStr = propStr.renderWithContext({
+                    myProp: {
+                        nestedProp: expected
                     }
                 });
                 assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
