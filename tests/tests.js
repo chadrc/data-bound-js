@@ -88,87 +88,89 @@ TestSuites.suites.push({
 
 TestSuites.suites.push({
     name: "Bound Prop String",
+    getData: () => {
+        return {
+            mainContext: {
+                helloProp: "Hello World!",
+                myProp: "My Prop",
+                parentProp: {
+                    nestedProp: "Nested Prop"
+                },
+                methodProp: () => {
+                    return "Method Prop";
+                }
+            },
+            selfContext: {
+                myProp: "My Self Prop"
+            },
+            rootContext: {
+                myProp: "My Root Prop"
+            }
+        }
+    },
     tests: [
         {
             name: "Single Prop String Render",
-            method: () => {
-                        let expected = "Hello, World!";
-                        let propStr = new DataBoundPropString("${myProp}");
-                        let renderStr = propStr.renderWithContext({myProp: expected});
-                        assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
-                    }
+            method: (data) => {
+                let propStr = new DataBoundPropString("${myProp}");
+                let renderStr = propStr.renderWithContext(data.mainContext);
+                assert(renderStr == data.mainContext.myProp,
+                    "Expected " + data.mainContext.myProp + ", got " + renderStr);
+            }
         },
         {
             name: "Multi Prop String Render",
-            method: () => {
-                let expected = "Hello, World!";
-                let propStr = new DataBoundPropString("${firstProp} ${secondProp}");
-                let renderStr = propStr.renderWithContext({firstProp: "Hello,", secondProp: "World!"});
-                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
+            method: (data) => {
+                let propStr = new DataBoundPropString("${myProp} is ${helloProp}");
+                let renderStr = propStr.renderWithContext(data.mainContext);
+                assert(renderStr == data.mainContext.myProp + " is " + data.mainContext.helloProp,
+                    "Expected " + data.mainContext.myProp + " is " + data.mainContext.helloProp + ", got " + renderStr);
             }
         },
         {
             name: "Self Prop String Render",
-            method: () => {
-                let expected = "Hello, Self!";
-                let propStr = new DataBoundPropString("${.helloProp}");
-                let renderStr = propStr.renderWithContext(
-                    {helloProp: "Goodbye"},
-                    {helloProp: expected},
-                    {helloProp: "Hello, World!"}
-                );
-                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
+            method: (data) => {
+                let propStr = new DataBoundPropString("${.myProp}");
+                let renderStr = propStr.renderWithContext(data.mainContext, data.selfContext, data.rootContext);
+                assert(renderStr == data.selfContext.myProp,
+                    "Expected " + data.selfContext.myProp + ", got " + renderStr);
             }
         },
         {
             name: "Root Prop String Render",
-            method: () => {
-                let expected = "Hello, World!";
-                let propStr = new DataBoundPropString("${~helloProp}");
-                let renderStr = propStr.renderWithContext(
-                    {helloProp: "Goodbye"},
-                    {helloProp: "Hello, Self!"},
-                    {helloProp: expected}
-                );
-                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
+            method: (data) => {
+                let propStr = new DataBoundPropString("${~myProp}");
+                let renderStr = propStr.renderWithContext(data.mainContext, data.selfContext, data.rootContext);
+                assert(renderStr == data.rootContext.myProp,
+                    "Expected " + data.rootContext.myProp + ", got " + renderStr);
             }
         },
         {
             name: "Method Call Render",
-            method: () => {
-                let expected = "Method Testing";
+            method: (data) => {
                 let propStr = new DataBoundPropString("${methodProp}");
-                let renderStr = propStr.renderWithContext({
-                    methodProp: () => {
-                        return expected;
-                    }
-                });
+                let renderStr = propStr.renderWithContext(data.mainContext);
+                let expected = data.mainContext.methodProp();
                 assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
             }
         },
         {
             name: "Multi same prop render",
             todo: "Refactor prop extraction and strings so duplicated props aren't stored twice.",
-            method: () => {
-                let expected = "MyProp MyProp";
+            method: (data) => {
                 let propStr = new DataBoundPropString("${myProp} ${myProp}");
-                let renderStr = propStr.renderWithContext({
-                    myProp: "MyProp"
-                });
+                let renderStr = propStr.renderWithContext(data.mainContext);
+                let expected = data.mainContext.myProp + " " + data.mainContext.myProp;
                 assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
             }
         },
         {
             name: "Nested props single depth",
             todo: "Research 'pre-compiling' nested props.",
-            method: () => {
-                let expected = "Nested prop";
-                let propStr = new DataBoundPropString("${myProp.nestedProp}");
-                let renderStr = propStr.renderWithContext({
-                    myProp: {
-                        nestedProp: expected
-                    }
-                });
+            method: (data) => {
+                let propStr = new DataBoundPropString("${parentProp.nestedProp}");
+                let renderStr = propStr.renderWithContext(data.mainContext);
+                let expected = data.mainContext.parentProp.nestedProp;
                 assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
             }
         }

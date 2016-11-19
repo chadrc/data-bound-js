@@ -30,7 +30,11 @@ function runTest(suiteNo, testNo) {
     let suite = TestSuites.suites[suiteNo];
     let test = suite.tests[testNo];
     try {
-        test.method();
+        let data;
+        if (suite.getData && suite.getData instanceof Function) {
+            data = suite.getData();
+        }
+        test.method(data);
         test.setSuccess();
         return true;
     } catch (err) {
