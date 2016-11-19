@@ -32,35 +32,45 @@ class DataBoundPropString {
         this.matches = DataBoundUtils.extractPropsFromString(str);
     }
 
-    renderWithContext(context, selfContext, rootContext) {
+    getValueWithContext(propIndex, context, dataBoundContext, rootContext) {
+        if (propIndex >= this.matches.length) {
+            return; // undefined
+        }
+
+        let value;
+        let match = this.matches[propIndex];
+        let prop = match.prop;
+        let parts = prop.split('.');
+        let ctx;
+        if (match.rootRef) {
+            ctx = rootContext;
+        } else if (match.selfRef) {
+            ctx = dataBoundContext;
+        } else {
+            ctx = context;
+        }
+
+        for (let j=0; j<parts.length; j++) {
+            let currentProp = parts[j];
+            if (ctx != null && currentProp in ctx) {
+                value = ctx[currentProp];
+            } else {
+                value = 'undefined';
+                break;
+            }
+
+            if (value instanceof Function) {
+                value = value();
+            }
+            ctx = value;
+        }
+        return value;
+    }
+
+    renderWithContext(context, dataBoundContext, rootContext) {
         let renderStr = this.originalStr;
         for (let i=0; i<this.matches.length; i++) {
-            let value;
-            let prop = this.matches[i].prop;
-            let parts = prop.split('.');
-            let ctx;
-            if (this.matches[i].rootRef) {
-                ctx = rootContext;
-            } else if (this.matches[i].selfRef) {
-                ctx = selfContext;
-            } else {
-                ctx = context;
-            }
-
-            for (let j=0; j<parts.length; j++) {
-                let currentProp = parts[j];
-                if (ctx != null && currentProp in ctx) {
-                    value = ctx[currentProp];
-                } else {
-                    value = 'undefined';
-                    break;
-                }
-
-                if (value instanceof Function) {
-                    value = value();
-                }
-                ctx = value;
-            }
+            let value = this.getValueWithContext(i, context, dataBoundContext, rootContext);
             renderStr = renderStr.replace(this.matches[i].match, value);
         }
         return renderStr;

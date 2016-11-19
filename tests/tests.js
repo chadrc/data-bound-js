@@ -87,13 +87,15 @@ TestSuites.suites.push({
 });
 
 TestSuites.suites.push({
-    name: "Bound Prop String",
+    name: "PropStrings",
     getData: () => {
         return {
             mainContext: {
                 helloProp: "Hello World!",
                 myProp: "My Prop",
                 nullProp: null,
+                numberProp: 2000,
+                booleanProp: true,
                 parentProp: {
                     nestedProp: "Nested Prop"
                 },
@@ -211,12 +213,24 @@ TestSuites.suites.push({
                 let renderStr = propStr.renderWithContext(data.mainContext);
                 assertExpectedValue(renderStr, 'undefined');
             }
+        },
+        {
+            name: "Get Prop Value",
+            method(data) {
+                let propStr = new DataBoundPropString("${numberProp} ${booleanProp} ${myProp}");
+                let numberValue = propStr.getValueWithContext(0, data.mainContext, data.selfContext, data.rootContext);
+                assertExpectedValue(numberValue, data.mainContext.numberProp);
+                let booleanValue = propStr.getValueWithContext(1, data.mainContext, data.selfContext, data.rootContext);
+                assertExpectedValue(booleanValue, data.mainContext.booleanProp);
+                let stringValue = propStr.getValueWithContext(2, data.mainContext, data.selfContext, data.rootContext);
+                assertExpectedValue(stringValue, data.mainContext.myProp);
+            }
         }
     ]
 });
 
 TestSuites.suites.push({
-    name: "Data Bound Bindings",
+    name: "Bindings",
     getData() {
         let element = document.createElement('div');
         element.setAttribute('class', '${classes}');
