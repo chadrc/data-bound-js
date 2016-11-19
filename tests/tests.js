@@ -99,6 +99,9 @@ TestSuites.suites.push({
                 },
                 methodProp() {
                     return "Method Prop";
+                },
+                get getProp() {
+                    return "Gotten Prop";
                 }
             },
             selfContext: {
@@ -149,6 +152,14 @@ TestSuites.suites.push({
                 let propStr = new DataBoundPropString("${methodProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
                 assertExpectedValue(renderStr, data.mainContext.methodProp());
+            }
+        },
+        {
+            name: "Getter Prop",
+            method(data) {
+                let propStr = new DataBoundPropString("${getProp}");
+                let renderStr = propStr.renderWithContext(data.mainContext);
+                assertExpectedValue(renderStr, data.mainContext.getProp);
             }
         },
         {
