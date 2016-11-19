@@ -2,6 +2,24 @@
  * Created by chad on 11/16/16.
  */
 
+let TestSuites = {
+    applicationName: "Test Application",
+    suites: []
+};
+
+window.addEventListener('load', function () {
+    initTestDisplay();
+});
+
+function initTestDisplay() {
+    createTestDisplay();
+
+    for (let i=0; i<TestSuites.suites.length; i++) {
+        let suite = TestSuites.suites[i];
+        runSuite(i);
+    }
+}
+
 function assert(condition, failMessage) {
     if (!condition) {
         throw "Assertion failed: " + failMessage;
@@ -37,16 +55,52 @@ function runSuite(suiteNo) {
     return {successCount: successCount, failCount: failCount};
 }
 
+function todoCount() {
+    let count = 0;
+    for (let i=0; i<TestSuites.suites.length; i++) {
+        let suite = TestSuites.suites[i];
+        for (let j=0; j<suite.tests.length; j++) {
+            let test = suite.tests[j];
+            if (test.todo) {
+                if (test.todo instanceof Array) {
+                    count += test.todo.length;
+                } else {
+                    count++;
+                }
+            }
+        }
+    }
+    return count;
+}
+
 function createTestDisplay() {
     let root = document.createElement('div');
+    root.setAttribute('class', 'p-1');
+
     let header = document.createElement('h1');
     header.innerHTML = TestSuites.applicationName;
+
+    let todoBtn = document.createElement('button');
+    todoBtn.setAttribute('type', 'button');
+    todoBtn.setAttribute('class', 'btn btn-info ml-1');
+    todoBtn.setAttribute('data-toggle', 'modal');
+    todoBtn.setAttribute('data-target', '#todoModal');
+    todoBtn.innerHTML = "TODO&nbsp;";
+
+    let todoBtnTag = document.createElement('span');
+    todoBtnTag.setAttribute('class', 'tag tag-primary tag-pill');
+    todoBtnTag.innerHTML = todoCount();
+
+    todoBtn.appendChild(todoBtnTag);
+
+    header.appendChild(todoBtn);
+
     root.appendChild(header);
 
     for (let i=0; i<TestSuites.suites.length; i++) {
         let suite = TestSuites.suites[i];
         let suiteRoot = document.createElement('div');
-        suiteRoot.setAttribute('class', 'card');
+        suiteRoot.setAttribute('class', 'card clearfix');
 
         let suiteHeader = document.createElement('div');
         suiteHeader.setAttribute('class', 'card-header ');
@@ -103,7 +157,11 @@ function createTestDisplay() {
             let testId = "suite" + i + "-test" + j;
             let testRoot = document.createElement('div');
             testRoot.setAttribute('id', testId);
-            testRoot.setAttribute('class', 'card-block m-1 rounded card-inverse card-info');
+            testRoot.setAttribute('class', 'card-block col-lg-6');
+
+            let testContent = document.createElement('div');
+            testContent.setAttribute('id', testId + "Content");
+            testContent.setAttribute('class', 'p-1 rounded card-inverse card-info');
 
             let testHeader = document.createElement('h5');
             testHeader.setAttribute('class', 'card-title');
@@ -125,15 +183,18 @@ function createTestDisplay() {
             testMessage.setAttribute('class', 'card-text');
             testMessage.innerHTML = "Not Run";
 
-            testRoot.appendChild(testHeader);
-            testRoot.appendChild(testMessage);
+            testContent.appendChild(testHeader);
+            testContent.appendChild(testMessage);
 
+            testRoot.appendChild(testContent);
+
+            let testQuery =  "#" + testId+ "Content";
             test.setError = (msg) => {
-                $("#"+testId).switchClass('card-info', 'card-danger');
+                $(testQuery).switchClass('card-info', 'card-danger');
                 testMessage.innerHTML = msg;
             };
             test.setSuccess = () => {
-                $("#"+testId).switchClass('card-info', 'card-success');
+                $(testQuery).switchClass('card-info', 'card-success');
                 testMessage.innerHTML = "Success";
             };
 
@@ -150,18 +211,98 @@ function createTestDisplay() {
     }
 
     document.body.appendChild(root);
+    createTodoModal();
 }
 
-let TestSuites = {
-    applicationName: "Test Application",
-    suites: []
-};
+function createTodoModal() {
+    let root = document.createElement('div');
+    root.setAttribute('class', 'modal fade bd-example-modal-lg');
+    root.setAttribute('id', 'todoModal');
+    root.setAttribute('tabIndex', '-1');
+    root.setAttribute('role', 'dialog');
+    root.setAttribute('aria-labelledby', 'todoTitle');
 
-window.addEventListener('load', function () {
-    createTestDisplay();
+    let modal = document.createElement('div');
+    modal.setAttribute('class', 'modal-dialog modal-lg');
+    modal.setAttribute('role', 'document');
+
+    let modalContent = document.createElement('div');
+    modalContent.setAttribute('class', 'modal-content');
+
+    let modalHeader = document.createElement('div');
+    modalHeader.setAttribute('class', 'modal-header');
+
+    let closeBtn = document.createElement('button');
+    closeBtn.setAttribute('type', 'button');
+    closeBtn.setAttribute('class', 'close');
+    closeBtn.setAttribute('data-dismiss', 'modal');
+    closeBtn.setAttribute('aria-label', 'Close');
+
+    let closeBtnContent = document.createElement('span');
+    closeBtnContent.setAttribute('aria-hidden', 'true');
+    closeBtnContent.innerHTML = "&times;";
+
+    closeBtn.appendChild(closeBtnContent);
+
+    let modalTitle = document.createElement('h4');
+    modalTitle.setAttribute('class', 'modal-title');
+    modalTitle.setAttribute('id', 'todoTitle');
+    modalTitle.innerHTML = "TODO";
+
+    modalHeader.appendChild(closeBtn);
+    modalHeader.appendChild(modalTitle);
+
+    let modalBody = document.createElement('div');
+    modalBody.setAttribute('class', 'modal-body');
 
     for (let i=0; i<TestSuites.suites.length; i++) {
         let suite = TestSuites.suites[i];
-        runSuite(i);
+        let suiteAppend = false;
+        let suiteHeader = document.createElement('h5');
+        suiteHeader.innerHTML = suite.name;
+        let suiteListRoot = document.createElement('ul');
+        for (let j=0; j<suite.tests.length; j++) {
+            let testAppend = false;
+            let test = suite.tests[j];
+            let testListItem = document.createElement('li');
+            testListItem.innerHTML = test.name;
+            let testListRoot = document.createElement('ul');
+            if (test.todo) {
+                if (test.todo instanceof Array) {
+                    for (let k=0; k<test.todo.length; k++) {
+                        let todo = test.todo[k];
+                        let todoItem = document.createElement('li');
+                        todoItem.innerHTML = todo;
+                        testListRoot.appendChild(todoItem);
+                        testAppend = true;
+                    }
+                } else {
+                    let todoItem = document.createElement('li');
+                    todoItem.innerHTML = test.todo;
+                    testListRoot.appendChild(todoItem);
+                    testAppend = true;
+                }
+            }
+            if (testAppend) {
+                testListItem.appendChild(testListRoot);
+                suiteListRoot.appendChild(testListItem);
+                testAppend = true;
+                suiteAppend = true;
+            }
+        }
+
+        if (suiteAppend) {
+            modalBody.appendChild(suiteHeader);
+            modalBody.appendChild(suiteListRoot);
+        }
     }
-});
+
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(modalBody);
+
+    modal.appendChild(modalContent);
+
+    root.appendChild(modal);
+
+    document.body.appendChild(root);
+}

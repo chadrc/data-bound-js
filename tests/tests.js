@@ -148,6 +148,7 @@ TestSuites.suites.push({
         },
         {
             name: "Multi same prop render",
+            todo: "Refactor prop extraction and strings so duplicated props aren't stored twice.",
             method: () => {
                 let expected = "MyProp MyProp";
                 let propStr = new DataBoundPropString("${myProp} ${myProp}");
@@ -159,6 +160,7 @@ TestSuites.suites.push({
         },
         {
             name: "Nested props single depth",
+            todo: "Research 'pre-compiling' nested props.",
             method: () => {
                 let expected = "Nested prop";
                 let propStr = new DataBoundPropString("${myProp.nestedProp}");
