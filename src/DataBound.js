@@ -92,6 +92,18 @@ class DataBoundBooleanAttribute {
     constructor(node) {
         this.nodeOwner = node.ownerElement;
         this.attrName = node.nodeName;
+        this.propString = new DataBoundPropString(node.nodeValue);
+        node.nodeValue = '';
+    }
 
+    renderWithContext(context, dataBoundContext, rootContext) {
+        if (this.propString.matches.length > 0) {
+            let contextValue = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
+            if (contextValue) {
+                this.nodeOwner.setAttribute(this.attrName, '');
+            } else {
+                this.nodeOwner.removeAttribute(this.attrName);
+            }
+        }
     }
 }

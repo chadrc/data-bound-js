@@ -266,11 +266,11 @@ TestSuites.suites.push({
             method(data) {
                 let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.hidden);
                 booleanBinding.renderWithContext(data.context);
-                assert(!data.element.attributes.hidden, "Expected hidden attribute to not exist.");
+                assert(data.element.attributes.hidden && data.element.attributes.hidden.nodeValue == "",
+                    "Expected hidden attribute to exist with an empty string as its value.");
                 data.context.isHidden = false;
                 booleanBinding.renderWithContext(data.context);
-                assert(data.element.attributes.hidden && data.element.attributes.hidden.nodeValue == "",
-                "Expected hidden attribute to exist with an empty string as its value.");
+                assert(!data.element.attributes.hidden, "Expected hidden attribute to not exist.");
             }
         }
     ]
