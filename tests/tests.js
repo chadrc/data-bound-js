@@ -114,8 +114,7 @@ TestSuites.suites.push({
             method: (data) => {
                 let propStr = new DataBoundPropString("${myProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
-                assert(renderStr == data.mainContext.myProp,
-                    "Expected " + data.mainContext.myProp + ", got " + renderStr);
+                assertExpectedValue(renderStr, data.mainContext.myProp);
             }
         },
         {
@@ -123,8 +122,8 @@ TestSuites.suites.push({
             method: (data) => {
                 let propStr = new DataBoundPropString("${myProp} is ${helloProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
-                assert(renderStr == data.mainContext.myProp + " is " + data.mainContext.helloProp,
-                    "Expected " + data.mainContext.myProp + " is " + data.mainContext.helloProp + ", got " + renderStr);
+                assertExpectedValue(renderStr, data.mainContext.myProp + " is " + data.mainContext.helloProp);
+
             }
         },
         {
@@ -132,8 +131,7 @@ TestSuites.suites.push({
             method: (data) => {
                 let propStr = new DataBoundPropString("${.myProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext, data.selfContext, data.rootContext);
-                assert(renderStr == data.selfContext.myProp,
-                    "Expected " + data.selfContext.myProp + ", got " + renderStr);
+                assertExpectedValue(renderStr, data.selfContext.myProp);
             }
         },
         {
@@ -141,8 +139,7 @@ TestSuites.suites.push({
             method: (data) => {
                 let propStr = new DataBoundPropString("${~myProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext, data.selfContext, data.rootContext);
-                assert(renderStr == data.rootContext.myProp,
-                    "Expected " + data.rootContext.myProp + ", got " + renderStr);
+                assertExpectedValue(renderStr, data.rootContext.myProp);
             }
         },
         {
@@ -150,8 +147,7 @@ TestSuites.suites.push({
             method: (data) => {
                 let propStr = new DataBoundPropString("${methodProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
-                let expected = data.mainContext.methodProp();
-                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
+                assertExpectedValue(renderStr, data.mainContext.methodProp());
             }
         },
         {
@@ -160,8 +156,7 @@ TestSuites.suites.push({
             method: (data) => {
                 let propStr = new DataBoundPropString("${myProp} ${myProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
-                let expected = data.mainContext.myProp + " " + data.mainContext.myProp;
-                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
+                assertExpectedValue(renderStr, data.mainContext.myProp + " " + data.mainContext.myProp);
             }
         },
         {
@@ -170,8 +165,7 @@ TestSuites.suites.push({
             method: (data) => {
                 let propStr = new DataBoundPropString("${parentProp.nestedProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
-                let expected = data.mainContext.parentProp.nestedProp;
-                assert(renderStr == expected, "Expected " + expected + ", got " + renderStr);
+                assertExpectedValue(renderStr, data.mainContext.parentProp.nestedProp);
             }
         }
     ]

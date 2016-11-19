@@ -2,6 +2,20 @@
  * Created by chad on 11/16/16.
  */
 
+// Assertions
+
+function assert(condition, failMessage) {
+    if (!condition) {
+        throw "Assertion failed: " + failMessage;
+    }
+}
+
+function assertExpectedValue(value, expected, msgPrefix, msgSuffix) {
+    assert(value == expected, (msgPrefix || '') + "Expected '" + expected + "', got '" + value + "'" + (msgSuffix || ''))
+}
+
+// Test Setup and Display
+
 let TestSuites = {
     applicationName: "Test Application",
     suites: []
@@ -17,12 +31,6 @@ function initTestDisplay() {
     for (let i=0; i<TestSuites.suites.length; i++) {
         let suite = TestSuites.suites[i];
         runSuite(i);
-    }
-}
-
-function assert(condition, failMessage) {
-    if (!condition) {
-        throw "Assertion failed: " + failMessage;
     }
 }
 
