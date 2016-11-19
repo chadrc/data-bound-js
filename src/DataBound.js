@@ -66,3 +66,22 @@ class DataBoundPropString {
         return renderStr;
     }
 }
+
+class DataBoundAttribute {
+    constructor(attrNode) {
+        this.node = attrNode;
+        this.propString = new DataBoundPropString(attrNode.nodeValue);
+    }
+
+    renderWithContext(context, dataBoundContext, rootContext) {
+        this.node.nodeValue = this.propString.renderWithContext(context, dataBoundContext, rootContext);
+    }
+}
+
+class DataBoundBooleanAttribute {
+    constructor(node) {
+        this.nodeOwner = node.ownerElement;
+        this.attrName = node.nodeName;
+
+    }
+}

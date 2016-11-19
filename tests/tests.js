@@ -214,3 +214,50 @@ TestSuites.suites.push({
         }
     ]
 });
+
+TestSuites.suites.push({
+    name: "Data Bound Bindings",
+    getData() {
+        let element = document.createElement('div');
+        element.setAttribute('class', '${classes}');
+        element.setAttribute('hidden', '${isHidden}');
+        element.setAttribute('onclick', '${raiseClick}');
+        element.innerHTML = "Description: ${description}";
+        return {
+            element: element,
+            context: {
+                classes: "alert-warning",
+                isHidden: true,
+                raiseClick() {
+                    element.setAttribute('class', 'alert-info');
+                },
+                description: "Basic element binding example."
+            }
+        }
+    },
+    tests: [
+        {
+            name: "Attribute Binding",
+            method(data) {
+                let attrBinding = new DataBoundAttribute(data.element.attributes.class);
+                attrBinding.renderWithContext(data.context);
+                assertExpectedValue(data.element.attributes.class.nodeValue, data.context.classes);
+                data.context.classes = "alert alert-info";
+                attrBinding.renderWithContext(data.context);
+                assertExpectedValue(data.element.attributes.class.nodeValue, data.context.classes);
+            }
+        },
+        {
+            name: "Boolean Binding",
+            method(data) {
+                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.hidden);
+                booleanBinding.renderWithContext(data.context);
+                assert(!data.element.attributes.hidden, "Expected hidden attribute to not exist.");
+                data.context.isHidden = false;
+                booleanBinding.renderWithContext(data.context);
+                assert(data.element.attributes.hidden && data.element.attributes.hidden.nodeValue == "",
+                "Expected hidden attribute to exist with an empty string as its value.");
+            }
+        }
+    ]
+});
