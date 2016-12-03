@@ -306,9 +306,13 @@ TestSuites.suites.push({
         let element = document.createElement('div');
         element.setAttribute('hidden', '${isHidden}');
         element.setAttribute('disabled', '${numValue}');
+        element.setAttribute('checked', '${checkedValue}');
+        element.setAttribute('data-bound-checked-eq', '${checkedCondition}');
         return {
             element: element,
             context: {
+                checkedValue: "checked",
+                checkedCondition: "checked",
                 isHidden: true,
                 numValue: 5,
             }
@@ -316,7 +320,7 @@ TestSuites.suites.push({
     },
     tests: [
         {
-            name: "Boolean Binding Conditionals - Equals",
+            name: "Equals",
             method(data) {
                 data.element.setAttribute('data-bound-disabled-eq', '4');
                 let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
@@ -330,7 +334,7 @@ TestSuites.suites.push({
             }
         },
         {
-            name: "Boolean Binding Conditionals - Not Equals",
+            name: "Not Equals",
             method(data) {
                 data.element.setAttribute('data-bound-disabled-neq', '5');
                 let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
@@ -344,7 +348,7 @@ TestSuites.suites.push({
             }
         },
         {
-            name: "Boolean Binding Conditionals - Less Than",
+            name: "Less Than",
             method(data) {
                 data.element.setAttribute('data-bound-disabled-lt', '5');
                 let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
@@ -358,7 +362,7 @@ TestSuites.suites.push({
             }
         },
         {
-            name: "Boolean Binding Conditionals - Less Than Or Equal",
+            name: "Less Than Or Equal",
             method(data) {
                 data.element.setAttribute('data-bound-disabled-lte', '4');
                 let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
@@ -372,7 +376,7 @@ TestSuites.suites.push({
             }
         },
         {
-            name: "Boolean Binding Conditionals - Greater Than",
+            name: "Greater Than",
             method(data) {
                 data.element.setAttribute('data-bound-disabled-gt', '5');
                 let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
@@ -386,7 +390,7 @@ TestSuites.suites.push({
             }
         },
         {
-            name: "Boolean Binding Conditionals - Greater Than Or Equal",
+            name: "Greater Than Or Equal",
             method(data) {
                 data.element.setAttribute('data-bound-disabled-gte', '6');
                 let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
@@ -400,7 +404,7 @@ TestSuites.suites.push({
             }
         },
         {
-            name: "Boolean Binding Conditionals - Not",
+            name: "Not",
             method(data) {
                 data.element.setAttribute('data-bound-hidden-not', '');
                 let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.hidden);
@@ -414,7 +418,7 @@ TestSuites.suites.push({
             }
         },
         {
-            name: "Boolean Binding Conditionals - Mod Zero",
+            name: "Mod Zero",
             method(data) {
                 data.element.setAttribute('data-bound-disabled-mod-zero', '6');
                 let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
@@ -425,6 +429,19 @@ TestSuites.suites.push({
                 booleanBinding.renderWithContext(data.context);
                 assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
                     "Expected 'disabled' attribute to exists with empty string as its value.");
+            }
+        },
+        {
+            name: "Conditional Bindings",
+            method(data) {
+                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.checked);
+                booleanBinding.renderWithContext(data.context);
+                assert(data.element.attributes.checked && data.element.attributes.checked.nodeValue == "",
+                    "Expected 'checked' attribute to exists with empty string as its value.");
+
+                data.context.checkedCondition = "not checked";
+                booleanBinding.renderWithContext(data.context);
+                assert(!data.element.attributes.checked, "Expected 'checked' attribute to be removed.");
             }
         }
     ]
