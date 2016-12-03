@@ -24,7 +24,7 @@ class DataBoundUtils {
     }
 }
 
-DataBoundUtils.ooleanConditionalAttributes = {
+DataBoundUtils.booleanConditionalAttributes = {
     'eq': (contextVal, conditionVal) => {
         return contextVal == conditionVal;
     },
@@ -144,7 +144,7 @@ class DataBoundBooleanAttribute {
             if (attr.name.startsWith(conditionAttrPrefix)) {
                 this.conditionAttr = attr;
                 let condition = attr.name.slice(conditionAttrPrefix.length);
-                this.conditionMethod = DataBoundUtils.ooleanConditionalAttributes[condition];
+                this.conditionMethod = DataBoundUtils.booleanConditionalAttributes[condition];
                 if (!this.conditionMethod) {
                     console.warn("Unknown conditional attribute '", condition,
                         "' used for boolean attribute '", this.attrName, "'.");
