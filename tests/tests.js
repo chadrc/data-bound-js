@@ -283,6 +283,16 @@ TestSuites.suites.push({
                 textBinding.renderWithContext(data.context);
                 assertExpectedValue(data.element.childNodes[0].nodeValue, "Description: " + data.context.description);
             }
+        },
+        {
+            name: "Method Binding",
+            method(data) {
+                let methodBinding = new DataBoundMethodAttribute(data.element.attributes.onclick);
+                methodBinding.renderWithContext(data.context);
+                data.element.click();
+                assertExpectedValue(data.element.attributes.class.value, "alert-info");
+                assertExpectedValue(data.element.attributes['data-bound-method-onclick'].value, "Object.raiseClick");
+            }
         }
     ]
 });

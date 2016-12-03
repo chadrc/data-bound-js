@@ -50,6 +50,8 @@ class DataBoundPropString {
             ctx = context;
         }
 
+        this.lastContextUsed = ctx;
+
         for (let j=0; j<parts.length; j++) {
             let currentProp = parts[j];
             if (ctx != null && currentProp in ctx) {
@@ -64,6 +66,12 @@ class DataBoundPropString {
             ctx = value;
         }
         return value;
+    }
+
+    getPropName(propIndex) {
+        if (propIndex < this.matches.length) {
+            return this.matches[propIndex].prop;
+        }
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
@@ -99,11 +107,11 @@ class DataBoundTextNode {
 }
 
 class DataBoundBooleanAttribute {
-    constructor(node) {
-        this.nodeOwner = node.ownerElement;
-        this.attrName = node.nodeName;
-        this.propString = new DataBoundPropString(node.nodeValue);
-        node.nodeValue = '';
+    constructor(attrNode) {
+        this.nodeOwner = attrNode.ownerElement;
+        this.attrName = attrNode.nodeName;
+        this.propString = new DataBoundPropString(attrNode.nodeValue);
+        attrNode.nodeValue = '';
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
@@ -114,6 +122,34 @@ class DataBoundBooleanAttribute {
             } else {
                 this.nodeOwner.removeAttribute(this.attrName);
             }
+        }
+    }
+}
+
+class DataBoundMethodAttribute {
+    constructor(attrNode) {
+        this.nodeOwner = attrNode.ownerElement;
+        this.attrName = attrNode.nodeName;
+        if (!this.attrName.startsWith("on")) {
+            throw "DataBoundMethodAttribute can only be bound to an attribute that begins with 'on'.";
+        }
+
+        this.propString = new DataBoundPropString(attrNode.nodeValue);
+        this.eventName = this.attrName.slice(2);
+        this.nodeOwner.addEventListener(this.eventName, this.eventCall);
+        this.nodeOwner.removeAttribute(this.attrName);
+    }
+
+    renderWithContext(context, dataBoundContext, rootContext) {
+        this.lastBoundContext = dataBoundContext;
+        this.method = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
+        this.nodeOwner.setAttribute('data-bound-method-' + this.attrName,
+            this.propString.lastContextUsed.constructor.name + "." + this.propString.getPropName(0));
+    }
+
+    eventCall(event) {
+        if (this.method instanceof Function) {
+            this.method(event, this.lastBoundContext);
         }
     }
 }
