@@ -24,6 +24,32 @@ class DataBoundUtils {
     }
 }
 
+DataBoundUtils.ooleanConditionalAttributes = {
+    'eq': (contextVal, conditionVal) => {
+        return contextVal == conditionVal;
+    },
+    'neq': (contextVal, conditionVal) => {
+        return contextVal != conditionVal;
+    },
+    'lt': (contextVal, conditionVal) => {
+        return contextVal < conditionVal;
+    },
+    'lte': (contextVal, conditionVal) => {
+        return contextVal <= conditionVal;
+    },
+    'gt': (contextVal, conditionVal) => {
+        return contextVal > conditionVal;
+    },
+    'gte': (contextVal, conditionVal) => {
+        return contextVal >= conditionVal;
+    },
+    'not': (contextVal) => {
+        return !contextVal;
+    },
+    'mod-zero': (contextVal, conditionVal) => {
+        return contextVal % conditionVal == 0;
+    }
+};
 DataBoundUtils.propStringRegex = new RegExp(/\$\{ *(~(?!\.))?[\w.]+\w *}/g);
 
 class DataBoundPropString {
@@ -118,33 +144,11 @@ class DataBoundBooleanAttribute {
             if (attr.name.startsWith(conditionAttrPrefix)) {
                 this.conditionAttr = attr;
                 let condition = attr.name.slice(conditionAttrPrefix.length);
-                switch (condition) {
-                    case 'eq':
-                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal == conditionVal;};
-                        break;
-                    case 'neq':
-                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal != conditionVal;};
-                        break;
-                    case 'lt':
-                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal < conditionVal;};
-                        break;
-                    case 'lte':
-                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal <= conditionVal;};
-                        break;
-                    case 'gt':
-                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal > conditionVal;};
-                        break;
-                    case 'gte':
-                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal >= conditionVal;};
-                        break;
-                    case 'not':
-                        this.conditionMethod = (contextVal) => {return !contextVal;};
-                        break;
-                    case 'mod-zero':
-                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal % conditionVal == 0;};
-                        break;
-                    default:
-                        console.warn("Boolean condition attribute with unknown conditional type: " + condition);
+                this.conditionMethod = DataBoundUtils.ooleanConditionalAttributes[condition];
+                if (!this.conditionMethod) {
+                    console.warn("Unknown conditional attribute '", condition,
+                        "' used for boolean attribute '", this.attrName, "'.");
+                    this.conditionMethod = (value) => {return value;};
                 }
                 break;
             }
