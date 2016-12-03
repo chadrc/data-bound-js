@@ -296,7 +296,25 @@ TestSuites.suites.push({
                 assert(!data.element.attributes.onclick, "Expected 'onclick' attribute to have been removed.");
                 assertExpectedValue(data.element.attributes['data-bound-method-onclick'].value, "Object.raiseClick");
             }
-        },
+        }
+    ]
+});
+
+TestSuites.suites.push({
+    name: "Boolean Attribute Conditionals",
+    getData() {
+        let element = document.createElement('div');
+        element.setAttribute('hidden', '${isHidden}');
+        element.setAttribute('disabled', '${numValue}');
+        return {
+            element: element,
+            context: {
+                isHidden: true,
+                numValue: 5,
+            }
+        }
+    },
+    tests: [
         {
             name: "Boolean Binding Conditionals - Equals",
             method(data) {
