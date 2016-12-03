@@ -109,12 +109,32 @@ class DataBoundBooleanAttribute {
         this.attrName = attrNode.nodeName;
         this.propString = new DataBoundPropString(attrNode.nodeValue);
         attrNode.nodeValue = '';
+        this.conditionMethod = (value) => {return value;};
+        this.conditionAttr = null;
+
+        for (let i=0; i<this.nodeOwner.attributes.length; i++) {
+            let attr = this.nodeOwner.attributes[i];
+            let conditionAttrPrefix = 'data-bound-' + this.attrName + '-';
+            if (attr.name.startsWith(conditionAttrPrefix)) {
+                this.conditionAttr = attr;
+                let condition = attr.name.slice(conditionAttrPrefix.length);
+                switch (condition) {
+                    case 'eq':
+                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal == conditionVal;};
+                        break;
+                    default:
+                        console.warn("Boolean condition attribute with unknown conditional type: " + condition);
+                }
+                break;
+            }
+        }
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
         if (this.propString.matches.length > 0) {
             let contextValue = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
-            if (contextValue) {
+            let conditionValue = this.conditionAttr ? this.conditionAttr.nodeValue : null;
+            if (this.conditionMethod(contextValue, conditionValue)) {
                 this.nodeOwner.setAttribute(this.attrName, '');
             } else {
                 this.nodeOwner.removeAttribute(this.attrName);

@@ -235,6 +235,7 @@ TestSuites.suites.push({
         let element = document.createElement('div');
         element.setAttribute('class', '${classes}');
         element.setAttribute('hidden', '${isHidden}');
+        element.setAttribute('disabled', '${numValue}');
         element.setAttribute('onclick', '${raiseClick}');
         element.innerHTML = "Description: ${description}";
         return {
@@ -242,6 +243,7 @@ TestSuites.suites.push({
             context: {
                 classes: "alert-warning",
                 isHidden: true,
+                numValue: 5,
                 raiseClick() {
                     element.setAttribute('class', 'alert-info');
                 },
@@ -291,7 +293,22 @@ TestSuites.suites.push({
                 methodBinding.renderWithContext(data.context);
                 data.element.click();
                 assertExpectedValue(data.element.attributes.class.value, "alert-info");
+                assert(!data.element.attributes.onclick, "Expected 'onclick' attribute to have been removed.");
                 assertExpectedValue(data.element.attributes['data-bound-method-onclick'].value, "Object.raiseClick");
+            }
+        },
+        {
+            name: "Boolean Binding Conditionals - Equals",
+            method(data) {
+                data.element.setAttribute('data-bound-disabled-eq', '4');
+                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                booleanBinding.renderWithContext(data.context);
+                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+
+                data.element.setAttribute('data-bound-disabled-eq', '5');
+                booleanBinding.renderWithContext(data.context);
+                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                    "Expected 'disabled' attribute to exists with empty string as its value.");
             }
         }
     ]
