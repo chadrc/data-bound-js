@@ -238,6 +238,9 @@ TestSuites.suites.push({
         element.setAttribute('disabled', '${numValue}');
         element.setAttribute('onclick', '${raiseClick}');
         element.innerHTML = "Description: ${description}";
+        let boundContext = {
+            index: 3
+        };
         return {
             element: element,
             context: {
@@ -245,10 +248,14 @@ TestSuites.suites.push({
                 isHidden: true,
                 numValue: 5,
                 raiseClick() {
-                    element.setAttribute('class', 'alert-info');
+                    element.setAttribute('class', "alert-info");
+                },
+                raiseClick2(event, dataBoundContext) {
+                    element.setAttribute('data-bound-index', dataBoundContext.index.toString());
                 },
                 description: "Basic element binding example."
-            }
+            },
+            dataBoundContext: boundContext
         }
     },
     tests: [
@@ -295,6 +302,16 @@ TestSuites.suites.push({
                 assertExpectedValue(data.element.attributes.class.value, "alert-info");
                 assert(!data.element.attributes.onclick, "Expected 'onclick' attribute to have been removed.");
                 assertExpectedValue(data.element.attributes['data-bound-method-onclick'].value, "Object.raiseClick");
+            }
+        },
+        {
+            name: "Method Binding Accessing Context",
+            method(data) {
+                data.element.setAttribute('onclick', '${raiseClick2}');
+                let methodBinding = new DataBoundMethodAttribute(data.element.attributes.onclick);
+                methodBinding.renderWithContext(data.context, data.dataBoundContext);
+                data.element.click();
+                assertExpectedValue(data.element.attributes['data-bound-index'].nodeValue, "3");
             }
         }
     ]
