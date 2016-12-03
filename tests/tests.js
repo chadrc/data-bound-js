@@ -194,6 +194,14 @@ TestSuites.suites.push({
             }
         },
         {
+            name: "Null Context",
+            method(data) {
+                let propStr = new DataBoundPropString("${myProp}");
+                let renderStr = propStr.renderWithContext(null);
+                assertExpectedValue(renderStr, 'undefined');
+            }
+        },
+        {
             name: "Undefined Prop",
             method(data) {
                 let propStr = new DataBoundPropString("${undefinedProp}");
