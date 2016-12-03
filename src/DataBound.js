@@ -60,9 +60,6 @@ class DataBoundPropString {
                 return; // undefined
             }
 
-            // if (value instanceof Function) {
-            //     value = value();
-            // }
             ctx = value;
         }
         return value;
