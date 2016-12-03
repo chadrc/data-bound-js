@@ -102,11 +102,14 @@ TestSuites.suites.push({
                 methodProp() {
                     return "Method Prop";
                 },
+                dataBoundMethodProp(dataBoundContext) {
+                    return dataBoundContext.myProp;
+                },
                 get getProp() {
                     return "Gotten Prop";
                 }
             },
-            selfContext: {
+            dataBoundContext: {
                 myProp: "My Self Prop"
             },
             rootContext: {
@@ -136,15 +139,15 @@ TestSuites.suites.push({
             name: "Self Prop String Render",
             method(data) {
                 let propStr = new DataBoundPropString("${.myProp}");
-                let renderStr = propStr.renderWithContext(data.mainContext, data.selfContext, data.rootContext);
-                assertExpectedValue(renderStr, data.selfContext.myProp);
+                let renderStr = propStr.renderWithContext(data.mainContext, data.dataBoundContext, data.rootContext);
+                assertExpectedValue(renderStr, data.dataBoundContext.myProp);
             }
         },
         {
             name: "Root Prop String Render",
             method(data) {
                 let propStr = new DataBoundPropString("${~myProp}");
-                let renderStr = propStr.renderWithContext(data.mainContext, data.selfContext, data.rootContext);
+                let renderStr = propStr.renderWithContext(data.mainContext, data.dataBoundContext, data.rootContext);
                 assertExpectedValue(renderStr, data.rootContext.myProp);
             }
         },
@@ -154,6 +157,14 @@ TestSuites.suites.push({
                 let propStr = new DataBoundPropString("${methodProp}");
                 let renderStr = propStr.renderWithContext(data.mainContext);
                 assertExpectedValue(renderStr, data.mainContext.methodProp());
+            }
+        },
+        {
+            name: "Data Bound Method Call Render",
+            method(data) {
+                let propStr = new DataBoundPropString("${dataBoundMethodProp}");
+                let renderStr = propStr.renderWithContext(data.mainContext, data.dataBoundContext);
+                assertExpectedValue(renderStr, data.dataBoundContext.myProp);
             }
         },
         {
@@ -218,11 +229,11 @@ TestSuites.suites.push({
             name: "Get Prop Value",
             method(data) {
                 let propStr = new DataBoundPropString("${numberProp} ${booleanProp} ${myProp}");
-                let numberValue = propStr.getValueWithContext(0, data.mainContext, data.selfContext, data.rootContext);
+                let numberValue = propStr.getValueWithContext(0, data.mainContext, data.dataBoundContext, data.rootContext);
                 assertExpectedValue(numberValue, data.mainContext.numberProp);
-                let booleanValue = propStr.getValueWithContext(1, data.mainContext, data.selfContext, data.rootContext);
+                let booleanValue = propStr.getValueWithContext(1, data.mainContext, data.dataBoundContext, data.rootContext);
                 assertExpectedValue(booleanValue, data.mainContext.booleanProp);
-                let stringValue = propStr.getValueWithContext(2, data.mainContext, data.selfContext, data.rootContext);
+                let stringValue = propStr.getValueWithContext(2, data.mainContext, data.dataBoundContext, data.rootContext);
                 assertExpectedValue(stringValue, data.mainContext.myProp);
             }
         }

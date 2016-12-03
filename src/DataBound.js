@@ -101,6 +101,7 @@ class DataBoundPropString {
         let renderStr = this.originalStr;
         for (let i=0; i<this.matches.length; i++) {
             let value = this.getValueWithContext(i, context, dataBoundContext, rootContext);
+            value = value instanceof Function ? value(dataBoundContext) : value
             renderStr = renderStr.replace(this.matches[i].match, value);
         }
         return renderStr;
