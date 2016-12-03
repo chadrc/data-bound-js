@@ -60,9 +60,9 @@ class DataBoundPropString {
                 return; // undefined
             }
 
-            if (value instanceof Function) {
-                value = value();
-            }
+            // if (value instanceof Function) {
+            //     value = value();
+            // }
             ctx = value;
         }
         return value;
@@ -136,7 +136,7 @@ class DataBoundMethodAttribute {
 
         this.propString = new DataBoundPropString(attrNode.nodeValue);
         this.eventName = this.attrName.slice(2);
-        this.nodeOwner.addEventListener(this.eventName, this.eventCall);
+        this.nodeOwner.addEventListener(this.eventName, this.eventCall.bind(this));
         this.nodeOwner.removeAttribute(this.attrName);
     }
 
