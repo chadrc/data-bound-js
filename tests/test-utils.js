@@ -98,7 +98,7 @@ function createTestDisplay() {
 
     let todoBtn = document.createElement('button');
     todoBtn.setAttribute('type', 'button');
-    todoBtn.setAttribute('class', 'btn btn-info ml-1');
+    todoBtn.setAttribute('class', 'btn btn-info ml-1 align-text-top');
     todoBtn.setAttribute('data-toggle', 'modal');
     todoBtn.setAttribute('data-target', '#todoModal');
     todoBtn.innerHTML = "TODO&nbsp;";
