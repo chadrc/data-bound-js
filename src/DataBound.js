@@ -122,6 +122,27 @@ class DataBoundBooleanAttribute {
                     case 'eq':
                         this.conditionMethod = (contextVal, conditionVal) => {return contextVal == conditionVal;};
                         break;
+                    case 'neq':
+                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal != conditionVal;};
+                        break;
+                    case 'lt':
+                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal < conditionVal;};
+                        break;
+                    case 'lte':
+                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal <= conditionVal;};
+                        break;
+                    case 'gt':
+                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal > conditionVal;};
+                        break;
+                    case 'gte':
+                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal >= conditionVal;};
+                        break;
+                    case 'not':
+                        this.conditionMethod = (contextVal) => {return !contextVal;};
+                        break;
+                    case 'mod-zero':
+                        this.conditionMethod = (contextVal, conditionVal) => {return contextVal % conditionVal == 0;};
+                        break;
                     default:
                         console.warn("Boolean condition attribute with unknown conditional type: " + condition);
                 }

@@ -310,6 +310,104 @@ TestSuites.suites.push({
                 assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
                     "Expected 'disabled' attribute to exists with empty string as its value.");
             }
+        },
+        {
+            name: "Boolean Binding Conditionals - Not Equals",
+            method(data) {
+                data.element.setAttribute('data-bound-disabled-neq', '5');
+                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                booleanBinding.renderWithContext(data.context);
+                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+
+                data.element.setAttribute('data-bound-disabled-neq', '4');
+                booleanBinding.renderWithContext(data.context);
+                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                    "Expected 'disabled' attribute to exists with empty string as its value.");
+            }
+        },
+        {
+            name: "Boolean Binding Conditionals - Less Than",
+            method(data) {
+                data.element.setAttribute('data-bound-disabled-lt', '5');
+                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                booleanBinding.renderWithContext(data.context);
+                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+
+                data.element.setAttribute('data-bound-disabled-lt', '6');
+                booleanBinding.renderWithContext(data.context);
+                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                    "Expected 'disabled' attribute to exists with empty string as its value.");
+            }
+        },
+        {
+            name: "Boolean Binding Conditionals - Less Than Or Equal",
+            method(data) {
+                data.element.setAttribute('data-bound-disabled-lte', '4');
+                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                booleanBinding.renderWithContext(data.context);
+                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+
+                data.element.setAttribute('data-bound-disabled-lte', '5');
+                booleanBinding.renderWithContext(data.context);
+                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                    "Expected 'disabled' attribute to exists with empty string as its value.");
+            }
+        },
+        {
+            name: "Boolean Binding Conditionals - Greater Than",
+            method(data) {
+                data.element.setAttribute('data-bound-disabled-gt', '5');
+                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                booleanBinding.renderWithContext(data.context);
+                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+
+                data.element.setAttribute('data-bound-disabled-gt', '4');
+                booleanBinding.renderWithContext(data.context);
+                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                    "Expected 'disabled' attribute to exists with empty string as its value.");
+            }
+        },
+        {
+            name: "Boolean Binding Conditionals - Greater Than Or Equal",
+            method(data) {
+                data.element.setAttribute('data-bound-disabled-gte', '6');
+                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                booleanBinding.renderWithContext(data.context);
+                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+
+                data.element.setAttribute('data-bound-disabled-gte', '5');
+                booleanBinding.renderWithContext(data.context);
+                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                    "Expected 'disabled' attribute to exists with empty string as its value.");
+            }
+        },
+        {
+            name: "Boolean Binding Conditionals - Not",
+            method(data) {
+                data.element.setAttribute('data-bound-hidden-not', '');
+                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.hidden);
+                booleanBinding.renderWithContext(data.context);
+                assert(!data.element.attributes.hidden, "Expected 'hidden' attribute to be removed.");
+
+                data.context.isHidden = false;
+                booleanBinding.renderWithContext(data.context);
+                assert(data.element.attributes.hidden && data.element.attributes.hidden.nodeValue == "",
+                    "Expected 'hidden' attribute to exists with empty string as its value.");
+            }
+        },
+        {
+            name: "Boolean Binding Conditionals - Mod Zero",
+            method(data) {
+                data.element.setAttribute('data-bound-disabled-mod-zero', '6');
+                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                booleanBinding.renderWithContext(data.context);
+                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+
+                data.element.setAttribute('data-bound-disabled-mod-zero', '5');
+                booleanBinding.renderWithContext(data.context);
+                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                    "Expected 'disabled' attribute to exists with empty string as its value.");
+            }
         }
     ]
 });
