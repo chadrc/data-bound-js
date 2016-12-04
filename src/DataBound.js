@@ -273,15 +273,15 @@ class DataBoundElementArray {
         this.propString = new DataBoundPropString(this.domElement.attributes["data-bound-element-array"].nodeValue);
         this.domElement.removeAttribute("data-bound-element-array");
         this.baseElement = this.domElement.parentElement;
-        this.anchorElement = document.createElement("data-bound-array-anchor");
-        this.baseElement.insertBefore(this.anchorElement, this.domElement);
+        this.anchorNode = document.createComment("DataBoundElementArray: [No Context]");
+        this.baseElement.insertBefore(this.anchorNode, this.domElement);
         this.baseElement.removeChild(this.domElement);
         this.elementArray = [];
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
-        this.anchorElement.setAttribute("data-bound-array",
-            context.constructor.name + "." + this.propString.getPropName(0));
+        this.anchorNode.data = "DataBoundElementArray: " +
+            context.constructor.name + "." + this.propString.getPropName(0);
         let contextArray = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (!(contextArray instanceof Array)) {
             throw "Cannot render a DataBoundElementArray with non-Array type.";
@@ -303,7 +303,7 @@ class DataBoundElementArray {
                     let clone = this.domElement.cloneNode(true);
                     let boundElement = new DataBoundElement(clone);
                     this.elementArray.push({domElement: clone, boundElement: boundElement});
-                    this.baseElement.insertBefore(clone, this.anchorElement);
+                    this.baseElement.insertBefore(clone, this.anchorNode);
                 }
             }
         }
