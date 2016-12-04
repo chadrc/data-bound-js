@@ -318,9 +318,9 @@ TestSuites.suites.push({
                 let methodBinding = new DataBoundMethodAttribute(data.element.attributes.onclick);
                 methodBinding.renderWithContext(data.context);
                 data.element.click();
-                assertExpectedValue(data.element.attributes.class.value, "alert-info");
+                assertExpectedValue(data.element.attributes.class.nodeValue, "alert-info");
                 assert(!data.element.attributes.onclick, "Expected 'onclick' attribute to have been removed.");
-                assertExpectedValue(data.element.attributes['data-bound-method-onclick'].value, "Object.raiseClick");
+                assertExpectedValue(data.element.attributes['data-bound-method-onclick'].nodeValue, "Object.raiseClick");
             }
         },
         {
@@ -331,6 +331,36 @@ TestSuites.suites.push({
                 methodBinding.renderWithContext(data.context, data.dataBoundContext);
                 data.element.click();
                 assertExpectedValue(data.element.attributes['data-bound-index'].nodeValue, "3");
+            }
+        },
+        {
+            name: "Data Bound Element",
+            method(data) {
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context);
+
+                assertExpectedValue(data.element.attributes.class.nodeValue, data.context.classes);
+                assert(data.element.attributes.hidden && data.element.attributes.hidden.nodeValue == "",
+                    "Expected hidden attribute to exist with an empty string as its value.");
+                data.element.click();
+                assertExpectedValue(data.element.attributes.class.nodeValue, "alert-info");
+            }
+        },
+        {
+            name: "Data Bound Element with Sub-Element",
+            method(data) {
+                let subElement = document.createElement('div');
+                subElement.setAttribute("class", "${subClass}");
+                subElement.innerHTML = "${subElementDesc}";
+                data.context.subElementDesc = "This is a sub-element.";
+                data.context.subClass = "my-sub-class";
+                data.element.appendChild(subElement);
+
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context);
+
+                assertExpectedValue(subElement.attributes.class.nodeValue, data.context.subClass);
+                assertExpectedValue(subElement.innerHTML, data.context.subElementDesc);
             }
         }
     ]

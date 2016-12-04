@@ -24,6 +24,22 @@ class DataBoundUtils {
     }
 }
 
+DataBoundUtils.booleanAttributeNameList = [
+    "checked",
+    "selected",
+    "disabled",
+    "hidden",
+    "readonly",
+    "multiple",
+    "ismap",
+    "defer",
+    "declare",
+    "noresize",
+    "nowrap",
+    "noshade",
+    "compact"
+];
+
 DataBoundUtils.booleanConditionalAttributes = {
     'eq': (contextVal, conditionVal) => {
         return contextVal == conditionVal;
@@ -50,6 +66,7 @@ DataBoundUtils.booleanConditionalAttributes = {
         return contextVal % conditionVal == 0;
     }
 };
+
 DataBoundUtils.propStringRegex = new RegExp(/\$\{ *(~(?!\.))?[\w.]+\w *}/g);
 
 class DataBoundPropString {
@@ -205,6 +222,43 @@ class DataBoundMethodAttribute {
     eventCall(event) {
         if (this.method instanceof Function) {
             this.method(event, this.lastBoundContext);
+        }
+    }
+}
+
+class DataBoundElement {
+    constructor(element) {
+        this.domElement = element;
+        this.bindings = [];
+
+        for (let i=0; i<this.domElement.attributes.length; i++) {
+            let attr = this.domElement.attributes[i];
+            if (DataBoundUtils.booleanAttributeNameList.indexOf(attr.name) >= 0) {
+                this.bindings.push(new DataBoundBooleanAttribute(attr));
+            } else if (attr.name.startsWith("on")) {
+                this.bindings.push(new DataBoundMethodAttribute(attr));
+            } else {
+                this.bindings.push(new DataBoundAttribute(attr));
+            }
+        }
+
+        for (let i=0; i<this.domElement.childNodes.length; i++) {
+            let node = this.domElement.childNodes[i];
+            switch (node.nodeType) {
+                case 1: // ELEMENT NODE
+                    this.bindings.push(new DataBoundElement(node));
+                    break;
+                case 3: // TEXT NODE
+                    this.bindings.push(new DataBoundTextNode(node));
+                    break;
+            }
+        }
+    }
+
+    renderWithContext(context, dataBoundContext, rootContext) {
+        for(let i=0; i<this.bindings.length; i++) {
+            let b = this.bindings[i];
+            b.renderWithContext(context, dataBoundContext, rootContext);
         }
     }
 }
