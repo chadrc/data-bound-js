@@ -576,6 +576,19 @@ TestSuites.suites.push({
                     assertExpectedValue(childNode.attributes.class.nodeValue, data.context.itemClass);
                 }
             }
+        },
+        {
+            name: "Literals for Item Values",
+            method(data) {
+                data.context.items = ["Item 1", "Item 2", "Item 3", "Item 4"];
+                data.childElement.innerHTML = "${.itemValue}";
+                let elementArray = new DataBoundElementArray(data.childElement);
+                elementArray.renderWithContext(data.context);
+                for (let i=0; i<data.context.items.length; i++) {
+                    let childNode = data.element.childNodes[i];
+                    assertExpectedValue(childNode.innerHTML, data.context.items[i]);
+                }
+            }
         }
     ]
 });
