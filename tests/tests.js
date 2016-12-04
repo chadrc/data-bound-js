@@ -604,6 +604,21 @@ TestSuites.suites.push({
                     assertExpectedValue(childNode.innerHTML, i + ": " + data.dataBoundContext.itemValue);
                 }
             }
+        },
+        {
+            name: "Count After Adding Items",
+            method(data) {
+                let elementArray = new DataBoundElementArray(data.childElement);
+                elementArray.renderWithContext(data.context, data.dataBoundContext);
+
+                data.context.items.push({text: "Item 5"});
+                data.context.items.push({text: "Item 6"});
+                data.context.items.push({text: "Item 7"});
+                elementArray.renderWithContext(data.context, data.dataBoundContext);
+
+                assertExpectedValue(data.element.childNodes.length, data.context.items.length + 1,
+                    "Expecting child nodes to be equal to number of items plus 1 (for anchor element).");
+            }
         }
     ]
 });

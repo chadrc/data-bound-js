@@ -272,7 +272,6 @@ class DataBoundElementArray {
         this.anchorElement = document.createElement("data-bound-array-anchor");
         this.baseElement.insertBefore(this.anchorElement, this.domElement);
         this.baseElement.removeChild(this.domElement);
-        this.lastSize = 0;
         this.elementArray = [];
     }
 
@@ -281,19 +280,21 @@ class DataBoundElementArray {
             context.constructor.name + "." + this.propString.getPropName(0));
         let contextArray = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (!(contextArray instanceof Array)) {
-            throw "Cannot render a DataBoundElementArray is non-Array type.";
+            throw "Cannot render a DataBoundElementArray with non-Array type.";
         }
 
-        if (contextArray.length != this.lastSize) {
-            if (contextArray.length < this.lastSize) {
+        if (contextArray.length != this.elementArray.length) {
+            if (contextArray.length < this.elementArray.length) {
                 // Remove Nodes
-                let removed = this.elementArray.slice(contextArray.length, this.lastSize - contextArray.length);
+                let removed = this.elementArray.slice(contextArray.length,
+                    this.elementArray.length - contextArray.length);
+
                 for (let i=0; i<removed.length; i++) {
                     this.baseElement.removeChild(removed[i].domElement);
                 }
-            } else if (contextArray.length > this.lastSize) {
+            } else if (contextArray.length > this.elementArray.length) {
                 // Add Nodes
-                let dif = contextArray.length - this.lastSize;
+                let dif = contextArray.length - this.elementArray.length;
                 for (let i=0; i<dif; i++) {
                     let clone = this.domElement.cloneNode(true);
                     let boundElement = new DataBoundElement(clone);
@@ -302,6 +303,7 @@ class DataBoundElementArray {
                 }
             }
         }
+
 
         for (let i=0; i<this.elementArray.length; i++) {
             let child = this.elementArray[i];
