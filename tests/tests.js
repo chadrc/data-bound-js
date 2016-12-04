@@ -619,6 +619,20 @@ TestSuites.suites.push({
                 assertExpectedValue(data.element.childNodes.length, data.context.items.length + 1,
                     "Expecting child nodes to be equal to number of items plus 1 (for anchor element).");
             }
+        },
+        {
+            name: "Count After Removing Items",
+            method(data) {
+                let elementArray = new DataBoundElementArray(data.childElement);
+                elementArray.renderWithContext(data.context, data.dataBoundContext);
+
+                data.context.items.pop();
+                data.context.items.pop();
+                elementArray.renderWithContext(data.context, data.dataBoundContext);
+
+                assertExpectedValue(data.element.childNodes.length, data.context.items.length + 1,
+                    "Expecting child nodes to be equal to number of items plus 1 (for anchor element).");
+            }
         }
     ]
 });

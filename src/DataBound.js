@@ -286,7 +286,7 @@ class DataBoundElementArray {
         if (contextArray.length != this.elementArray.length) {
             if (contextArray.length < this.elementArray.length) {
                 // Remove Nodes
-                let removed = this.elementArray.slice(contextArray.length,
+                let removed = this.elementArray.splice(contextArray.length,
                     this.elementArray.length - contextArray.length);
 
                 for (let i=0; i<removed.length; i++) {
