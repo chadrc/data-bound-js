@@ -512,3 +512,57 @@ TestSuites.suites.push({
         }
     ]
 });
+
+TestSuites.suites.push({
+    name: "Bound Element Arrays",
+    getData() {
+        let baseElement = document.createElement("ul");
+        let childElement = document.createElement("li");
+        childElement.setAttribute("data-bound-element-array", "${items}");
+        childElement.innerHTML = "${.index}: ${text}";
+        baseElement.appendChild(childElement);
+        return {
+            element: baseElement,
+            childElement: childElement,
+            context: {
+                items: [
+                    {text: "Item 1"},
+                    {text: "Item 2"},
+                    {text: "Item 3"},
+                    {text: "Item 4"}
+                ]
+            }
+        }
+    },
+    tests: [
+        {
+            name: "Creation",
+            method(data) {
+                let elementArray = new DataBoundElementArray(data.childElement);
+                let baseChild = data.element.childNodes[0];
+                assert(baseChild != data.childElement, "Child element should've been replaced.");
+            }
+        },
+        {
+            name: "Child Count After Render",
+            method(data) {
+                let elementArray = new DataBoundElementArray(data.childElement);
+                elementArray.renderWithContext(data.context);
+                assertExpectedValue(data.element.childNodes.length, data.context.items.length + 1,
+                    "Expecting child nodes to be equal to number of items plus 1 (for anchor element).");
+            }
+        },
+        {
+            name: "Item Render Values",
+            method(data) {
+                let elementArray = new DataBoundElementArray(data.childElement);
+                elementArray.renderWithContext(data.context);
+                for (let i=0; i<data.context.items.length; i++) {
+                    let childNode = data.element.childNodes[i];
+                    let childContext = data.context.items[i];
+                    assertExpectedValue(childNode.innerHTML, i + ": " + childContext.text);
+                }
+            }
+        }
+    ]
+});

@@ -262,3 +262,51 @@ class DataBoundElement {
         }
     }
 }
+
+class DataBoundElementArray {
+    constructor(element) {
+        this.domElement = element;
+        console.log(this.domElement.attributes["data-bound-element-array"]);
+        this.propString = new DataBoundPropString(this.domElement.attributes["data-bound-element-array"].nodeValue);
+        this.domElement.removeAttribute("data-bound-element-array");
+        this.baseElement = this.domElement.parentElement;
+        this.anchorElement = document.createElement("data-bound-array-anchor");
+        this.baseElement.insertBefore(this.anchorElement, this.domElement);
+        this.baseElement.removeChild(this.domElement);
+        this.lastSize = 0;
+        this.elementArray = [];
+    }
+
+    renderWithContext(context, dataBoundContext, rootContext) {
+        this.anchorElement.setAttribute("data-bound-array",
+            context.constructor.name + "." + this.propString.getPropName(0));
+        let contextArray = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
+        if (!(contextArray instanceof Array)) {
+            throw "Cannot render a DataBoundElementArray is non-Array type.";
+        }
+
+        if (contextArray.length != this.lastSize) {
+            if (contextArray.length < this.lastSize) {
+                // Remove Nodes
+                let removed = this.elementArray.slice(contextArray.length, this.lastSize - contextArray.length);
+                for (let i=0; i<removed.length; i++) {
+                    this.baseElement.removeChild(removed[i].domElement);
+                }
+            } else if (contextArray.length > this.lastSize) {
+                // Add Nodes
+                let dif = contextArray.length - this.lastSize;
+                for (let i=0; i<dif; i++) {
+                    let clone = this.domElement.cloneNode(true);
+                    let boundElement = new DataBoundElement(clone);
+                    this.elementArray.push({domElement: clone, boundElement: boundElement});
+                    this.baseElement.insertBefore(clone, this.anchorElement);
+                }
+            }
+        }
+
+        for (let i=0; i<this.elementArray.length; i++) {
+            let child = this.elementArray[i];
+            child.boundElement.renderWithContext(contextArray[i], {index: i}, rootContext);
+        }
+    }
+}
