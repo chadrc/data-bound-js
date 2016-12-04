@@ -578,7 +578,7 @@ TestSuites.suites.push({
             }
         },
         {
-            name: "Literals for Item Values",
+            name: "Reference Item Value Directly",
             method(data) {
                 data.context.items = ["Item 1", "Item 2", "Item 3", "Item 4"];
                 data.childElement.innerHTML = "${.itemValue}";
