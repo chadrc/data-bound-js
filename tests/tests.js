@@ -570,7 +570,7 @@ TestSuites.suites.push({
             name: "Reference Item Value Directly",
             method(data) {
                 data.context.items = ["Item 1", "Item 2", "Item 3", "Item 4"];
-                data.childElement.innerHTML = "${.itemValue}";
+                data.childElement.innerHTML = "${.contextValue}";
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
