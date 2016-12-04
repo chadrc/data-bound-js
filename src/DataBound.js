@@ -299,7 +299,7 @@ class DataBoundElementArray {
                 for (let i=0; i<dif; i++) {
                     let clone = this.domElement.cloneNode(true);
                     let boundElement = new DataBoundElement(clone);
-                    this.elementArray.push({domElement: clone, boundElement: boundElement});
+                    this.elementArray.push(boundElement);
                     this.baseElement.insertBefore(clone, this.anchorNode);
                 }
             }
@@ -314,7 +314,7 @@ class DataBoundElementArray {
                 itemValue: contextArray[i],
                 dataBoundContext: dataBoundContext
             };
-            child.boundElement.renderWithContext(contextArray[i], childDataBoundContext, rootContext);
+            child.renderWithContext(contextArray[i], childDataBoundContext, rootContext);
         }
     }
 }
