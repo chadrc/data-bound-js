@@ -305,7 +305,7 @@ class DataBoundElementArray {
 
         for (let i=0; i<this.elementArray.length; i++) {
             let child = this.elementArray[i];
-            child.boundElement.renderWithContext(contextArray[i], {index: i}, rootContext);
+            child.boundElement.renderWithContext(contextArray[i], {index: i, parent: context}, rootContext);
         }
     }
 }

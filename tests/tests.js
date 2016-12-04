@@ -525,6 +525,7 @@ TestSuites.suites.push({
             element: baseElement,
             childElement: childElement,
             context: {
+                itemClass: "item-class",
                 items: [
                     {text: "Item 1"},
                     {text: "Item 2"},
@@ -561,6 +562,19 @@ TestSuites.suites.push({
                     let childNode = data.element.childNodes[i];
                     let childContext = data.context.items[i];
                     assertExpectedValue(childNode.innerHTML, i + ": " + childContext.text);
+                }
+            }
+        },
+        {
+            name: "Item Reference Parent Context",
+            method(data) {
+                data.childElement.setAttribute("class", "${.parent.itemClass}");
+                let elementArray = new DataBoundElementArray(data.childElement);
+                elementArray.renderWithContext(data.context);
+                for (let i=0; i<data.context.items.length; i++) {
+                    let childNode = data.element.childNodes[i];
+                    let childContext = data.context.items[i];
+                    assertExpectedValue(childNode.attributes.class.nodeValue, data.context.itemClass);
                 }
             }
         }
