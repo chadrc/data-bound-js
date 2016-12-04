@@ -519,7 +519,7 @@ TestSuites.suites.push({
         let baseElement = document.createElement("ul");
         let childElement = document.createElement("li");
         childElement.setAttribute("data-bound-element-array", "${items}");
-        childElement.innerHTML = "${.index}: ${text}";
+        childElement.innerHTML = "${.dataBoundIndex}: ${text}";
         baseElement.appendChild(childElement);
         return {
             element: baseElement,
@@ -568,12 +568,11 @@ TestSuites.suites.push({
         {
             name: "Item Reference Parent Context",
             method(data) {
-                data.childElement.setAttribute("class", "${.parent.itemClass}");
+                data.childElement.setAttribute("class", "${.parentContext.itemClass}");
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
                     let childNode = data.element.childNodes[i];
-                    let childContext = data.context.items[i];
                     assertExpectedValue(childNode.attributes.class.nodeValue, data.context.itemClass);
                 }
             }
