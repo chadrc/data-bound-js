@@ -32,6 +32,14 @@
         <div class="row">
             <aside class="col-sm-4">
                 <h3>Todo Lists</h3>
+                <form onsubmit="${createList}" class="row">
+                    <label for="newTodoListName" class="col-sm-8">
+                        <input id="newTodoListName" type="text" placeholder="New List" name="newTodoListName" class="w-100">
+                    </label>
+                    <div class="col-sm-4 text-xs-center p-0">
+                        <button type="submit" class="btn btn-sm btn-primary align-middle">Create</button>
+                    </div>
+                </form>
                 <ul class="list-unstyled">
                     <li data-bound-element-array="${lists}"
                         onclick="${.parentContext.selectList}"

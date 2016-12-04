@@ -26,6 +26,7 @@ class TodoApp {
         // end temp
 
         this.selectList = this.selectList.bind(this);
+        this.createList = this.createList.bind(this);
 
         this.element = new DataBoundElement(document.getElementById("todo-app"));
         this.element.renderWithContext(this);
@@ -34,6 +35,16 @@ class TodoApp {
     selectList(event, dataBoundContext) {
         this.currentList = this.lists[dataBoundContext.dataBoundIndex];
         this.element.renderWithContext(this);
+    }
+
+    createList(event, dataBoundContext) {
+        event.preventDefault();
+        let newListName = event.srcElement.elements.newTodoListName.value;
+        if (newListName != "") {
+            this.lists.push(new TodoList(newListName));
+            this.element.renderWithContext(this);
+            event.srcElement.reset();
+        }
     }
 }
 
