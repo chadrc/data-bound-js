@@ -484,20 +484,6 @@ TestSuites.suites.push({
             }
         },
         {
-            name: "Mod Zero",
-            method(data) {
-                data.element.setAttribute('data-bound-disabled-mod-zero', '6');
-                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
-                booleanBinding.renderWithContext(data.context);
-                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
-
-                data.element.setAttribute('data-bound-disabled-mod-zero', '5');
-                booleanBinding.renderWithContext(data.context);
-                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
-                    "Expected 'disabled' attribute to exists with empty string as its value.");
-            }
-        },
-        {
             name: "Conditional Bindings",
             method(data) {
                 let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.checked);

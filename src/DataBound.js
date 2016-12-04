@@ -61,9 +61,6 @@ DataBoundUtils.booleanConditionalAttributes = {
     },
     'not': (contextVal) => {
         return !contextVal;
-    },
-    'mod-zero': (contextVal, conditionVal) => {
-        return contextVal % conditionVal == 0;
     }
 };
 
