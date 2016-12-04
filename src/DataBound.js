@@ -243,7 +243,7 @@ class DataBoundElement {
             let node = this.domElement.childNodes[i];
             switch (node.nodeType) {
                 case 1: // ELEMENT NODE
-                    if (node.attributes["data-bound-element-array"]) {
+                    if (node.attributes["data-bound-array"]) {
                         this.bindings.push(new DataBoundElementArray(node));
                     } else {
                         this.bindings.push(new DataBoundElement(node));
@@ -267,8 +267,8 @@ class DataBoundElement {
 class DataBoundElementArray {
     constructor(element) {
         this.domElement = element;
-        this.propString = new DataBoundPropString(this.domElement.attributes["data-bound-element-array"].nodeValue);
-        this.domElement.removeAttribute("data-bound-element-array");
+        this.propString = new DataBoundPropString(this.domElement.attributes["data-bound-array"].nodeValue);
+        this.domElement.removeAttribute("data-bound-array");
         this.baseElement = this.domElement.parentElement;
         this.anchorNode = document.createComment("DataBoundElementArray: [No Context]");
         this.baseElement.insertBefore(this.anchorNode, this.domElement);

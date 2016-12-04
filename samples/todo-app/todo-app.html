@@ -41,7 +41,7 @@
                     </div>
                 </form>
                 <ul class="list-unstyled">
-                    <li data-bound-element-array="${lists}"
+                    <li data-bound-array="${lists}"
                         onclick="${.parentContext.selectList}"
                         class="d-block selectable">
                         ${name}
@@ -60,7 +60,7 @@
                         </div>
                     </form>
                     <ul>
-                        <li data-bound-element-array="${currentList.items}">${.contextValue}</li>
+                        <li data-bound-array="${currentList.items}">${.contextValue}</li>
                     </ul>
                 </section>
             </section>

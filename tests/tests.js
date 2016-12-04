@@ -504,7 +504,7 @@ TestSuites.suites.push({
     getData() {
         let baseElement = document.createElement("ul");
         let childElement = document.createElement("li");
-        childElement.setAttribute("data-bound-element-array", "${items}");
+        childElement.setAttribute("data-bound-array", "${items}");
         childElement.innerHTML = "${.dataBoundIndex}: ${text}";
         baseElement.appendChild(childElement);
         return {
