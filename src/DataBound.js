@@ -308,7 +308,8 @@ class DataBoundElementArray {
             let childDataBoundContext = {
                 dataBoundIndex: i,
                 parentContext: context,
-                itemValue: contextArray[i]
+                itemValue: contextArray[i],
+                dataBoundContext: dataBoundContext
             };
             child.boundElement.renderWithContext(contextArray[i], childDataBoundContext, rootContext);
         }

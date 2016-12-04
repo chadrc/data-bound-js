@@ -532,6 +532,9 @@ TestSuites.suites.push({
                     {text: "Item 3"},
                     {text: "Item 4"}
                 ]
+            },
+            dataBoundContext: {
+                itemValue: "Parent Bound Context"
             }
         }
     },
@@ -587,6 +590,18 @@ TestSuites.suites.push({
                 for (let i=0; i<data.context.items.length; i++) {
                     let childNode = data.element.childNodes[i];
                     assertExpectedValue(childNode.innerHTML, data.context.items[i]);
+                }
+            }
+        },
+        {
+            name: "Reference Parent Data Bound Context",
+            method(data) {
+                data.childElement.innerHTML = "${.dataBoundIndex}: ${.dataBoundContext.itemValue}";
+                let elementArray = new DataBoundElementArray(data.childElement);
+                elementArray.renderWithContext(data.context, data.dataBoundContext);
+                for (let i=0; i<data.context.items.length; i++) {
+                    let childNode = data.element.childNodes[i];
+                    assertExpectedValue(childNode.innerHTML, i + ": " + data.dataBoundContext.itemValue);
                 }
             }
         }
