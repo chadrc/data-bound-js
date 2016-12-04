@@ -633,6 +633,29 @@ TestSuites.suites.push({
                 assertExpectedValue(data.element.childNodes.length, data.context.items.length + 1,
                     "Expecting child nodes to be equal to number of items plus 1 (for anchor element).");
             }
+        },
+        {
+            name: "Order After Removing Items",
+            method(data) {
+                let elementArray = new DataBoundElementArray(data.childElement);
+                elementArray.renderWithContext(data.context, data.dataBoundContext);
+
+                data.context.items.splice(1, 2);
+                elementArray.renderWithContext(data.context, data.dataBoundContext);
+
+                assertExpectedValue(data.element.childNodes[0].innerHTML, "0: Item 1");
+                assertExpectedValue(data.element.childNodes[1].innerHTML, "1: Item 4");
+            }
+        },
+        {
+            name: "Child Count After Creation As Child",
+            method(data) {
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context, data.dataBoundContext);
+
+                assertExpectedValue(data.element.childNodes.length, data.context.items.length + 1,
+                    "Expecting child nodes to be equal to number of items plus 1 (for anchor element).");
+            }
         }
     ]
 });

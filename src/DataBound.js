@@ -246,7 +246,11 @@ class DataBoundElement {
             let node = this.domElement.childNodes[i];
             switch (node.nodeType) {
                 case 1: // ELEMENT NODE
-                    this.bindings.push(new DataBoundElement(node));
+                    if (node.attributes["data-bound-element-array"]) {
+                        this.bindings.push(new DataBoundElementArray(node));
+                    } else {
+                        this.bindings.push(new DataBoundElement(node));
+                    }
                     break;
                 case 3: // TEXT NODE
                     this.bindings.push(new DataBoundTextNode(node));
