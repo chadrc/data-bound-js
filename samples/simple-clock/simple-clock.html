@@ -19,38 +19,52 @@
 <body>
     <h1 class="display-3 mb-1 text-xs-center">Simple Clock Example</h1>
     <section id="time-section" class="text-xs-center">
-        <h1 class="display-1">${getHour}:${getMinutes}:${getSeconds} ${getMeridian}</h1>
+        <h1 class="display-1">${hour}:${minutes}:${seconds} ${meridian}</h1>
     </section>
 
     <script>
-        let context = {
-            getHour() {
-                let hour = new Date().getHours();
+        class DateContext {
+            constructor(element) {
+                this.now = new Date();
+                this.element = element;
+
+                this.tick = this.tick.bind(this);
+                setInterval(this.tick, 1000);
+
+                this.element.renderWithContext(this);
+            }
+
+            get hour() {
+                let hour = this.now.getHours();
                 if (hour > 12) {
                     hour -= 12
                 }
                 return hour < 10 ? "0" + hour : hour;
-            },
-            getMinutes() {
-                let minutes = new Date().getMinutes();
-                return minutes < 10 ? "0" + minutes : minutes;
-            },
-            getSeconds() {
-                let seconds = new Date().getSeconds();
-                return seconds < 10 ? "0" + seconds : seconds;
-            },
-            getMeridian() {
-                let hour = new Date().getHours();
-                return hour >= 12 ? "PM" : "PM";
             }
-        };
+
+            get minutes() {
+                let minutes = this.now.getMinutes();
+                return minutes < 10 ? "0" + minutes : minutes;
+            }
+
+            get seconds() {
+                let seconds = this.now.getSeconds();
+                return seconds < 10 ? "0" + seconds : seconds;
+            }
+
+            get meridian() {
+                let hour = this.now.getHours();
+                return hour >= 12 ? "PM" : "AM";
+            }
+
+            tick() {
+                this.now = new Date();
+                this.element.renderWithContext(context);
+            }
+        }
 
         let boundElement = new DataBoundElement(document.getElementById("time-section"));
-        boundElement.renderWithContext(context);
-
-        setInterval(() => {
-            boundElement.renderWithContext(context);
-        }, 1000);
+        let context = new DateContext(boundElement);
     </script>
 </body>
 </html>
