@@ -16,6 +16,15 @@
     <!-- Simple Clock Stuff -->
     <script src="../../dist/DataBound.js"></script>
     <script src="todo-app.js"></script>
+    <style>
+        .selectable {
+            cursor: pointer;
+        }
+
+        .selectable:hover {
+            background-color: lightblue;
+        }
+    </style>
 </head>
 <body>
     <h1 class="display-3 mb-1 text-xs-center">TODO Application</h1>
@@ -23,8 +32,12 @@
         <div class="row">
             <aside class="col-sm-4">
                 <h3>Todo Lists</h3>
-                <ul>
-                    <li data-bound-element-array="${lists}">${name}</li>
+                <ul class="list-unstyled">
+                    <li data-bound-element-array="${lists}"
+                        onclick="${.parentContext.selectList}"
+                        class="d-block selectable">
+                        ${name}
+                    </li>
                 </ul>
             </aside>
             <section class="col-sm-8">

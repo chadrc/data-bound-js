@@ -25,7 +25,14 @@ class TodoApp {
 
         // end temp
 
+        this.selectList = this.selectList.bind(this);
+
         this.element = new DataBoundElement(document.getElementById("todo-app"));
+        this.element.renderWithContext(this);
+    }
+
+    selectList(event, dataBoundContext) {
+        this.currentList = this.lists[dataBoundContext.dataBoundIndex];
         this.element.renderWithContext(this);
     }
 }
