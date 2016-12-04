@@ -28,6 +28,7 @@ class TodoApp {
         this.selectList = this.selectList.bind(this);
         this.createList = this.createList.bind(this);
         this.addItemToCurrentList = this.addItemToCurrentList.bind(this);
+        this.removeItemFromCurrentList = this.removeItemFromCurrentList.bind(this);
 
         this.element = new DataBoundElement(document.getElementById("todo-app"));
         this.element.renderWithContext(this);
@@ -56,6 +57,11 @@ class TodoApp {
             this.element.renderWithContext(this);
             event.srcElement.reset();
         }
+    }
+
+    removeItemFromCurrentList(event, dataBoundContext) {
+        this.currentList.items.splice(dataBoundContext.dataBoundIndex, 1);
+        this.element.renderWithContext(this);
     }
 }
 

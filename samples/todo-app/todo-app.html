@@ -17,12 +17,21 @@
     <script src="../../dist/DataBound.js"></script>
     <script src="todo-app.js"></script>
     <style>
-        .selectable {
-            cursor: pointer;
+        .list-item {
+            padding-left: 10px;
+            margin-bottom: 2px;
         }
 
-        .selectable:hover {
+        .list-item:hover {
             background-color: lightblue;
+        }
+
+        .list-item>button.btn-danger {
+            visibility: hidden;
+        }
+
+        .list-item:hover>button.btn-danger {
+            visibility: visible;
         }
     </style>
 </head>
@@ -43,8 +52,13 @@
                 <ul class="list-unstyled">
                     <li data-bound-array="${lists}"
                         onclick="${.parentContext.selectList}"
-                        class="d-block selectable">
+                        class="rounded list-item clearfix">
                         ${name}
+                        <button type="button"
+                                onclick="${.parentContext.removeItemFromCurrentList}"
+                                class="btn btn-sm btn-danger float-xs-right">
+                            &times;
+                        </button>
                     </li>
                 </ul>
             </aside>
@@ -59,8 +73,16 @@
                             <button type="submit" class="btn btn-sm btn-primary align-middle">Add</button>
                         </div>
                     </form>
-                    <ul>
-                        <li data-bound-array="${currentList.items}">${.contextValue}</li>
+                    <ul class="list-unstyled">
+                        <li data-bound-array="${currentList.items}"
+                            class="rounded list-item clearfix">
+                            ${.contextValue}
+                            <button type="button"
+                                    onclick="${.parentContext.removeItemFromCurrentList}"
+                                    class="btn btn-sm btn-danger float-xs-right">
+                                &times;
+                            </button>
+                        </li>
                     </ul>
                 </section>
             </section>
