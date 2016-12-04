@@ -266,7 +266,6 @@ class DataBoundElement {
 class DataBoundElementArray {
     constructor(element) {
         this.domElement = element;
-        console.log(this.domElement.attributes["data-bound-element-array"]);
         this.propString = new DataBoundPropString(this.domElement.attributes["data-bound-element-array"].nodeValue);
         this.domElement.removeAttribute("data-bound-element-array");
         this.baseElement = this.domElement.parentElement;
