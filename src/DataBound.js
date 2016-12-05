@@ -249,6 +249,8 @@ class DataBoundElement {
                 case 1: // ELEMENT NODE
                     if (node.attributes["data-bound-array"]) {
                         this.bindings.push(new DataBoundElementArray(node));
+                    } else if (node.attributes["data-bound-if"]) {
+                        this.bindings.push(new DataBoundIfNode(node));
                     } else {
                         this.bindings.push(new DataBoundElement(node));
                     }

@@ -379,6 +379,22 @@ TestSuites.suites.push({
                 boundIf.renderWithContext(data.context);
                 assertExpectedValue(data.element.childElementCount, 1);
             }
+        },
+        {
+            name: "Data Bound If Through Bound Element",
+            method(data) {
+                let subElement = document.createElement('div');
+                subElement.setAttribute("data-bound-if", "${displayChild}");
+                data.element.appendChild(subElement);
+
+                let boundIf = new DataBoundElement(data.element);
+                boundIf.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
+
+                data.context.displayChild = true;
+                boundIf.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
+            }
         }
     ]
 });
@@ -511,6 +527,32 @@ TestSuites.suites.push({
                 data.context.checkedCondition = "not checked";
                 booleanBinding.renderWithContext(data.context);
                 assert(!data.element.attributes.checked, "Expected 'checked' attribute to be removed.");
+            }
+        }
+    ]
+});
+
+TestSuites.suites.push({
+    name: "Data Bound If Conditions",
+    getData() {
+        let element = document.createElement('div');
+        let childElement = document.createElement('div');
+        childElement.setAttribute('data-bound-if', '${checkedValue}');
+        element.appendChild(childElement);
+        return {
+            element: element,
+            childElement: childElement,
+            context: {
+                checkedValue: 5
+            }
+        }
+    },
+    tests: [
+        {
+            name: "Equals",
+            method(data) {
+                data.childElement.setAttribute("data-bound-if-eq", "4");
+
             }
         }
     ]
