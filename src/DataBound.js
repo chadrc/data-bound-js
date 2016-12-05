@@ -212,8 +212,12 @@ class DataBoundMethodAttribute {
     renderWithContext(context, dataBoundContext, rootContext) {
         this.lastBoundContext = dataBoundContext;
         this.method = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
-        this.nodeOwner.setAttribute('data-bound-method-' + this.attrName,
-            this.propString.lastContextUsed.constructor.name + "." + this.propString.getPropName(0));
+        if (this.method && this.method instanceof Function) {
+            this.nodeOwner.setAttribute('data-bound-method-' + this.attrName,
+                this.propString.lastContextUsed.constructor.name + "." + this.propString.getPropName(0));
+        } else {
+            this.nodeOwner.setAttribute('data-bound-method-' + this.attrName, "[No Bound Method]");
+        }
     }
 
     eventCall(event) {
