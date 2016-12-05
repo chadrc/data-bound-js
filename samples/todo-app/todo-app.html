@@ -55,7 +55,7 @@
                         class="rounded list-item clearfix">
                         ${name}
                         <button type="button"
-                                onclick="${.parentContext.removeItemFromCurrentList}"
+                                onclick="${.parentContext.deleteList}"
                                 class="btn btn-sm btn-danger float-xs-right">
                             &times;
                         </button>
@@ -64,7 +64,7 @@
             </aside>
             <section class="col-sm-8">
                 <h1>${currentList.name}</h1>
-                <section>
+                <section hidden="${currentList}" data-bound-hidden-not>
                     <form onsubmit="${addItemToCurrentList}" class="row">
                         <label for="newTodoItem" class="col-sm-8">
                             <input id="newTodoItem" type="text" placeholder="New List" name="newTodoItem" class="w-100">

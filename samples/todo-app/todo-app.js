@@ -27,6 +27,7 @@ class TodoApp {
 
         this.selectList = this.selectList.bind(this);
         this.createList = this.createList.bind(this);
+        this.deleteList = this.deleteList.bind(this);
         this.addItemToCurrentList = this.addItemToCurrentList.bind(this);
         this.removeItemFromCurrentList = this.removeItemFromCurrentList.bind(this);
 
@@ -35,6 +36,7 @@ class TodoApp {
     }
 
     selectList(event, dataBoundContext) {
+        event.stopPropagation();
         this.currentList = this.lists[dataBoundContext.dataBoundIndex];
         this.element.renderWithContext(this);
     }
@@ -49,6 +51,15 @@ class TodoApp {
         }
     }
 
+    deleteList(event, dataBoundContext) {
+        event.stopPropagation();
+        let deleted = this.lists.splice(dataBoundContext.dataBoundIndex, 1);
+        if (deleted[0] == this.currentList) {
+            this.currentList = null;
+        }
+        this.element.renderWithContext(this);
+    }
+
     addItemToCurrentList(event, dataBoundContext) {
         event.preventDefault();
         let newListItem = event.srcElement.elements.newTodoItem.value;
@@ -60,6 +71,7 @@ class TodoApp {
     }
 
     removeItemFromCurrentList(event, dataBoundContext) {
+        event.stopPropagation();
         this.currentList.items.splice(dataBoundContext.dataBoundIndex, 1);
         this.element.renderWithContext(this);
     }
