@@ -277,12 +277,19 @@ class DataBoundElementArray {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
-        this.anchorNode.data = "DataBoundElementArray: " +
-            context.constructor.name + "." + this.propString.getPropName(0);
         let contextArray = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (!(contextArray instanceof Array)) {
-            throw "Cannot render a DataBoundElementArray with non-Array type.";
+            this.anchorNode.data = "DataBoundElementArray: [No Context]";
+            if (contextArray) {
+                throw "Cannot render a DataBoundElementArray with non-Array type.";
+            } else {
+                // null and undefined are allowed values, but still can't render, so just return
+                return;
+            }
         }
+
+        this.anchorNode.data = "DataBoundElementArray: " +
+            context.constructor.name + "." + this.propString.getPropName(0);
 
         if (contextArray.length != this.elementArray.length) {
             if (contextArray.length < this.elementArray.length) {
@@ -304,7 +311,6 @@ class DataBoundElementArray {
                 }
             }
         }
-
 
         for (let i=0; i<this.elementArray.length; i++) {
             let child = this.elementArray[i];
