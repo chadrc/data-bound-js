@@ -543,7 +543,8 @@ TestSuites.suites.push({
             element: element,
             childElement: childElement,
             context: {
-                checkedValue: 5
+                checkedValue: 5,
+                conditionValue: 4
             }
         }
     },
@@ -557,6 +558,97 @@ TestSuites.suites.push({
                 assertExpectedValue(data.element.childElementCount, 0);
 
                 data.childElement.setAttribute("data-bound-if-eq", "5");
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
+            }
+        },
+        {
+            name: "Not Equals",
+            method(data) {
+                data.childElement.setAttribute("data-bound-if-neq", "5");
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
+
+                data.childElement.setAttribute("data-bound-if-neq", "4");
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
+            }
+        },
+        {
+            name: "Less Than",
+            method(data) {
+                data.childElement.setAttribute("data-bound-if-lt", "5");
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
+
+                data.childElement.setAttribute("data-bound-if-lt", "6");
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
+            }
+        },
+        {
+            name: "Less Than Or Equals",
+            method(data) {
+                data.childElement.setAttribute("data-bound-if-lte", "4");
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
+
+                data.childElement.setAttribute("data-bound-if-lte", "5");
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
+            }
+        },
+        {
+            name: "Greater Than",
+            method(data) {
+                data.childElement.setAttribute("data-bound-if-gt", "5");
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
+
+                data.childElement.setAttribute("data-bound-if-gt", "4");
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
+            }
+        },
+        {
+            name: "Greater Than Or Equal",
+            method(data) {
+                data.childElement.setAttribute("data-bound-if-gte", "56");
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
+
+                data.childElement.setAttribute("data-bound-if-gte", "5");
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
+            }
+        },
+        {
+            name: "Not",
+            method(data) {
+                data.childElement.setAttribute("data-bound-if-not", "");
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
+
+                data.context.checkedValue = false;
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
+            }
+        },
+        {
+            name: "Conditional Binding",
+            method(data) {
+                data.childElement.setAttribute("data-bound-if-eq", "${conditionValue}");
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
+
+                data.context.conditionValue = 5;
                 boundElement.renderWithContext(data.context);
                 assertExpectedValue(data.element.childElementCount, 1);
             }
