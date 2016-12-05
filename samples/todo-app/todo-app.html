@@ -62,9 +62,9 @@
                     </li>
                 </ul>
             </aside>
-            <section class="col-sm-8">
+            <section class="col-sm-8" hidden="${currentList}" data-bound-hidden-not>
                 <h1>${currentList.name}</h1>
-                <section hidden="${currentList}" data-bound-hidden-not>
+                <section>
                     <form onsubmit="${addItemToCurrentList}" class="row">
                         <label for="newTodoItem" class="col-sm-8">
                             <input id="newTodoItem" type="text" placeholder="New List" name="newTodoItem" class="w-100">
