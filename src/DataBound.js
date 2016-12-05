@@ -268,6 +268,41 @@ class DataBoundElement {
     }
 }
 
+class DataBoundIfNode {
+    constructor(element) {
+        this.domElement = element;
+        this.propString = new DataBoundPropString(this.domElement.attributes["data-bound-if"].nodeValue);
+        this.domElement.removeAttribute("data-bound-if");
+        this.boundElement = new DataBoundElement(this.domElement);
+        this.baseElement = this.domElement.parentElement;
+        this.anchorNode = document.createComment("DataBoundIfNode: [No Condition Set");
+        this.baseElement.insertBefore(this.anchorNode, this.domElement);
+        this.elementInDom = true;
+    }
+
+    renderWithContext(context, dataBoundContext, rootContext) {
+        let value = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
+        this.anchorNode.data = "DataBoundElementArray: " +
+            context.constructor.name + "." + this.propString.getPropName(0);
+
+        if (value) {
+            if (!this.elementInDom) {
+                this.baseElement.insertBefore(this.domElement, this.anchorNode);
+                this.elementInDom = true;
+            }
+        } else {
+            if (this.elementInDom) {
+                this.baseElement.removeChild(this.domElement);
+                this.elementInDom = false;
+            }
+        }
+
+        if (this.elementInDom) {
+            this.boundElement.renderWithContext(context, dataBoundContext, rootContext);
+        }
+    }
+}
+
 class DataBoundElementArray {
     constructor(element) {
         this.domElement = element;

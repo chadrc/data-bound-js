@@ -265,6 +265,7 @@ TestSuites.suites.push({
             context: {
                 classes: "alert-warning",
                 isHidden: true,
+                displayChild: false,
                 numValue: 5,
                 raiseClick() {
                     element.setAttribute('class', "alert-info");
@@ -361,6 +362,22 @@ TestSuites.suites.push({
 
                 assertExpectedValue(subElement.attributes.class.nodeValue, data.context.subClass);
                 assertExpectedValue(subElement.innerHTML, data.context.subElementDesc);
+            }
+        },
+        {
+            name: "Data Bound If",
+            method(data) {
+                let subElement = document.createElement('div');
+                subElement.setAttribute("data-bound-if", "${displayChild}");
+                data.element.appendChild(subElement);
+
+                let boundIf = new DataBoundIfNode(subElement);
+                boundIf.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
+
+                data.context.displayChild = true;
+                boundIf.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
             }
         }
     ]
