@@ -154,9 +154,9 @@ class DataBoundBooleanAttribute {
         this.conditionAttr = null;
         this.conditionPropString = null;
 
+        let conditionAttrPrefix = 'data-bound-' + this.attrName + '-';
         for (let i=0; i<this.nodeOwner.attributes.length; i++) {
             let attr = this.nodeOwner.attributes[i];
-            let conditionAttrPrefix = 'data-bound-' + this.attrName + '-';
             if (attr.name.startsWith(conditionAttrPrefix)) {
                 this.conditionAttr = attr;
                 this.conditionPropString = new DataBoundPropString(attr.nodeValue);
@@ -280,14 +280,46 @@ class DataBoundIfNode {
         this.anchorNode = document.createComment("DataBoundIfNode: [No Condition Set");
         this.baseElement.insertBefore(this.anchorNode, this.domElement);
         this.elementInDom = true;
+        this.conditionPropString = null;
+        this.conditionAttr = null;
+        this.conditionMethod = (value) => {return value;};
+
+        let conditionAttrPrefix = 'data-bound-if-';
+        for (let i=0; i<this.domElement.attributes.length; i++) {
+            let attr = this.domElement.attributes[i];
+            if (attr.name.startsWith(conditionAttrPrefix)) {
+                this.conditionAttr = attr;
+                this.conditionPropString = new DataBoundPropString(attr.nodeValue);
+                if (this.conditionPropString.matches.length == 0) {
+                    this.conditionPropString = null;
+                }
+                let condition = attr.name.slice(conditionAttrPrefix.length);
+                this.conditionMethod = DataBoundUtils.booleanConditionalAttributes[condition];
+                if (!this.conditionMethod) {
+                    console.warn("Unknown conditional attribute '", condition,
+                        "' used for data bound if node '", this.attrName, "'.");
+                    this.conditionMethod = (value) => {return value;};
+                }
+                break;
+            }
+        }
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
         let value = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
-        this.anchorNode.data = "DataBoundElementArray: " +
+        this.anchorNode.data = "DataBoundIfNode: " +
             context.constructor.name + "." + this.propString.getPropName(0);
 
-        if (value) {
+        let conditionValue = null;
+        if (this.conditionAttr) {
+            if (this.conditionPropString) {
+                conditionValue = this.conditionPropString.renderWithContext(context, dataBoundContext, rootContext);
+            } else {
+                conditionValue = this.conditionAttr.nodeValue;
+            }
+        }
+
+        if (this.conditionMethod(value, conditionValue)) {
             if (!this.elementInDom) {
                 this.baseElement.insertBefore(this.domElement, this.anchorNode);
                 this.elementInDom = true;

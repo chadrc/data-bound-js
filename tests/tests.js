@@ -552,7 +552,13 @@ TestSuites.suites.push({
             name: "Equals",
             method(data) {
                 data.childElement.setAttribute("data-bound-if-eq", "4");
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
 
+                data.childElement.setAttribute("data-bound-if-eq", "5");
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
             }
         }
     ]
