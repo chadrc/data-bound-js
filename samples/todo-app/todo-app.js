@@ -4,26 +4,24 @@
 
 class TodoApp {
     constructor() {
-        this.lists = [];
-        this.currentList = null;
+        let appInfo = JSON.parse(localStorage.getItem("todoAppInfo"));
 
-        // Temp until functionality is implemented
-        let myList = new TodoList("My List");
-        myList.items.push("Feed Cats");
-        myList.items.push("Program");
-        myList.items.push("Play FFXV");
+        if (appInfo) {
+            this.data = {
+                lists: appInfo.lists,
+                currentListIndex: appInfo.currentListIndex
+            };
+        } else {
+            let myList = new TodoList("My List");
+            myList.items.push("List Item");
 
-        let wishList = new TodoList("Wish List");
-        wishList.items.push("Doughnut maker");
-        wishList.items.push("Wolf bottle opener");
-        wishList.items.push("New Rice Maker");
-        wishList.items.push("Five more computers");
+            this.data = {
+                lists: [myList],
+                currentListIndex: 0
+            };
 
-        this.lists.push(myList);
-        this.lists.push(wishList);
-        this.currentList = myList;
-
-        // end temp
+            this.save();
+        }
 
         this.selectList = this.selectList.bind(this);
         this.createList = this.createList.bind(this);
@@ -35,29 +33,41 @@ class TodoApp {
         this.element.renderWithContext(this);
     }
 
+    get currentList() {
+        return this.data.currentListIndex >= 0 && this.data.currentListIndex < this.data.lists.length
+            ? this.data.lists[this.data.currentListIndex] : null;
+    }
+
+    get lists() {
+        return this.data.lists;
+    }
+
     selectList(event, dataBoundContext) {
         event.stopPropagation();
-        this.currentList = this.lists[dataBoundContext.dataBoundIndex];
+        this.data.currentListIndex = dataBoundContext.dataBoundIndex;
         this.element.renderWithContext(this);
+        this.save();
     }
 
     createList(event, dataBoundContext) {
         event.preventDefault();
         let newListName = event.srcElement.elements.newTodoListName.value;
         if (newListName != "") {
-            this.lists.push(new TodoList(newListName));
+            this.data.lists.push(new TodoList(newListName));
             this.element.renderWithContext(this);
             event.srcElement.reset();
+            this.save();
         }
     }
 
     deleteList(event, dataBoundContext) {
         event.stopPropagation();
-        let deleted = this.lists.splice(dataBoundContext.dataBoundIndex, 1);
+        let deleted = this.data.lists.splice(dataBoundContext.dataBoundIndex, 1);
         if (deleted[0] == this.currentList) {
-            this.currentList = null;
+            this.data.currentListIndex = -1;
         }
         this.element.renderWithContext(this);
+        this.save();
     }
 
     addItemToCurrentList(event, dataBoundContext) {
@@ -67,6 +77,7 @@ class TodoApp {
             this.currentList.items.push(newListItem);
             this.element.renderWithContext(this);
             event.srcElement.reset();
+            this.save();
         }
     }
 
@@ -74,6 +85,11 @@ class TodoApp {
         event.stopPropagation();
         this.currentList.items.splice(dataBoundContext.dataBoundIndex, 1);
         this.element.renderWithContext(this);
+        this.save();
+    }
+
+    save() {
+        localStorage.setItem("todoAppInfo", JSON.stringify(this.data));
     }
 }
 

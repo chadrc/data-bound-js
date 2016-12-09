@@ -17,6 +17,10 @@
     <script src="../../dist/DataBound.js"></script>
     <script src="todo-app.js"></script>
     <style>
+        .pointer {
+            cursor: pointer;
+        }
+
         .list-item {
             padding-left: 10px;
             margin-bottom: 2px;
@@ -52,7 +56,7 @@
                 <ul class="list-unstyled">
                     <li data-bound-array="${lists}"
                         onclick="${.parentContext.selectList}"
-                        class="rounded list-item clearfix">
+                        class="rounded list-item clearfix pointer">
                         ${name}
                         <span class="tag tag-pill tag-info">${items.length}</span>
                         <button type="button"
