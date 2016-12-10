@@ -351,11 +351,12 @@ class DataBoundElement {
                     if (node.attributes["data-bound-context"]) {
                         let subContext = new DataBoundSubContext(node);
                         let contextName = node.getAttribute("id");
-
                         this.subContexts.push(subContext);
                         if (contextName) {
                             this.subContexts[contextName] = this.subContexts[this.subContexts.length-1];
                         }
+                        node.removeAttribute("data-bound-context");
+                        node.setAttribute("data-bound-sub-context", "");
                         break;
                     }
 
