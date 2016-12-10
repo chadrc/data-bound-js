@@ -2,9 +2,9 @@
  * Created by chad on 12/4/16.
  */
 
-class TodoApp {
+class ListsApp {
     constructor() {
-        let appInfo = JSON.parse(localStorage.getItem("todoAppInfo"));
+        let appInfo = JSON.parse(localStorage.getItem("listsAppInfo"));
 
         if (appInfo) {
             this.data = {
@@ -12,7 +12,7 @@ class TodoApp {
                 currentListIndex: appInfo.currentListIndex
             };
         } else {
-            let myList = new TodoList("My List");
+            let myList = new List("My List");
             myList.items.push("List Item");
 
             this.data = {
@@ -29,7 +29,7 @@ class TodoApp {
         this.addItemToCurrentList = this.addItemToCurrentList.bind(this);
         this.removeItemFromCurrentList = this.removeItemFromCurrentList.bind(this);
 
-        this.element = new DataBoundElement(document.getElementById("todo-app"));
+        this.element = new DataBoundElement(document.getElementById("lists-app"));
         this.element.renderWithContext(this);
     }
 
@@ -51,9 +51,9 @@ class TodoApp {
 
     createList(event, dataBoundContext) {
         event.preventDefault();
-        let newListName = event.srcElement.elements.newTodoListName.value;
+        let newListName = event.srcElement.elements.newListName.value;
         if (newListName != "") {
-            this.data.lists.push(new TodoList(newListName));
+            this.data.lists.push(new List(newListName));
             this.element.renderWithContext(this);
             event.srcElement.reset();
             this.save();
@@ -72,7 +72,7 @@ class TodoApp {
 
     addItemToCurrentList(event, dataBoundContext) {
         event.preventDefault();
-        let newListItem = event.srcElement.elements.newTodoItem.value;
+        let newListItem = event.srcElement.elements.newListItem.value;
         if (newListItem != "") {
             this.currentList.items.push(newListItem);
             this.element.renderWithContext(this);
@@ -89,11 +89,11 @@ class TodoApp {
     }
 
     save() {
-        localStorage.setItem("todoAppInfo", JSON.stringify(this.data));
+        localStorage.setItem("listsAppInfo", JSON.stringify(this.data));
     }
 }
 
-class TodoList {
+class List {
     constructor(name) {
         this.name = name;
         this.items = [];
@@ -101,5 +101,5 @@ class TodoList {
 }
 
 window.addEventListener('load', () => {
-    let app = new TodoApp();
+    let app = new ListsApp();
 });

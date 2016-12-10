@@ -45,16 +45,16 @@
     </style>
 </head>
 <body>
-    <section id="todo-app" class="container">
+    <section id="lists-app" class="container">
         <h1 class="display-3 mb-1 bold-underline">Lists App</h1>
         <div class="row">
             <aside class="col-sm-4">
                 <h1>Lists</h1>
                 <form onsubmit="${createList}" class="form">
                     <div class="form-group">
-                        <label for="newTodoListName" class="sr-only">List Name</label>
-                        <input id="newTodoListName"
-                               name="newTodoListName"
+                        <label for="newListName" class="sr-only">List Name</label>
+                        <input id="newListName"
+                               name="newListName"
                                type="text"
                                placeholder="New List"
                                class="form-control">
@@ -78,11 +78,11 @@
                 <h1>${currentList.name}</h1>
                 <section>
                     <form onsubmit="${addItemToCurrentList}" class="form">
-                        <label for="newTodoItem" class="sr-only">Item Name</label>
-                        <input id="newTodoItem"
+                        <label for="newListItem" class="sr-only">Item Name</label>
+                        <input id="newListItem"
                                type="text"
                                placeholder="New Item"
-                               name="newTodoItem"
+                               name="newListItem"
                                class="form-control">
                     </form>
                     <ul class="list-unstyled mt-1">
