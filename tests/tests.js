@@ -948,3 +948,35 @@ TestSuites.suites.push({
         }
     ]
 });
+
+TestSuites.suites.push({
+    name: "Sub Contexts",
+    getData() {
+        let rootElement = document.createElement("div");
+        let child = document.createElement("h4");
+        child.innerHTML = "${title}";
+        rootElement.appendChild(child);
+
+        let subContext = document.createElement("section");
+        subContext.setAttribute("data-bound-context", "${subContext}");
+        let subChild = document.createElement("span");
+        subChild.innerHTML = "${description} of the ${~title} page";
+        subContext.appendChild(subChild);
+
+        return {
+            rootElement: rootElement,
+            rootChild: child,
+            subContextElement: subContext,
+            subContextChild: subChild,
+            context: {
+                title: "My Title",
+                subContext: {
+                    description: "Page Description"
+                }
+            }
+        }
+    },
+    tests: [
+
+    ]
+});
