@@ -351,9 +351,15 @@ class DataBoundIfNode {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
+        // Needs Test
+        dataBoundContext.element = this.domElement;
         let value = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
-        let conditionValue = this.boundConditional.getValueWithContext(context, dataBoundContext, rootContext);
+        if (value instanceof Function) {
+            value = value(dataBoundContext);
+        }
+        // End
 
+        let conditionValue = this.boundConditional.getValueWithContext(context, dataBoundContext, rootContext);
         this.anchorNode.data = "DataBoundIfNode: " +
             context.constructor.name + "." + this.propString.getPropName(0);
 

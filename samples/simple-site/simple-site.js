@@ -10,6 +10,7 @@ class RootController {
 
         this.selectPage = this.selectPage.bind(this);
         this.activeClass = this.activeClass.bind(this);
+        this.isCurrentPage = this.isCurrentPage.bind(this);
 
         this.rootElement = new DataBoundElement(document.getElementById("simpleSiteRoot"));
         this.rootElement.renderWithContext(this);
@@ -34,6 +35,11 @@ class RootController {
     get currentPageSubTitle() {
         let page = this.pages[this.currentPage];
         return page ? page.subTitle : "";
+    }
+
+    isCurrentPage(dataBoundContext) {
+        let ref = dataBoundContext.element.getAttribute("id");
+        return ref == this.currentPage;
     }
 
     activeClass(dataBoundContext) {
