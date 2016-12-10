@@ -984,7 +984,8 @@ TestSuites.suites.push({
             name: "Sub Context Creation",
             method(data) {
                 let boundElement = new DataBoundElement(data.rootElement);
-                assert(boundElement.subContexts.mySubContext, "Expected sub-context with name 'mySubContext' to exist.");
+                assert(boundElement.subContexts.mySubContext,
+                    "Expected sub-context with name 'mySubContext' to exist.");
             }
         },
         {
@@ -1019,6 +1020,18 @@ TestSuites.suites.push({
 
                 assertExpectedValue(data.subContextChild.innerHTML,
                     data.context.subContext.description + " of the " + data.context.title + " page");
+            }
+        },
+        {
+            name: "All Contexts To Root",
+            method(data) {
+                let newRoot = document.createElement("div");
+                newRoot.appendChild(data.rootElement);
+
+                let boundElement = new DataBoundElement(newRoot);
+                console.log(boundElement);
+                assert(boundElement.subContexts.mySubContext,
+                    "Expected sub-context with name 'mySubContext' to exist.");
             }
         }
     ]

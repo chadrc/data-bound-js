@@ -310,12 +310,12 @@ class DataBoundMethodAttribute {
 }
 
 class DataBoundElement {
-    constructor(element) {
+    constructor(element, creatingElement) {
         DataBoundUtils.registerDBObject(this);
         this.domElement = element;
         this.bindings = [];
         this.refs = {};
-        this.subContexts = [];
+        this.subContexts = creatingElement ? creatingElement.subContexts : [];
 
         for (let i=0; i<this.domElement.attributes.length; i++) {
             let attr = this.domElement.attributes[i];
@@ -339,6 +339,7 @@ class DataBoundElement {
                     if (node.attributes["data-bound-context"]) {
                         let subContext = new DataBoundSubContext(node);
                         let contextName = node.getAttribute("id");
+
                         this.subContexts.push(subContext);
                         if (contextName) {
                             this.subContexts[contextName] = this.subContexts[this.subContexts.length-1];
@@ -352,7 +353,7 @@ class DataBoundElement {
                     } else if (node.attributes["data-bound-if"]) {
                         elementBinding = new DataBoundIfNode(node);
                     } else {
-                        elementBinding = new DataBoundElement(node);
+                        elementBinding = new DataBoundElement(node, this);
                     }
 
                     if (node.attributes["data-bound-ref"]) {
@@ -382,7 +383,8 @@ class DataBoundElement {
         return this.bindings.length > 0;
     }
 
-    renderWithContext(context, dataBoundContext, rootContext, extendContext, extendDataBoundContext, extendRootContext) {
+    renderWithContext(context, dataBoundContext, rootContext,
+                      extendContext, extendDataBoundContext, extendRootContext) {
         if (!rootContext) {
             rootContext = context;
         }
