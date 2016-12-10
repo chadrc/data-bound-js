@@ -49,7 +49,29 @@ class DataBoundUtils {
         }
         return info;
     }
+
+    static registerDBObject(obj) {
+        if (DataBoundUtils.debugMode) {
+            obj.dataBoundId = DataBoundUtils.boundObjectCounter++;
+            DataBoundUtils.objectList.push(obj);
+        }
+    }
+
+    static getDBObjectById(id) {
+        if (!DataBoundUtils.debugMode) {
+            return "DataBoundJS is not in debug mode.";
+        }
+
+        if (id >= 0 && id < DataBoundUtils.objectList.length) {
+            return DataBoundUtils.objectList[id];
+        }
+        return null;
+    }
 }
+
+DataBoundUtils.debugMode = false;
+DataBoundUtils.objectList = [];
+DataBoundUtils.boundObjectCounter = 1;
 
 DataBoundUtils.booleanAttributeNameList = [
     "checked",
@@ -95,6 +117,7 @@ DataBoundUtils.propStringRegex = new RegExp(/\$\{ *(~(?!\.))?[\w.]+\w *}/g);
 
 class DataBoundPropString {
     constructor(str) {
+        DataBoundUtils.registerDBObject(this);
         this.originalStr = str;
         this.matches = DataBoundUtils.extractPropsFromString(str);
     }
@@ -151,6 +174,7 @@ class DataBoundPropString {
 
 class DataBoundAttribute {
     constructor(attrNode) {
+        DataBoundUtils.registerDBObject(this);
         this.node = attrNode;
         this.propString = new DataBoundPropString(attrNode.nodeValue);
     }
@@ -166,6 +190,7 @@ class DataBoundAttribute {
 
 class DataBoundTextNode {
     constructor(textNode) {
+        DataBoundUtils.registerDBObject(this);
         this.node = textNode;
         this.propString = new DataBoundPropString(textNode.nodeValue);
     }
@@ -181,6 +206,7 @@ class DataBoundTextNode {
 
 class DataBoundConditional {
     constructor(attributes, prefix) {
+        DataBoundUtils.registerDBObject(this);
         this.conditionAttr = null;
         this.conditionPropString = null;
         this.conditionMethod = (value) => {return value;};
@@ -220,6 +246,7 @@ class DataBoundConditional {
 
 class DataBoundBooleanAttribute {
     constructor(attrNode) {
+        DataBoundUtils.registerDBObject(this);
         this.nodeOwner = attrNode.ownerElement;
         this.attrName = attrNode.nodeName;
         this.propString = new DataBoundPropString(attrNode.nodeValue);
@@ -247,6 +274,7 @@ class DataBoundBooleanAttribute {
 
 class DataBoundMethodAttribute {
     constructor(attrNode) {
+        DataBoundUtils.registerDBObject(this);
         this.nodeOwner = attrNode.ownerElement;
         this.attrName = attrNode.nodeName;
         if (!this.attrName.startsWith("on")) {
@@ -283,6 +311,7 @@ class DataBoundMethodAttribute {
 
 class DataBoundElement {
     constructor(element) {
+        DataBoundUtils.registerDBObject(this);
         this.domElement = element;
         this.bindings = [];
         this.refs = {};
@@ -366,6 +395,7 @@ class DataBoundElement {
 
 class DataBoundIfNode {
     constructor(element) {
+        DataBoundUtils.registerDBObject(this);
         this.domElement = element;
         this.propString = new DataBoundPropString(this.domElement.attributes["data-bound-if"].nodeValue);
         this.domElement.removeAttribute("data-bound-if");
@@ -382,6 +412,7 @@ class DataBoundIfNode {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
+
         let value = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (value instanceof Function) {
             value = value(dataBoundContext);
@@ -411,6 +442,7 @@ class DataBoundIfNode {
 
 class DataBoundElementArray {
     constructor(element) {
+        DataBoundUtils.registerDBObject(this);
         this.domElement = element;
         this.propString = new DataBoundPropString(this.domElement.attributes["data-bound-array"].nodeValue);
         this.domElement.removeAttribute("data-bound-array");
