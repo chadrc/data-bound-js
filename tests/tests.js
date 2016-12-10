@@ -958,7 +958,7 @@ TestSuites.suites.push({
         rootElement.appendChild(child);
 
         let subContext = document.createElement("section");
-        subContext.setAttribute("data-bound-context", "${subContext}");
+        subContext.setAttribute("data-bound-context", "");
         subContext.setAttribute("id", "mySubContext");
         let subChild = document.createElement("span");
         subChild.innerHTML = "${description} of the ${~title} page";
@@ -993,6 +993,32 @@ TestSuites.suites.push({
                 let boundElement = new DataBoundElement(data.rootElement);
                 boundElement.renderWithContext(data.context);
                 assertExpectedValue(data.subContextChild.innerHTML, "${description} of the ${~title} page");
+            }
+        },
+        {
+            name: "Sub Context Render",
+            method(data) {
+                let boundElement = new DataBoundElement(data.rootElement);
+                boundElement.renderWithContext(data.context);
+                let sub = boundElement.subContexts.mySubContext;
+                sub.renderWithContext(data.context.subContext);
+                assertExpectedValue(data.subContextChild.innerHTML,
+                    data.context.subContext.description + " of the " + data.context.title + " page");
+            }
+        },
+        {
+            name: "Sub Context Render After Root Context Changed",
+            method(data) {
+                let boundElement = new DataBoundElement(data.rootElement);
+                boundElement.renderWithContext(data.context);
+                let sub = boundElement.subContexts.mySubContext;
+                sub.renderWithContext(data.context.subContext);
+
+                data.context.title = "My New Title";
+                sub.renderWithContext(data.context.subContext);
+
+                assertExpectedValue(data.subContextChild.innerHTML,
+                    data.context.subContext.description + " of the " + data.context.title + " page");
             }
         }
     ]

@@ -337,7 +337,6 @@ class DataBoundElement {
             switch (node.nodeType) {
                 case 1: // ELEMENT NODE
                     if (node.attributes["data-bound-context"]) {
-                        console.log("sub context found");
                         let subContext = new DataBoundSubContext(node);
                         let contextName = node.getAttribute("id");
                         this.subContexts.push(subContext);
@@ -384,8 +383,11 @@ class DataBoundElement {
     }
 
     renderWithContext(context, dataBoundContext, rootContext, extendContext, extendDataBoundContext, extendRootContext) {
-        let newContext = null;
+        if (!rootContext) {
+            rootContext = context;
+        }
 
+        let newContext = null;
         if (extendDataBoundContext && dataBoundContext) {
             dataBoundContext.element = this.domElement;
             dataBoundContext.boundElement = this;
@@ -402,6 +404,11 @@ class DataBoundElement {
             let b = this.bindings[i];
             b.renderWithContext(context, newContext, rootContext, false, true, false);
         }
+
+        for(let i=0; i<this.subContexts.length; i++) {
+            let sub = this.subContexts[i];
+            sub.rootContext = rootContext;
+        }
     }
 }
 
@@ -409,6 +416,16 @@ class DataBoundSubContext {
     constructor(element) {
         DataBoundUtils.registerDBObject(this);
         this.domElement = element;
+        this.boundElement = new DataBoundElement(element);
+        this.currentRootContext = null;
+    }
+
+    set rootContext(context) {
+        this.currentRootContext = context;
+    }
+
+    renderWithContext(context) {
+        this.boundElement.renderWithContext(context, null, this.currentRootContext);
     }
 }
 
