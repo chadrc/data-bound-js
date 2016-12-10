@@ -44,15 +44,17 @@
         <div class="row">
             <aside class="col-sm-4">
                 <h1>Lists</h1>
-                <form onsubmit="${createList}" class="row">
-                    <label for="newTodoListName" class="col-sm-8">
-                        <input id="newTodoListName" type="text" placeholder="New List" name="newTodoListName" class="w-100">
-                    </label>
-                    <div class="col-sm-4 text-xs-center p-0">
-                        <button type="submit" class="btn btn-sm btn-primary align-middle">Create</button>
+                <form onsubmit="${createList}" class="form">
+                    <div class="form-group">
+                        <label for="newTodoListName" class="sr-only">List Name</label>
+                        <input id="newTodoListName"
+                               name="newTodoListName"
+                               type="text"
+                               placeholder="New List"
+                               class="form-control">
                     </div>
                 </form>
-                <ul class="list-unstyled">
+                <ul class="list-unstyled mt-1">
                     <li data-bound-array="${lists}"
                         onclick="${.parentContext.selectList}"
                         class="rounded list-item clearfix pointer">
@@ -69,15 +71,15 @@
             <section class="col-sm-8" hidden="${currentList}" data-bound-hidden-not>
                 <h1>${currentList.name}</h1>
                 <section>
-                    <form onsubmit="${addItemToCurrentList}" class="row">
-                        <label for="newTodoItem" class="col-sm-8">
-                            <input id="newTodoItem" type="text" placeholder="New Item" name="newTodoItem" class="w-100">
-                        </label>
-                        <div class="col-sm-4 text-xs-center p-0">
-                            <button type="submit" class="btn btn-sm btn-primary align-middle">Add</button>
-                        </div>
+                    <form onsubmit="${addItemToCurrentList}" class="form">
+                        <label for="newTodoItem" class="sr-only">Item Name</label>
+                        <input id="newTodoItem"
+                               type="text"
+                               placeholder="New Item"
+                               name="newTodoItem"
+                               class="form-control">
                     </form>
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled mt-1">
                         <li data-bound-array="${currentList.items}"
                             class="rounded list-item clearfix">
                             <span>${.contextValue}</span>
