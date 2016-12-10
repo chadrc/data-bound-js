@@ -6,6 +6,7 @@ class RootController {
     constructor() {
 
         this.currentPage = null;
+        this.pages = {};
 
         this.selectPage = this.selectPage.bind(this);
         this.activeClass = this.activeClass.bind(this);
@@ -13,28 +14,37 @@ class RootController {
         this.rootElement = new DataBoundElement(document.getElementById("simpleSiteRoot"));
         this.rootElement.renderWithContext(this);
 
-        this.homeCtrl = new HomePageController(this.rootElement.refs.home);
-
-        this.currentPage = this.homeCtrl;
+        this.pages = {
+            home: new HomePageController(this.rootElement.refs.home),
+            about: new AboutPageController(this.rootElement.refs.about),
+            gallery: new GalleryPageController(this.rootElement.refs.gallery),
+            projects: new ProjectsPageController(this.rootElement.refs.projects),
+            articles: new ArticlesPageController(this.rootElement.refs.articles)
+        };
+        this.currentPage = "home";
 
         this.rootElement.renderWithContext(this);
     }
 
     get currentPageTitle() {
-        return this.currentPage ? this.currentPage.title : "";
+        let page = this.pages[this.currentPage];
+        return page ? page.title : "";
     }
 
     get currentPageSubTitle() {
-        return this.currentPage ? this.currentPage.subTitle : "";
+        let page = this.pages[this.currentPage];
+        return page ? page.subTitle : "";
     }
 
     activeClass(dataBoundContext) {
-        console.log(dataBoundContext);
+        let ref = dataBoundContext.element.getAttribute("href").slice(1);
+        let activePage = ref == this.currentPage;
+        return activePage ? "active" : "";
     }
 
     selectPage(event, dataBoundContext) {
-        console.log(dataBoundContext);
-        this.currentPage = event.target.getAttribute("href").slice(1);;
+        this.currentPage = event.target.getAttribute("href").slice(1);
+        this.rootElement.renderWithContext(this);
     }
 }
 
