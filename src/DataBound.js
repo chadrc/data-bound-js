@@ -269,6 +269,7 @@ class DataBoundElement {
     constructor(element) {
         this.domElement = element;
         this.bindings = [];
+        this.refs = {};
 
         for (let i=0; i<this.domElement.attributes.length; i++) {
             let attr = this.domElement.attributes[i];
@@ -285,13 +286,20 @@ class DataBoundElement {
             let node = this.domElement.childNodes[i];
             switch (node.nodeType) {
                 case 1: // ELEMENT NODE
+                    let elementBinding = null;
                     if (node.attributes["data-bound-array"]) {
-                        this.bindings.push(new DataBoundElementArray(node));
+                        elementBinding = new DataBoundElementArray(node);
                     } else if (node.attributes["data-bound-if"]) {
-                        this.bindings.push(new DataBoundIfNode(node));
+                        elementBinding = new DataBoundIfNode(node);
                     } else {
-                        this.bindings.push(new DataBoundElement(node));
+                        elementBinding = new DataBoundElement(node);
                     }
+
+                    if (node.attributes["data-bound-ref"]) {
+                        this.refs[node.getAttribute("data-bound-ref")] = elementBinding;
+                    }
+
+                    this.bindings.push(elementBinding);
                     break;
                 case 3: // TEXT NODE
                     this.bindings.push(new DataBoundTextNode(node));
@@ -315,7 +323,7 @@ class DataBoundIfNode {
         this.domElement.removeAttribute("data-bound-if");
         this.boundElement = new DataBoundElement(this.domElement);
         this.baseElement = this.domElement.parentElement;
-        this.anchorNode = document.createComment("DataBoundIfNode: [No Condition Set");
+        this.anchorNode = document.createComment("DataBoundIfNode: [No Condition Set]");
         this.baseElement.insertBefore(this.anchorNode, this.domElement);
         this.elementInDom = true;
         this.boundConditional = new DataBoundConditional(this.domElement.attributes, "data-bound-if-");

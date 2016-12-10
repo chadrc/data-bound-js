@@ -808,29 +808,35 @@ TestSuites.suites.push({
     getData() {
         let element = document.createElement("div");
 
-        let refChild1 = document.createElement("div");
-        refChild1.setAttribute("data-bound-ref", "child1");
+        let refChild = document.createElement("div");
+        refChild.setAttribute("data-bound-ref", "child1");
 
-        let refChild2 = document.createElement("div");
-        refChild2.setAttribute("id", "child2");
-        refChild2.setAttribute("data-bound-ref", "");
+        element.appendChild(refChild);
 
-        let refChild3 = document.createElement("div");
-        refChild3.setAttribute("data-bound-ref", "${childReference}");
-
-        element.appendChild(refChild1);
-        element.appendChild(refChild2);
+        let testContext = {
+            childRefFound: null
+        };
 
         return {
             element: element,
-            refChild1: refChild1,
-            refChild2: refChild2,
+            refChild: refChild,
             context: {
-                childReference: "child3"
-            }
+                childReference: "contextChildReference",
+                childRefMethod(ref) {
+                    testContext.childRefFound = ref;
+                }
+            },
+            testContext: testContext
         }
     },
     tests: [
-
+        {
+            name: "Simple Reference",
+            method(data) {
+                let boundElement = new DataBoundElement(data.element);
+                assert(boundElement.refs.child1.domElement === data.refChild,
+                    "Expecting reference on bound element to exactly equal refChild.");
+            }
+        }
     ]
 });
