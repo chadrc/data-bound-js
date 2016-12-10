@@ -155,6 +155,10 @@ class DataBoundAttribute {
         this.propString = new DataBoundPropString(attrNode.nodeValue);
     }
 
+    get isBound() {
+        return this.propString.matches.length > 0;
+    }
+
     renderWithContext(context, dataBoundContext, rootContext) {
         this.node.nodeValue = this.propString.renderWithContext(context, dataBoundContext, rootContext);
     }
@@ -164,6 +168,10 @@ class DataBoundTextNode {
     constructor(textNode) {
         this.node = textNode;
         this.propString = new DataBoundPropString(textNode.nodeValue);
+    }
+
+    get isBound() {
+        return this.propString.matches.length > 0;
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
@@ -220,6 +228,10 @@ class DataBoundBooleanAttribute {
         this.boundConditional = new DataBoundConditional(this.nodeOwner.attributes, conditionAttrPrefix);
     }
 
+    get isBound() {
+        return this.propString.matches.length > 0;
+    }
+
     renderWithContext(context, dataBoundContext, rootContext) {
         if (this.propString.matches.length > 0) {
             let contextValue = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
@@ -245,6 +257,10 @@ class DataBoundMethodAttribute {
         this.eventName = this.attrName.slice(2);
         this.nodeOwner.addEventListener(this.eventName, this.eventCall.bind(this));
         this.nodeOwner.removeAttribute(this.attrName);
+    }
+
+    get isBound() {
+        return this.propString.matches.length > 0;
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
@@ -273,12 +289,16 @@ class DataBoundElement {
 
         for (let i=0; i<this.domElement.attributes.length; i++) {
             let attr = this.domElement.attributes[i];
+            let binding = null;
             if (DataBoundUtils.booleanAttributeNameList.indexOf(attr.name) >= 0) {
-                this.bindings.push(new DataBoundBooleanAttribute(attr));
+                binding = new DataBoundBooleanAttribute(attr);
             } else if (attr.name.startsWith("on")) {
-                this.bindings.push(new DataBoundMethodAttribute(attr));
+                binding = new DataBoundMethodAttribute(attr);
             } else {
-                this.bindings.push(new DataBoundAttribute(attr));
+                binding = new DataBoundAttribute(attr);
+            }
+            if (binding.isBound) {
+                this.bindings.push(binding);
             }
         }
 
@@ -304,15 +324,22 @@ class DataBoundElement {
                         }
                     }
 
-                    if (!node.attributes["data-bound-ignore"]) {
+                    if (elementBinding.isBound && !node.attributes["data-bound-ignore"]) {
                         this.bindings.push(elementBinding);
                     }
                     break;
                 case 3: // TEXT NODE
-                    this.bindings.push(new DataBoundTextNode(node));
+                    let textBinding = new DataBoundTextNode(node);
+                    if (textBinding.isBound) {
+                        this.bindings.push(textBinding);
+                    }
                     break;
             }
         }
+    }
+
+    get isBound() {
+        return this.bindings.length > 0;
     }
 
     renderWithContext(context, dataBoundContext, rootContext, extendContext, extendDataBoundContext, extendRootContext) {
@@ -348,6 +375,10 @@ class DataBoundIfNode {
         this.baseElement.insertBefore(this.anchorNode, this.domElement);
         this.elementInDom = true;
         this.boundConditional = new DataBoundConditional(this.domElement.attributes, "data-bound-if-");
+    }
+
+    get isBound() {
+        return this.propString.matches.length > 0;
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
@@ -388,6 +419,10 @@ class DataBoundElementArray {
         this.baseElement.insertBefore(this.anchorNode, this.domElement);
         this.baseElement.removeChild(this.domElement);
         this.elementArray = [];
+    }
+
+    get isBound() {
+        return this.propString.matches.length > 0;
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
