@@ -837,6 +837,16 @@ TestSuites.suites.push({
                 assert(boundElement.refs.child1.domElement === data.refChild,
                     "Expecting reference on bound element to exactly equal refChild.");
             }
+        },
+        {
+            name: "Implicit Reference With ID",
+            method(data) {
+                data.refChild.setAttribute("data-bound-ref", "");
+                data.refChild.setAttribute("id", "child1");
+                let boundElement = new DataBoundElement(data.element);
+                assert(boundElement.refs.child1.domElement === data.refChild,
+                    "Expecting reference on bound element to exactly equal refChild.");
+            }
         }
     ]
 });

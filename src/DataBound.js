@@ -296,7 +296,16 @@ class DataBoundElement {
                     }
 
                     if (node.attributes["data-bound-ref"]) {
-                        this.refs[node.getAttribute("data-bound-ref")] = elementBinding;
+                        let refName = node.getAttribute("data-bound-ref");
+                        if (refName === "") {
+                            refName = node.getAttribute("id");
+                        }
+
+                        if (refName === "") {
+                            console.warn("Data bound reference used without value or id value.");
+                        } else {
+                            this.refs[refName] = elementBinding;
+                        }
                     }
 
                     this.bindings.push(elementBinding);
