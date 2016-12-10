@@ -1,0 +1,36 @@
+
+.bb-xs {
+    border-bottom: 0.1rem solid rgb(55, 58, 60);
+}
+
+.bb-sm {
+    border-bottom: 0.2rem solid rgb(55, 58, 60);
+}
+
+.bb-md {
+    border-bottom: 0.3rem solid rgb(55, 58, 60);
+}
+
+.bb-lg {
+    border-bottom: 0.4rem solid rgb(55, 58, 60);
+}
+
+.bb-xl {
+    border-bottom: 0.5rem solid rgb(55, 58, 60);
+}
+
+.p-h {
+    padding: 0.5rem;
+}
+
+.pb-h {
+    padding-bottom: 0.5rem;
+}
+
+.hover-underline {
+    border: 0.2rem solid transparent;
+}
+
+a.hover-underline.active, .hover-underline:hover {
+    border-bottom: 0.2rem solid white;
+}
