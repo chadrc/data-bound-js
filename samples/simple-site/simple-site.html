@@ -69,20 +69,30 @@
                 <h1 class="display-5">${currentPageTitle}</h1>
                 <h5 class="text-muted">${currentPageSubTitle}</h5>
             </header>
-            <section id="home" data-bound-context data-bound-if="${~isCurrentPage}">
-                <p>Home</p>
+            <section hidden="${currentPageName}" data-bound-hidden-neq="home">
+                <div id="home" data-bound-context>
+                    <p>Home</p>
+                </div>
             </section>
-            <section id="about" data-bound-context data-bound-if="${~isCurrentPage}">
-                <p>About</p>
+            <section hidden="${currentPageName}" data-bound-hidden-neq="about">
+                <div id="about" data-bound-context>
+                    <p>About</p>
+                </div>
             </section>
-            <section id="projects" data-bound-context data-bound-if="${~isCurrentPage}">
-                <p>Projects</p>
+            <section hidden="${currentPageName}" data-bound-hidden-neq="projects">
+                <div id="projects" data-bound-context>
+                    <p>Projects</p>
+                </div>
             </section>
-            <section id="gallery" data-bound-context data-bound-if="${~isCurrentPage}">
-                <p>Gallery</p>
+            <section hidden="${currentPageName}" data-bound-hidden-neq="gallery">
+                <div id="gallery" data-bound-context>
+                    <p>Gallery</p>
+                </div>
             </section>
-            <section id="articles" data-bound-context data-bound-if="${~isCurrentPage}">
-                <p>Articles</p>
+            <section hidden="${currentPageName}" data-bound-hidden-neq="articles">
+                <div id="articles" data-bound-context>
+                    <p>Articles</p>
+                </div>
             </section>
         </section>
     </div>

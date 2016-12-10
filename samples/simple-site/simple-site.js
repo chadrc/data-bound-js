@@ -28,6 +28,10 @@ class RootController {
         this.rootElement.renderWithContext(this);
     }
 
+    get currentPageName() {
+        return this.currentPage;
+    }
+
     get currentPageTitle() {
         let page = this.pages[this.currentPage];
         return page ? page.title : "";
