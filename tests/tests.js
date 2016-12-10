@@ -269,6 +269,9 @@ TestSuites.suites.push({
                 isHidden: true,
                 displayChild: false,
                 numValue: 5,
+                getIsHidden(dataBoundContext) {
+                    return boundContext.index == 4;
+                },
                 getMethodValue(dataBoundContext) {
                     return dataBoundContext.element.getAttribute("data-value");
                 },
@@ -404,6 +407,22 @@ TestSuites.suites.push({
                 assertExpectedValue(data.element.childElementCount, 0);
 
                 data.context.displayChild = true;
+                boundIf.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
+            }
+        },
+        {
+            name: "Data Bound If With Method",
+            method(data) {
+                let subElement = document.createElement('div');
+                subElement.setAttribute("data-bound-if", "${getIsHidden}");
+                data.element.appendChild(subElement);
+
+                let boundIf = new DataBoundIfNode(subElement);
+                boundIf.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
+
+                data.dataBoundContext.index = 4;
                 boundIf.renderWithContext(data.context);
                 assertExpectedValue(data.element.childElementCount, 1);
             }
