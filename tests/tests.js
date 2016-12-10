@@ -802,3 +802,35 @@ TestSuites.suites.push({
         }
     ]
 });
+
+TestSuites.suites.push({
+    name: "References",
+    getData() {
+        let element = document.createElement("div");
+
+        let refChild1 = document.createElement("div");
+        refChild1.setAttribute("data-bound-ref", "child1");
+
+        let refChild2 = document.createElement("div");
+        refChild2.setAttribute("id", "child2");
+        refChild2.setAttribute("data-bound-ref", "");
+
+        let refChild3 = document.createElement("div");
+        refChild3.setAttribute("data-bound-ref", "${childReference}");
+
+        element.appendChild(refChild1);
+        element.appendChild(refChild2);
+
+        return {
+            element: element,
+            refChild1: refChild1,
+            refChild2: refChild2,
+            context: {
+                childReference: "child3"
+            }
+        }
+    },
+    tests: [
+
+    ]
+});
