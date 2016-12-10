@@ -248,7 +248,10 @@ class DataBoundMethodAttribute {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
-        this.lastBoundContext = dataBoundContext;
+        this.lastBoundContext = {
+            parent: dataBoundContext,
+            element: this.nodeOwner
+        };
         this.method = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (this.method && this.method instanceof Function) {
             this.nodeOwner.setAttribute('data-bound-method-' + this.attrName,

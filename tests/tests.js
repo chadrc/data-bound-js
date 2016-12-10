@@ -271,7 +271,11 @@ TestSuites.suites.push({
                     element.setAttribute('class', "alert-info");
                 },
                 raiseClick2(event, dataBoundContext) {
-                    element.setAttribute('data-bound-index', dataBoundContext.index.toString());
+                    element.setAttribute('data-bound-index', dataBoundContext.parent.index.toString());
+                },
+                raiseClick3(event, dataBoundContext) {
+                    console.log(dataBoundContext);
+                    dataBoundContext.element.setAttribute("data-clicked", "true");
                 },
                 description: "Basic element binding example."
             },
@@ -332,6 +336,16 @@ TestSuites.suites.push({
                 methodBinding.renderWithContext(data.context, data.dataBoundContext);
                 data.element.click();
                 assertExpectedValue(data.element.attributes['data-bound-index'].nodeValue, "3");
+            }
+        },
+        {
+            name: "Method Binding Accessing Bound Element",
+            method(data) {
+                data.element.setAttribute('onclick', '${raiseClick3}');
+                let methodBinding = new DataBoundMethodAttribute(data.element.attributes.onclick);
+                methodBinding.renderWithContext(data.context, data.dataBoundContext);
+                data.element.click();
+                assertExpectedValue(data.element.getAttribute("data-clicked"), "true");
             }
         },
         {
