@@ -690,7 +690,7 @@ TestSuites.suites.push({
         let baseElement = document.createElement("ul");
         let childElement = document.createElement("li");
         childElement.setAttribute("data-bound-array", "${items}");
-        childElement.innerHTML = "${.parent.dataBoundIndex}: ${text}";
+        childElement.innerHTML = "${.dataBoundIndex}: ${text}";
         baseElement.appendChild(childElement);
         return {
             element: baseElement,
@@ -742,7 +742,7 @@ TestSuites.suites.push({
         {
             name: "Item Reference Parent Context",
             method(data) {
-                data.childElement.setAttribute("class", "${.parent.arrayContext.itemClass}");
+                data.childElement.setAttribute("class", "${.arrayContext.itemClass}");
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
@@ -755,7 +755,7 @@ TestSuites.suites.push({
             name: "Reference Item Value Directly",
             method(data) {
                 data.context.items = ["Item 1", "Item 2", "Item 3", "Item 4"];
-                data.childElement.innerHTML = "${.parent.contextValue}";
+                data.childElement.innerHTML = "${.contextValue}";
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
@@ -767,7 +767,7 @@ TestSuites.suites.push({
         {
             name: "Reference Parent Data Bound Context",
             method(data) {
-                data.childElement.innerHTML = "${.parent.dataBoundIndex}: ${.parent.parent.itemValue}";
+                data.childElement.innerHTML = "${.dataBoundIndex}: ${.parent.itemValue}";
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context, data.dataBoundContext);
                 for (let i=0; i<data.context.items.length; i++) {

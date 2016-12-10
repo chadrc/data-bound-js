@@ -318,11 +318,19 @@ class DataBoundElement {
         }
     }
 
-    renderWithContext(context, dataBoundContext, rootContext) {
-        let newContext = {
-            parent: dataBoundContext,
-            element: this.domElement
-        };
+    renderWithContext(context, dataBoundContext, rootContext, extendContext, extendDataBoundContext, extendRootContext) {
+        let newContext = null;
+
+        if (extendDataBoundContext) {
+            dataBoundContext.element = this.domElement;
+            newContext = dataBoundContext;
+        } else {
+            newContext = {
+                parent: dataBoundContext,
+                element: this.domElement
+            };
+        }
+
         for(let i=0; i<this.bindings.length; i++) {
             let b = this.bindings[i];
             b.renderWithContext(context, newContext, rootContext);
@@ -424,7 +432,7 @@ class DataBoundElementArray {
                 contextValue: contextArray[i],
                 parent: dataBoundContext
             };
-            child.renderWithContext(contextArray[i], childDataBoundContext, rootContext);
+            child.renderWithContext(contextArray[i], childDataBoundContext, rootContext, false, true);
         }
     }
 }
