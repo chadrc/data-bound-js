@@ -984,8 +984,15 @@ TestSuites.suites.push({
             name: "Sub Context Creation",
             method(data) {
                 let boundElement = new DataBoundElement(data.rootElement);
-                console.log(boundElement);
                 assert(boundElement.subContexts.mySubContext, "Expected sub-context with name 'mySubContext' to exist.");
+            }
+        },
+        {
+            name: "Root Render",
+            method(data) {
+                let boundElement = new DataBoundElement(data.rootElement);
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.subContextChild.innerHTML, "${description} of the ${~title} page");
             }
         }
     ]

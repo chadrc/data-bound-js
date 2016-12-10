@@ -344,6 +344,7 @@ class DataBoundElement {
                         if (contextName) {
                             this.subContexts[contextName] = this.subContexts[this.subContexts.length-1];
                         }
+                        break;
                     }
 
                     let elementBinding = null;
