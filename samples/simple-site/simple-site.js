@@ -18,11 +18,11 @@ class RootController {
         this.rootElement.renderWithContext(this);
 
         this.pages = {
-            home: new HomePageController(this.rootElement.refs.home),
-            about: new AboutPageController(this.rootElement.refs.about),
-            gallery: new GalleryPageController(this.rootElement.refs.gallery),
-            projects: new ProjectsPageController(this.rootElement.refs.projects),
-            articles: new ArticlesPageController(this.rootElement.refs.articles)
+            home: new HomePageController(this.rootElement.subContexts.home),
+            about: new AboutPageController(this.rootElement.subContexts.about),
+            gallery: new GalleryPageController(this.rootElement.subContexts.gallery),
+            projects: new ProjectsPageController(this.rootElement.subContexts.projects),
+            articles: new ArticlesPageController(this.rootElement.subContexts.articles)
         };
 
         this.rootElement.renderWithContext(this);

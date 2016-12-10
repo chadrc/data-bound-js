@@ -69,19 +69,19 @@
                 <h1 class="display-5">${currentPageTitle}</h1>
                 <h5 class="text-muted">${currentPageSubTitle}</h5>
             </header>
-            <section id="home" data-bound-ref data-bound-if="${isCurrentPage}">
+            <section id="home" data-bound-context data-bound-if="${~isCurrentPage}">
                 <p>Home</p>
             </section>
-            <section id="about" data-bound-ref data-bound-if="${isCurrentPage}">
+            <section id="about" data-bound-context data-bound-if="${~isCurrentPage}">
                 <p>About</p>
             </section>
-            <section id="projects" data-bound-ref data-bound-if="${isCurrentPage}">
+            <section id="projects" data-bound-context data-bound-if="${~isCurrentPage}">
                 <p>Projects</p>
             </section>
-            <section id="gallery" data-bound-ref data-bound-if="${isCurrentPage}">
+            <section id="gallery" data-bound-context data-bound-if="${~isCurrentPage}">
                 <p>Gallery</p>
             </section>
-            <section id="articles" data-bound-ref data-bound-if="${isCurrentPage}">
+            <section id="articles" data-bound-context data-bound-if="${~isCurrentPage}">
                 <p>Articles</p>
             </section>
         </section>

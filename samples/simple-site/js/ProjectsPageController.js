@@ -6,5 +6,8 @@ class ProjectsPageController {
     constructor(boundElement) {
         this.title = "Our Work";
         this.subTitle = "Just Keeping Busy";
+
+        this.boundElement = boundElement;
+        this.boundElement.renderWithContext(this);
     }
 }
