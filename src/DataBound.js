@@ -248,10 +248,7 @@ class DataBoundMethodAttribute {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
-        this.lastBoundContext = {
-            parent: dataBoundContext,
-            element: this.nodeOwner
-        };
+        this.lastBoundContext = dataBoundContext;
         this.method = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (this.method && this.method instanceof Function) {
             this.nodeOwner.setAttribute('data-bound-method-' + this.attrName,
@@ -323,17 +320,19 @@ class DataBoundElement {
 
         if (extendDataBoundContext) {
             dataBoundContext.element = this.domElement;
+            dataBoundContext.boundElement = this;
             newContext = dataBoundContext;
         } else {
             newContext = {
                 parent: dataBoundContext,
+                boundElement: this,
                 element: this.domElement
             };
         }
 
         for(let i=0; i<this.bindings.length; i++) {
             let b = this.bindings[i];
-            b.renderWithContext(context, newContext, rootContext);
+            b.renderWithContext(context, newContext, rootContext, false, true, false);
         }
     }
 }
@@ -432,7 +431,7 @@ class DataBoundElementArray {
                 contextValue: contextArray[i],
                 parent: dataBoundContext
             };
-            child.renderWithContext(contextArray[i], childDataBoundContext, rootContext, false, true);
+            child.renderWithContext(contextArray[i], childDataBoundContext, rootContext, false, true, false);
         }
     }
 }

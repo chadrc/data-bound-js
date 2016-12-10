@@ -276,7 +276,7 @@ TestSuites.suites.push({
                     element.setAttribute('class', "alert-info");
                 },
                 raiseClick2(event, dataBoundContext) {
-                    element.setAttribute('data-bound-index', dataBoundContext.parent.index.toString());
+                    element.setAttribute('data-bound-index', dataBoundContext.index.toString());
                 },
                 raiseClick3(event, dataBoundContext) {
                     dataBoundContext.element.setAttribute("data-clicked", "true");
@@ -343,16 +343,6 @@ TestSuites.suites.push({
             }
         },
         {
-            name: "Method Binding Accessing Bound Element",
-            method(data) {
-                data.element.setAttribute('onclick', '${raiseClick3}');
-                let methodBinding = new DataBoundMethodAttribute(data.element.attributes.onclick);
-                methodBinding.renderWithContext(data.context, data.parent);
-                data.element.click();
-                assertExpectedValue(data.element.getAttribute("data-clicked"), "true");
-            }
-        },
-        {
             name: "Data Bound Element",
             method(data) {
                 let boundElement = new DataBoundElement(data.element);
@@ -363,6 +353,16 @@ TestSuites.suites.push({
                     "Expected hidden attribute to exist with an empty string as its value.");
                 data.element.click();
                 assertExpectedValue(data.element.attributes.class.nodeValue, "alert-info");
+            }
+        },
+        {
+            name: "Method Binding Accessing Bound Element",
+            method(data) {
+                data.element.setAttribute('onclick', '${raiseClick3}');
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context, data.dataBoundContext);
+                data.element.click();
+                assertExpectedValue(data.element.getAttribute("data-clicked"), "true");
             }
         },
         {
