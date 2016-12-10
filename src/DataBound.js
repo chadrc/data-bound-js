@@ -67,6 +67,18 @@ class DataBoundUtils {
         }
         return null;
     }
+
+    static bindElement(domElement, creator) {
+        let elementBinding = null;
+        if (domElement.attributes["data-bound-array"]) {
+            elementBinding = new DataBoundElementArray(domElement);
+        } else if (domElement.attributes["data-bound-if"]) {
+            elementBinding = new DataBoundIfNode(domElement);
+        } else {
+            elementBinding = new DataBoundElement(domElement, creator);
+        }
+        return elementBinding;
+    }
 }
 
 DataBoundUtils.debugMode = false;
@@ -347,14 +359,7 @@ class DataBoundElement {
                         break;
                     }
 
-                    let elementBinding = null;
-                    if (node.attributes["data-bound-array"]) {
-                        elementBinding = new DataBoundElementArray(node);
-                    } else if (node.attributes["data-bound-if"]) {
-                        elementBinding = new DataBoundIfNode(node);
-                    } else {
-                        elementBinding = new DataBoundElement(node, this);
-                    }
+                    let elementBinding = DataBoundUtils.bindElement(node, this);
 
                     if (node.attributes["data-bound-ref"]) {
                         let refName = node.getAttribute("data-bound-ref") || node.getAttribute("id");
@@ -418,7 +423,7 @@ class DataBoundSubContext {
     constructor(element) {
         DataBoundUtils.registerDBObject(this);
         this.domElement = element;
-        this.boundElement = new DataBoundElement(element);
+        this.boundElement = DataBoundUtils.bindElement(element);
         this.currentRootContext = null;
     }
 
@@ -453,6 +458,11 @@ class DataBoundIfNode {
         if (dataBoundContext) {
             dataBoundContext.element = this.domElement;
             dataBoundContext.boundElement = this.boundElement;
+        } else {
+            dataBoundContext = {
+                element: this.domElement,
+                boundElement: this.boundElement
+            }
         }
 
         let value = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
@@ -528,7 +538,7 @@ class DataBoundElementArray {
                 let dif = contextArray.length - this.elementArray.length;
                 for (let i=0; i<dif; i++) {
                     let clone = this.domElement.cloneNode(true);
-                    let boundElement = new DataBoundElement(clone);
+                    let boundElement = DataBoundUtils.bindElement(clone);
                     this.elementArray.push(boundElement);
                     this.baseElement.insertBefore(clone, this.anchorNode);
                 }

@@ -1029,7 +1029,6 @@ TestSuites.suites.push({
                 newRoot.appendChild(data.rootElement);
 
                 let boundElement = new DataBoundElement(newRoot);
-                console.log(boundElement);
                 assert(boundElement.subContexts.mySubContext,
                     "Expected sub-context with name 'mySubContext' to exist.");
             }
