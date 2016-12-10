@@ -959,9 +959,12 @@ TestSuites.suites.push({
 
         let subContext = document.createElement("section");
         subContext.setAttribute("data-bound-context", "${subContext}");
+        subContext.setAttribute("id", "mySubContext");
         let subChild = document.createElement("span");
         subChild.innerHTML = "${description} of the ${~title} page";
         subContext.appendChild(subChild);
+
+        rootElement.appendChild(subContext);
 
         return {
             rootElement: rootElement,
@@ -977,6 +980,13 @@ TestSuites.suites.push({
         }
     },
     tests: [
-
+        {
+            name: "Sub Context Creation",
+            method(data) {
+                let boundElement = new DataBoundElement(data.rootElement);
+                console.log(boundElement);
+                assert(boundElement.subContexts.mySubContext, "Expected sub-context with name 'mySubContext' to exist.");
+            }
+        }
     ]
 });

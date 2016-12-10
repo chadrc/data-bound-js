@@ -315,6 +315,7 @@ class DataBoundElement {
         this.domElement = element;
         this.bindings = [];
         this.refs = {};
+        this.subContexts = [];
 
         for (let i=0; i<this.domElement.attributes.length; i++) {
             let attr = this.domElement.attributes[i];
@@ -335,6 +336,16 @@ class DataBoundElement {
             let node = this.domElement.childNodes[i];
             switch (node.nodeType) {
                 case 1: // ELEMENT NODE
+                    if (node.attributes["data-bound-context"]) {
+                        console.log("sub context found");
+                        let subContext = new DataBoundSubContext(node);
+                        let contextName = node.getAttribute("id");
+                        this.subContexts.push(subContext);
+                        if (contextName) {
+                            this.subContexts[contextName] = this.subContexts[this.subContexts.length-1];
+                        }
+                    }
+
                     let elementBinding = null;
                     if (node.attributes["data-bound-array"]) {
                         elementBinding = new DataBoundElementArray(node);
@@ -390,6 +401,13 @@ class DataBoundElement {
             let b = this.bindings[i];
             b.renderWithContext(context, newContext, rootContext, false, true, false);
         }
+    }
+}
+
+class DataBoundSubContext {
+    constructor(element) {
+        DataBoundUtils.registerDBObject(this);
+        this.domElement = element;
     }
 }
 
