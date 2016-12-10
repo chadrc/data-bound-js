@@ -850,3 +850,34 @@ TestSuites.suites.push({
         }
     ]
 });
+
+TestSuites.suites.push({
+    name: "Ignores",
+    getData() {
+        let element = document.createElement("div");
+
+        let ignoreChild = document.createElement("div");
+        ignoreChild.setAttribute("data-bound-ignore", "");
+        ignoreChild.innerHTML = "${childText}";
+
+        element.appendChild(ignoreChild);
+
+        return {
+            element: element,
+            child: ignoreChild,
+            context: {
+                childText: "This text shouldn't appear."
+            }
+        }
+    },
+    tests: [
+        {
+            name: "Simple Ignore",
+            method(data) {
+                let boundElement = new DataBoundElement(data.element);
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.child.innerHTML, "${childText}");
+            }
+        }
+    ]
+});

@@ -304,7 +304,9 @@ class DataBoundElement {
                         }
                     }
 
-                    this.bindings.push(elementBinding);
+                    if (!node.attributes["data-bound-ignore"]) {
+                        this.bindings.push(elementBinding);
+                    }
                     break;
                 case 3: // TEXT NODE
                     this.bindings.push(new DataBoundTextNode(node));
