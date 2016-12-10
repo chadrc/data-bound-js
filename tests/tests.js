@@ -273,7 +273,7 @@ TestSuites.suites.push({
                     return boundContext.index == 4;
                 },
                 getDataBoundHidden(dataBoundContext) {
-                    return dataBoundContext.element.getAttribute("data-value") == "12";
+                    return dataBoundContext.element.getAttribute("data-sub-value") == "12";
                 },
                 getMethodValue(dataBoundContext) {
                     return dataBoundContext.element.getAttribute("data-value");
@@ -451,13 +451,14 @@ TestSuites.suites.push({
             method(data) {
                 let subElement = document.createElement('div');
                 subElement.setAttribute("data-bound-if", "${getDataBoundHidden}");
+                subElement.setAttribute("data-sub-value", "11");
                 data.element.appendChild(subElement);
 
                 let boundIf = new DataBoundElement(data.element);
                 boundIf.renderWithContext(data.context);
                 assertExpectedValue(data.element.childElementCount, 0);
 
-                data.element.setAttribute("data-value", "12");
+                subElement.setAttribute("data-sub-value", "12");
                 boundIf.renderWithContext(data.context);
                 assertExpectedValue(data.element.childElementCount, 1);
             }

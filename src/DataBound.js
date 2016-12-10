@@ -412,6 +412,10 @@ class DataBoundIfNode {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
+        if (dataBoundContext) {
+            dataBoundContext.element = this.domElement;
+            dataBoundContext.boundElement = this.boundElement;
+        }
 
         let value = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (value instanceof Function) {

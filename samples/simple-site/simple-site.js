@@ -2,10 +2,12 @@
  * Created by chad on 12/9/16.
  */
 
+DataBoundUtils.debugMode = true;
+
 class RootController {
     constructor() {
 
-        this.currentPage = null;
+        this.currentPage = "home";
         this.pages = {};
 
         this.selectPage = this.selectPage.bind(this);
@@ -22,7 +24,6 @@ class RootController {
             projects: new ProjectsPageController(this.rootElement.refs.projects),
             articles: new ArticlesPageController(this.rootElement.refs.articles)
         };
-        this.currentPage = "home";
 
         this.rootElement.renderWithContext(this);
     }
