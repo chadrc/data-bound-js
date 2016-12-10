@@ -318,7 +318,7 @@ class DataBoundElement {
     renderWithContext(context, dataBoundContext, rootContext, extendContext, extendDataBoundContext, extendRootContext) {
         let newContext = null;
 
-        if (extendDataBoundContext) {
+        if (extendDataBoundContext && dataBoundContext) {
             dataBoundContext.element = this.domElement;
             dataBoundContext.boundElement = this;
             newContext = dataBoundContext;
@@ -352,13 +352,13 @@ class DataBoundIfNode {
 
     renderWithContext(context, dataBoundContext, rootContext) {
         // Needs Test
-        if (dataBoundContext) {
-            dataBoundContext.element = this.domElement;
-        } else {
-            dataBoundContext = {
-                element: this.domElement
-            }
-        }
+        // if (dataBoundContext) {
+        //     dataBoundContext.element = this.domElement;
+        // } else {
+        //     dataBoundContext = {
+        //         element: this.domElement
+        //     }
+        // }
         // End
         let value = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (value instanceof Function) {
@@ -382,7 +382,7 @@ class DataBoundIfNode {
         }
 
         if (this.elementInDom) {
-            this.boundElement.renderWithContext(context, dataBoundContext, rootContext);
+            this.boundElement.renderWithContext(context, dataBoundContext, rootContext, false, true, false);
         }
     }
 }

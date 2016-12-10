@@ -272,6 +272,10 @@ TestSuites.suites.push({
                 getIsHidden(dataBoundContext) {
                     return boundContext.index == 4;
                 },
+                getDataBoundHidden(dataBoundContext) {
+                    console.log(dataBoundContext);
+                    return dataBoundContext.element.getAttribute("data-value") == "12";
+                },
                 getMethodValue(dataBoundContext) {
                     return dataBoundContext.element.getAttribute("data-value");
                 },
@@ -439,6 +443,22 @@ TestSuites.suites.push({
                 assertExpectedValue(data.element.childElementCount, 0);
 
                 data.context.displayChild = true;
+                boundIf.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 1);
+            }
+        },
+        {
+            name: "Data Bound If With Method Accessing Data Bound Context",
+            method(data) {
+                let subElement = document.createElement('div');
+                subElement.setAttribute("data-bound-if", "${getDataBoundHidden}");
+                data.element.appendChild(subElement);
+
+                let boundIf = new DataBoundElement(data.element);
+                boundIf.renderWithContext(data.context);
+                assertExpectedValue(data.element.childElementCount, 0);
+
+                data.element.setAttribute("data-value", "12");
                 boundIf.renderWithContext(data.context);
                 assertExpectedValue(data.element.childElementCount, 1);
             }
