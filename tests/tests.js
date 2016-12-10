@@ -273,7 +273,6 @@ TestSuites.suites.push({
                     return boundContext.index == 4;
                 },
                 getDataBoundHidden(dataBoundContext) {
-                    console.log(dataBoundContext);
                     return dataBoundContext.element.getAttribute("data-value") == "12";
                 },
                 getMethodValue(dataBoundContext) {
