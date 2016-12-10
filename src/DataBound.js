@@ -142,7 +142,7 @@ class DataBoundPropString {
         let renderStr = this.originalStr;
         for (let i=0; i<this.matches.length; i++) {
             let value = this.getValueWithContext(i, context, dataBoundContext, rootContext);
-            value = value instanceof Function ? value(dataBoundContext) : value
+            value = value instanceof Function ? value(dataBoundContext) : value;
             renderStr = renderStr.replace(this.matches[i].match, value);
         }
         return renderStr;
@@ -319,9 +319,13 @@ class DataBoundElement {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
+        let newContext = {
+            parent: dataBoundContext,
+            element: this.domElement
+        };
         for(let i=0; i<this.bindings.length; i++) {
             let b = this.bindings[i];
-            b.renderWithContext(context, dataBoundContext, rootContext);
+            b.renderWithContext(context, newContext, rootContext);
         }
     }
 }
@@ -416,9 +420,9 @@ class DataBoundElementArray {
             let child = this.elementArray[i];
             let childDataBoundContext = {
                 dataBoundIndex: i,
-                parentContext: context,
+                arrayContext: context,
                 contextValue: contextArray[i],
-                dataBoundContext: dataBoundContext
+                parent: dataBoundContext
             };
             child.renderWithContext(contextArray[i], childDataBoundContext, rootContext);
         }

@@ -109,7 +109,7 @@ TestSuites.suites.push({
                     return "Gotten Prop";
                 }
             },
-            dataBoundContext: {
+            parent: {
                 myProp: "My Self Prop"
             },
             rootContext: {
@@ -139,15 +139,15 @@ TestSuites.suites.push({
             name: "Self Prop String Render",
             method(data) {
                 let propStr = new DataBoundPropString("${.myProp}");
-                let renderStr = propStr.renderWithContext(data.mainContext, data.dataBoundContext, data.rootContext);
-                assertExpectedValue(renderStr, data.dataBoundContext.myProp);
+                let renderStr = propStr.renderWithContext(data.mainContext, data.parent, data.rootContext);
+                assertExpectedValue(renderStr, data.parent.myProp);
             }
         },
         {
             name: "Root Prop String Render",
             method(data) {
                 let propStr = new DataBoundPropString("${~myProp}");
-                let renderStr = propStr.renderWithContext(data.mainContext, data.dataBoundContext, data.rootContext);
+                let renderStr = propStr.renderWithContext(data.mainContext, data.parent, data.rootContext);
                 assertExpectedValue(renderStr, data.rootContext.myProp);
             }
         },
@@ -163,8 +163,8 @@ TestSuites.suites.push({
             name: "Data Bound Method Call Render",
             method(data) {
                 let propStr = new DataBoundPropString("${dataBoundMethodProp}");
-                let renderStr = propStr.renderWithContext(data.mainContext, data.dataBoundContext);
-                assertExpectedValue(renderStr, data.dataBoundContext.myProp);
+                let renderStr = propStr.renderWithContext(data.mainContext, data.parent);
+                assertExpectedValue(renderStr, data.parent.myProp);
             }
         },
         {
@@ -237,11 +237,11 @@ TestSuites.suites.push({
             name: "Get Prop Value",
             method(data) {
                 let propStr = new DataBoundPropString("${numberProp} ${booleanProp} ${myProp}");
-                let numberValue = propStr.getValueWithContext(0, data.mainContext, data.dataBoundContext, data.rootContext);
+                let numberValue = propStr.getValueWithContext(0, data.mainContext, data.parent, data.rootContext);
                 assertExpectedValue(numberValue, data.mainContext.numberProp);
-                let booleanValue = propStr.getValueWithContext(1, data.mainContext, data.dataBoundContext, data.rootContext);
+                let booleanValue = propStr.getValueWithContext(1, data.mainContext, data.parent, data.rootContext);
                 assertExpectedValue(booleanValue, data.mainContext.booleanProp);
-                let stringValue = propStr.getValueWithContext(2, data.mainContext, data.dataBoundContext, data.rootContext);
+                let stringValue = propStr.getValueWithContext(2, data.mainContext, data.parent, data.rootContext);
                 assertExpectedValue(stringValue, data.mainContext.myProp);
             }
         }
@@ -256,6 +256,8 @@ TestSuites.suites.push({
         element.setAttribute('hidden', '${isHidden}');
         element.setAttribute('disabled', '${numValue}');
         element.setAttribute('onclick', '${raiseClick}');
+        element.setAttribute('data-value', "13");
+        element.setAttribute('data-method-value', "${getMethodValue}");
         element.innerHTML = "Description: ${description}";
         let boundContext = {
             index: 3
@@ -267,6 +269,9 @@ TestSuites.suites.push({
                 isHidden: true,
                 displayChild: false,
                 numValue: 5,
+                getMethodValue(dataBoundContext) {
+                    return dataBoundContext.element.getAttribute("data-value");
+                },
                 raiseClick() {
                     element.setAttribute('class', "alert-info");
                 },
@@ -274,7 +279,6 @@ TestSuites.suites.push({
                     element.setAttribute('data-bound-index', dataBoundContext.parent.index.toString());
                 },
                 raiseClick3(event, dataBoundContext) {
-                    console.log(dataBoundContext);
                     dataBoundContext.element.setAttribute("data-clicked", "true");
                 },
                 description: "Basic element binding example."
@@ -325,7 +329,7 @@ TestSuites.suites.push({
                 data.element.click();
                 assertExpectedValue(data.element.attributes.class.nodeValue, "alert-info");
                 assert(!data.element.attributes.onclick, "Expected 'onclick' attribute to have been removed.");
-                assertExpectedValue(data.element.attributes['data-bound-method-onclick'].nodeValue, "Object.raiseClick");
+                assertExpectedValue(data.element.getAttribute('data-bound-method-onclick'), "Object.raiseClick");
             }
         },
         {
@@ -343,7 +347,7 @@ TestSuites.suites.push({
             method(data) {
                 data.element.setAttribute('onclick', '${raiseClick3}');
                 let methodBinding = new DataBoundMethodAttribute(data.element.attributes.onclick);
-                methodBinding.renderWithContext(data.context, data.dataBoundContext);
+                methodBinding.renderWithContext(data.context, data.parent);
                 data.element.click();
                 assertExpectedValue(data.element.getAttribute("data-clicked"), "true");
             }
@@ -359,6 +363,16 @@ TestSuites.suites.push({
                     "Expected hidden attribute to exist with an empty string as its value.");
                 data.element.click();
                 assertExpectedValue(data.element.attributes.class.nodeValue, "alert-info");
+            }
+        },
+        {
+            name: "Access Element With Method Prop",
+            method(data) {
+                let attrBinding = new DataBoundElement(data.element);
+                attrBinding.renderWithContext(data.context);
+                assertExpectedValue(
+                    data.element.getAttribute("data-method-value"),
+                    data.element.getAttribute("data-value"));
             }
         },
         {
@@ -676,7 +690,7 @@ TestSuites.suites.push({
         let baseElement = document.createElement("ul");
         let childElement = document.createElement("li");
         childElement.setAttribute("data-bound-array", "${items}");
-        childElement.innerHTML = "${.dataBoundIndex}: ${text}";
+        childElement.innerHTML = "${.parent.dataBoundIndex}: ${text}";
         baseElement.appendChild(childElement);
         return {
             element: baseElement,
@@ -728,7 +742,7 @@ TestSuites.suites.push({
         {
             name: "Item Reference Parent Context",
             method(data) {
-                data.childElement.setAttribute("class", "${.parentContext.itemClass}");
+                data.childElement.setAttribute("class", "${.parent.arrayContext.itemClass}");
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
@@ -741,7 +755,7 @@ TestSuites.suites.push({
             name: "Reference Item Value Directly",
             method(data) {
                 data.context.items = ["Item 1", "Item 2", "Item 3", "Item 4"];
-                data.childElement.innerHTML = "${.contextValue}";
+                data.childElement.innerHTML = "${.parent.contextValue}";
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
@@ -753,7 +767,7 @@ TestSuites.suites.push({
         {
             name: "Reference Parent Data Bound Context",
             method(data) {
-                data.childElement.innerHTML = "${.dataBoundIndex}: ${.dataBoundContext.itemValue}";
+                data.childElement.innerHTML = "${.parent.dataBoundIndex}: ${.parent.parent.itemValue}";
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context, data.dataBoundContext);
                 for (let i=0; i<data.context.items.length; i++) {

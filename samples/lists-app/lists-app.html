@@ -62,12 +62,12 @@
                 </form>
                 <ul class="list-unstyled mt-1">
                     <li data-bound-array="${lists}"
-                        onclick="${.parentContext.selectList}"
+                        onclick="${.arrayContext.selectList}"
                         class="rounded list-item clearfix pointer">
                         ${name}
                         <span class="tag tag-pill tag-info">${items.length}</span>
                         <button type="button"
-                                onclick="${.parentContext.deleteList}"
+                                onclick="${.arrayContext.deleteList}"
                                 class="btn btn-sm btn-danger float-xs-right">
                             &times;
                         </button>
@@ -90,7 +90,7 @@
                             class="rounded list-item clearfix">
                             <span>${.contextValue}</span>
                             <button type="button"
-                                    onclick="${.parentContext.removeItemFromCurrentList}"
+                                    onclick="${.arrayContext.removeItemFromCurrentList}"
                                     class="btn btn-sm btn-danger float-xs-right">
                                 &times;
                             </button>
