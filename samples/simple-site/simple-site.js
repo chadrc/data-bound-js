@@ -57,7 +57,7 @@ class RootController {
 
 class PageController {
     set contextElement(c) {
-        this.boundElement = c;
+        this.subContext = c;
         c.renderWithContext(this);
     }
 }

@@ -72,3 +72,9 @@ a.hover-underline.active, .hover-underline:hover {
 .home-page-card:hover>.home-page-card-name {
     opacity: 1.0;
 }
+
+.hr-tapper {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right,rgba(55, 58, 60,0),rgba(55, 58, 60,.75),rgba(55, 58, 60,0));
+}

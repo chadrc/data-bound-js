@@ -326,7 +326,7 @@ class DataBoundElement {
         DataBoundUtils.registerDBObject(this);
         this.domElement = element;
         this.bindings = [];
-        this.refs = {};
+        this.refs = creatingElement ? creatingElement.refs : [];
         this.subContexts = creatingElement ? creatingElement.subContexts : [];
 
         for (let i=0; i<this.domElement.attributes.length; i++) {
@@ -364,10 +364,10 @@ class DataBoundElement {
 
                     if (node.attributes["data-bound-ref"]) {
                         let refName = node.getAttribute("data-bound-ref") || node.getAttribute("id");
+                        console.log("creating reference:", refName);
+                        this.refs.push(elementBinding);
                         if (refName) {
                             this.refs[refName] = elementBinding;
-                        } else {
-                            console.warn("Data bound reference used without value or id value.");
                         }
                     }
 
