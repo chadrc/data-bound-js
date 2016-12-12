@@ -364,7 +364,6 @@ class DataBoundElement {
 
                     if (node.attributes["data-bound-ref"]) {
                         let refName = node.getAttribute("data-bound-ref") || node.getAttribute("id");
-                        console.log("creating reference:", refName);
                         this.refs.push(elementBinding);
                         if (refName) {
                             this.refs[refName] = elementBinding;
