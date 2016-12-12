@@ -44,7 +44,7 @@ class RootController {
     }
 
     activeClass(dataBoundContext) {
-        let ref = dataBoundContext.element.getAttribute("href").slice(1);
+        let ref = dataBoundContext.domElement.getAttribute("href").slice(1);
         let activePage = ref == this.currentPage;
         return activePage ? "active" : "";
     }

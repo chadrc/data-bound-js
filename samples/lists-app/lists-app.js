@@ -29,8 +29,8 @@ class ListsApp {
         this.addItemToCurrentList = this.addItemToCurrentList.bind(this);
         this.removeItemFromCurrentList = this.removeItemFromCurrentList.bind(this);
 
-        this.element = new DataBoundElement(document.getElementById("lists-app"));
-        this.element.renderWithContext(this);
+        this.domElement = new DataBoundElement(document.getElementById("lists-app"));
+        this.domElement.renderWithContext(this);
     }
 
     get currentList() {
@@ -45,7 +45,7 @@ class ListsApp {
     selectList(event, dataBoundContext) {
         event.stopPropagation();
         this.data.currentListIndex = dataBoundContext.dataBoundIndex;
-        this.element.renderWithContext(this);
+        this.domElement.renderWithContext(this);
         this.save();
     }
 
@@ -54,7 +54,7 @@ class ListsApp {
         let newListName = event.srcElement.elements.newListName.value;
         if (newListName != "") {
             this.data.lists.push(new List(newListName));
-            this.element.renderWithContext(this);
+            this.domElement.renderWithContext(this);
             event.srcElement.reset();
             this.save();
         }
@@ -66,7 +66,7 @@ class ListsApp {
         if (deleted[0] == this.currentList) {
             this.data.currentListIndex = -1;
         }
-        this.element.renderWithContext(this);
+        this.domElement.renderWithContext(this);
         this.save();
     }
 
@@ -75,7 +75,7 @@ class ListsApp {
         let newListItem = event.srcElement.elements.newListItem.value;
         if (newListItem != "") {
             this.currentList.items.push(newListItem);
-            this.element.renderWithContext(this);
+            this.domElement.renderWithContext(this);
             event.srcElement.reset();
             this.save();
         }
@@ -84,7 +84,7 @@ class ListsApp {
     removeItemFromCurrentList(event, dataBoundContext) {
         event.stopPropagation();
         this.currentList.items.splice(dataBoundContext.dataBoundIndex, 1);
-        this.element.renderWithContext(this);
+        this.domElement.renderWithContext(this);
         this.save();
     }
 

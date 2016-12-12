@@ -24,14 +24,14 @@
 
     <script>
         class DateContext {
-            constructor(element) {
+            constructor(domElement) {
                 this.now = new Date();
-                this.element = element;
+                this.domElement = element;
 
                 this.tick = this.tick.bind(this);
                 setInterval(this.tick, 1000);
 
-                this.element.renderWithContext(this);
+                this.domElement.renderWithContext(this);
             }
 
             get hour() {
@@ -59,7 +59,7 @@
 
             tick() {
                 this.now = new Date();
-                this.element.renderWithContext(context);
+                this.domElement.renderWithContext(context);
             }
         }
 

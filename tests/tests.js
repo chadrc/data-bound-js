@@ -273,10 +273,10 @@ TestSuites.suites.push({
                     return boundContext.index == 4;
                 },
                 getDataBoundHidden(dataBoundContext) {
-                    return dataBoundContext.element.getAttribute("data-sub-value") == "12";
+                    return dataBoundContext.domElement.getAttribute("data-sub-value") == "12";
                 },
                 getMethodValue(dataBoundContext) {
-                    return dataBoundContext.element.getAttribute("data-value");
+                    return dataBoundContext.domElement.getAttribute("data-value");
                 },
                 raiseClick() {
                     element.setAttribute('class', "alert-info");
@@ -285,7 +285,7 @@ TestSuites.suites.push({
                     element.setAttribute('data-bound-index', dataBoundContext.index.toString());
                 },
                 raiseClick3(event, dataBoundContext) {
-                    dataBoundContext.element.setAttribute("data-clicked", "true");
+                    dataBoundContext.domElement.setAttribute("data-clicked", "true");
                 },
                 description: "Basic element binding example."
             },
@@ -296,89 +296,89 @@ TestSuites.suites.push({
         {
             name: "Attribute Binding",
             method(data) {
-                let attrBinding = new DataBoundAttribute(data.element.attributes.class);
+                let attrBinding = new DataBoundAttribute(data.domElement.attributes.class);
                 attrBinding.renderWithContext(data.context);
-                assertExpectedValue(data.element.attributes.class.nodeValue, data.context.classes);
+                assertExpectedValue(data.domElement.attributes.class.nodeValue, data.context.classes);
                 data.context.classes = "alert alert-info";
                 attrBinding.renderWithContext(data.context);
-                assertExpectedValue(data.element.attributes.class.nodeValue, data.context.classes);
+                assertExpectedValue(data.domElement.attributes.class.nodeValue, data.context.classes);
             }
         },
         {
             name: "Boolean Binding",
             method(data) {
-                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.hidden);
+                let booleanBinding = new DataBoundBooleanAttribute(data.domElement.attributes.hidden);
                 booleanBinding.renderWithContext(data.context);
-                assert(data.element.attributes.hidden && data.element.attributes.hidden.nodeValue == "",
+                assert(data.domElement.attributes.hidden && data.domElement.attributes.hidden.nodeValue == "",
                     "Expected hidden attribute to exist with an empty string as its value.");
                 data.context.isHidden = false;
                 booleanBinding.renderWithContext(data.context);
-                assert(!data.element.attributes.hidden, "Expected hidden attribute to not exist.");
+                assert(!data.domElement.attributes.hidden, "Expected hidden attribute to not exist.");
             }
         },
         {
             name: "Text Binding",
             method(data) {
-                let textBinding = new DataBoundTextNode(data.element.childNodes[0]);
+                let textBinding = new DataBoundTextNode(data.domElement.childNodes[0]);
                 textBinding.renderWithContext(data.context);
-                assertExpectedValue(data.element.childNodes[0].nodeValue, "Description: " + data.context.description);
+                assertExpectedValue(data.domElement.childNodes[0].nodeValue, "Description: " + data.context.description);
                 data.context.description = "Another description.";
                 textBinding.renderWithContext(data.context);
-                assertExpectedValue(data.element.childNodes[0].nodeValue, "Description: " + data.context.description);
+                assertExpectedValue(data.domElement.childNodes[0].nodeValue, "Description: " + data.context.description);
             }
         },
         {
             name: "Method Binding",
             method(data) {
-                let methodBinding = new DataBoundMethodAttribute(data.element.attributes.onclick);
+                let methodBinding = new DataBoundMethodAttribute(data.domElement.attributes.onclick);
                 methodBinding.renderWithContext(data.context);
-                data.element.click();
-                assertExpectedValue(data.element.attributes.class.nodeValue, "alert-info");
-                assert(!data.element.attributes.onclick, "Expected 'onclick' attribute to have been removed.");
-                assertExpectedValue(data.element.getAttribute('data-bound-method-onclick'), "Object.raiseClick");
+                data.domElement.click();
+                assertExpectedValue(data.domElement.attributes.class.nodeValue, "alert-info");
+                assert(!data.domElement.attributes.onclick, "Expected 'onclick' attribute to have been removed.");
+                assertExpectedValue(data.domElement.getAttribute('data-bound-method-onclick'), "Object.raiseClick");
             }
         },
         {
             name: "Method Binding Accessing Context",
             method(data) {
-                data.element.setAttribute('onclick', '${raiseClick2}');
-                let methodBinding = new DataBoundMethodAttribute(data.element.attributes.onclick);
+                data.domElement.setAttribute('onclick', '${raiseClick2}');
+                let methodBinding = new DataBoundMethodAttribute(data.domElement.attributes.onclick);
                 methodBinding.renderWithContext(data.context, data.dataBoundContext);
-                data.element.click();
-                assertExpectedValue(data.element.attributes['data-bound-index'].nodeValue, "3");
+                data.domElement.click();
+                assertExpectedValue(data.domElement.attributes['data-bound-index'].nodeValue, "3");
             }
         },
         {
             name: "Data Bound Element",
             method(data) {
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context);
 
-                assertExpectedValue(data.element.attributes.class.nodeValue, data.context.classes);
-                assert(data.element.attributes.hidden && data.element.attributes.hidden.nodeValue == "",
+                assertExpectedValue(data.domElement.attributes.class.nodeValue, data.context.classes);
+                assert(data.domElement.attributes.hidden && data.domElement.attributes.hidden.nodeValue == "",
                     "Expected hidden attribute to exist with an empty string as its value.");
-                data.element.click();
-                assertExpectedValue(data.element.attributes.class.nodeValue, "alert-info");
+                data.domElement.click();
+                assertExpectedValue(data.domElement.attributes.class.nodeValue, "alert-info");
             }
         },
         {
             name: "Method Binding Accessing Bound Element",
             method(data) {
-                data.element.setAttribute('onclick', '${raiseClick3}');
-                let boundElement = new DataBoundElement(data.element);
+                data.domElement.setAttribute('onclick', '${raiseClick3}');
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context, data.dataBoundContext);
-                data.element.click();
-                assertExpectedValue(data.element.getAttribute("data-clicked"), "true");
+                data.domElement.click();
+                assertExpectedValue(data.domElement.getAttribute("data-clicked"), "true");
             }
         },
         {
             name: "Access Element With Method Prop",
             method(data) {
-                let attrBinding = new DataBoundElement(data.element);
+                let attrBinding = new DataBoundElement(data.domElement);
                 attrBinding.renderWithContext(data.context);
                 assertExpectedValue(
-                    data.element.getAttribute("data-method-value"),
-                    data.element.getAttribute("data-value"));
+                    data.domElement.getAttribute("data-method-value"),
+                    data.domElement.getAttribute("data-value"));
             }
         },
         {
@@ -389,9 +389,9 @@ TestSuites.suites.push({
                 subElement.innerHTML = "${subElementDesc}";
                 data.context.subElementDesc = "This is a sub-element.";
                 data.context.subClass = "my-sub-class";
-                data.element.appendChild(subElement);
+                data.domElement.appendChild(subElement);
 
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context);
 
                 assertExpectedValue(subElement.attributes.class.nodeValue, data.context.subClass);
@@ -403,15 +403,15 @@ TestSuites.suites.push({
             method(data) {
                 let subElement = document.createElement('div');
                 subElement.setAttribute("data-bound-if", "${displayChild}");
-                data.element.appendChild(subElement);
+                data.domElement.appendChild(subElement);
 
                 let boundIf = new DataBoundIfNode(subElement);
                 boundIf.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 data.context.displayChild = true;
                 boundIf.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         },
         {
@@ -419,15 +419,15 @@ TestSuites.suites.push({
             method(data) {
                 let subElement = document.createElement('div');
                 subElement.setAttribute("data-bound-if", "${getIsHidden}");
-                data.element.appendChild(subElement);
+                data.domElement.appendChild(subElement);
 
                 let boundIf = new DataBoundIfNode(subElement);
                 boundIf.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 data.dataBoundContext.index = 4;
                 boundIf.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         },
         {
@@ -435,15 +435,15 @@ TestSuites.suites.push({
             method(data) {
                 let subElement = document.createElement('div');
                 subElement.setAttribute("data-bound-if", "${displayChild}");
-                data.element.appendChild(subElement);
+                data.domElement.appendChild(subElement);
 
-                let boundIf = new DataBoundElement(data.element);
+                let boundIf = new DataBoundElement(data.domElement);
                 boundIf.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 data.context.displayChild = true;
                 boundIf.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         },
         {
@@ -452,15 +452,15 @@ TestSuites.suites.push({
                 let subElement = document.createElement('div');
                 subElement.setAttribute("data-bound-if", "${getDataBoundHidden}");
                 subElement.setAttribute("data-sub-value", "11");
-                data.element.appendChild(subElement);
+                data.domElement.appendChild(subElement);
 
-                let boundIf = new DataBoundElement(data.element);
+                let boundIf = new DataBoundElement(data.domElement);
                 boundIf.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 subElement.setAttribute("data-sub-value", "12");
                 boundIf.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         }
     ]
@@ -488,112 +488,112 @@ TestSuites.suites.push({
         {
             name: "Equals",
             method(data) {
-                data.element.setAttribute('data-bound-disabled-eq', '4');
-                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                data.domElement.setAttribute('data-bound-disabled-eq', '4');
+                let booleanBinding = new DataBoundBooleanAttribute(data.domElement.attributes.disabled);
                 booleanBinding.renderWithContext(data.context);
-                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+                assert(!data.domElement.attributes.disabled, "Expected 'disabled' attribute to be removed.");
 
-                data.element.setAttribute('data-bound-disabled-eq', '5');
+                data.domElement.setAttribute('data-bound-disabled-eq', '5');
                 booleanBinding.renderWithContext(data.context);
-                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                assert(data.domElement.attributes.disabled && data.domElement.attributes.disabled.nodeValue == "",
                     "Expected 'disabled' attribute to exists with empty string as its value.");
             }
         },
         {
             name: "Not Equals",
             method(data) {
-                data.element.setAttribute('data-bound-disabled-neq', '5');
-                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                data.domElement.setAttribute('data-bound-disabled-neq', '5');
+                let booleanBinding = new DataBoundBooleanAttribute(data.domElement.attributes.disabled);
                 booleanBinding.renderWithContext(data.context);
-                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+                assert(!data.domElement.attributes.disabled, "Expected 'disabled' attribute to be removed.");
 
-                data.element.setAttribute('data-bound-disabled-neq', '4');
+                data.domElement.setAttribute('data-bound-disabled-neq', '4');
                 booleanBinding.renderWithContext(data.context);
-                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                assert(data.domElement.attributes.disabled && data.domElement.attributes.disabled.nodeValue == "",
                     "Expected 'disabled' attribute to exists with empty string as its value.");
             }
         },
         {
             name: "Less Than",
             method(data) {
-                data.element.setAttribute('data-bound-disabled-lt', '5');
-                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                data.domElement.setAttribute('data-bound-disabled-lt', '5');
+                let booleanBinding = new DataBoundBooleanAttribute(data.domElement.attributes.disabled);
                 booleanBinding.renderWithContext(data.context);
-                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+                assert(!data.domElement.attributes.disabled, "Expected 'disabled' attribute to be removed.");
 
-                data.element.setAttribute('data-bound-disabled-lt', '6');
+                data.domElement.setAttribute('data-bound-disabled-lt', '6');
                 booleanBinding.renderWithContext(data.context);
-                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                assert(data.domElement.attributes.disabled && data.domElement.attributes.disabled.nodeValue == "",
                     "Expected 'disabled' attribute to exists with empty string as its value.");
             }
         },
         {
             name: "Less Than Or Equal",
             method(data) {
-                data.element.setAttribute('data-bound-disabled-lte', '4');
-                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                data.domElement.setAttribute('data-bound-disabled-lte', '4');
+                let booleanBinding = new DataBoundBooleanAttribute(data.domElement.attributes.disabled);
                 booleanBinding.renderWithContext(data.context);
-                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+                assert(!data.domElement.attributes.disabled, "Expected 'disabled' attribute to be removed.");
 
-                data.element.setAttribute('data-bound-disabled-lte', '5');
+                data.domElement.setAttribute('data-bound-disabled-lte', '5');
                 booleanBinding.renderWithContext(data.context);
-                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                assert(data.domElement.attributes.disabled && data.domElement.attributes.disabled.nodeValue == "",
                     "Expected 'disabled' attribute to exists with empty string as its value.");
             }
         },
         {
             name: "Greater Than",
             method(data) {
-                data.element.setAttribute('data-bound-disabled-gt', '5');
-                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                data.domElement.setAttribute('data-bound-disabled-gt', '5');
+                let booleanBinding = new DataBoundBooleanAttribute(data.domElement.attributes.disabled);
                 booleanBinding.renderWithContext(data.context);
-                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+                assert(!data.domElement.attributes.disabled, "Expected 'disabled' attribute to be removed.");
 
-                data.element.setAttribute('data-bound-disabled-gt', '4');
+                data.domElement.setAttribute('data-bound-disabled-gt', '4');
                 booleanBinding.renderWithContext(data.context);
-                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                assert(data.domElement.attributes.disabled && data.domElement.attributes.disabled.nodeValue == "",
                     "Expected 'disabled' attribute to exists with empty string as its value.");
             }
         },
         {
             name: "Greater Than Or Equal",
             method(data) {
-                data.element.setAttribute('data-bound-disabled-gte', '6');
-                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.disabled);
+                data.domElement.setAttribute('data-bound-disabled-gte', '6');
+                let booleanBinding = new DataBoundBooleanAttribute(data.domElement.attributes.disabled);
                 booleanBinding.renderWithContext(data.context);
-                assert(!data.element.attributes.disabled, "Expected 'disabled' attribute to be removed.");
+                assert(!data.domElement.attributes.disabled, "Expected 'disabled' attribute to be removed.");
 
-                data.element.setAttribute('data-bound-disabled-gte', '5');
+                data.domElement.setAttribute('data-bound-disabled-gte', '5');
                 booleanBinding.renderWithContext(data.context);
-                assert(data.element.attributes.disabled && data.element.attributes.disabled.nodeValue == "",
+                assert(data.domElement.attributes.disabled && data.domElement.attributes.disabled.nodeValue == "",
                     "Expected 'disabled' attribute to exists with empty string as its value.");
             }
         },
         {
             name: "Not",
             method(data) {
-                data.element.setAttribute('data-bound-hidden-not', '');
-                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.hidden);
+                data.domElement.setAttribute('data-bound-hidden-not', '');
+                let booleanBinding = new DataBoundBooleanAttribute(data.domElement.attributes.hidden);
                 booleanBinding.renderWithContext(data.context);
-                assert(!data.element.attributes.hidden, "Expected 'hidden' attribute to be removed.");
+                assert(!data.domElement.attributes.hidden, "Expected 'hidden' attribute to be removed.");
 
                 data.context.isHidden = false;
                 booleanBinding.renderWithContext(data.context);
-                assert(data.element.attributes.hidden && data.element.attributes.hidden.nodeValue == "",
+                assert(data.domElement.attributes.hidden && data.domElement.attributes.hidden.nodeValue == "",
                     "Expected 'hidden' attribute to exists with empty string as its value.");
             }
         },
         {
             name: "Conditional Bindings",
             method(data) {
-                let booleanBinding = new DataBoundBooleanAttribute(data.element.attributes.checked);
+                let booleanBinding = new DataBoundBooleanAttribute(data.domElement.attributes.checked);
                 booleanBinding.renderWithContext(data.context);
-                assert(data.element.attributes.checked && data.element.attributes.checked.nodeValue == "",
+                assert(data.domElement.attributes.checked && data.domElement.attributes.checked.nodeValue == "",
                     "Expected 'checked' attribute to exists with empty string as its value.");
 
                 data.context.checkedCondition = "not checked";
                 booleanBinding.renderWithContext(data.context);
-                assert(!data.element.attributes.checked, "Expected 'checked' attribute to be removed.");
+                assert(!data.domElement.attributes.checked, "Expected 'checked' attribute to be removed.");
             }
         }
     ]
@@ -620,104 +620,104 @@ TestSuites.suites.push({
             name: "Equals",
             method(data) {
                 data.childElement.setAttribute("data-bound-if-eq", "4");
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 data.childElement.setAttribute("data-bound-if-eq", "5");
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         },
         {
             name: "Not Equals",
             method(data) {
                 data.childElement.setAttribute("data-bound-if-neq", "5");
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 data.childElement.setAttribute("data-bound-if-neq", "4");
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         },
         {
             name: "Less Than",
             method(data) {
                 data.childElement.setAttribute("data-bound-if-lt", "5");
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 data.childElement.setAttribute("data-bound-if-lt", "6");
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         },
         {
             name: "Less Than Or Equals",
             method(data) {
                 data.childElement.setAttribute("data-bound-if-lte", "4");
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 data.childElement.setAttribute("data-bound-if-lte", "5");
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         },
         {
             name: "Greater Than",
             method(data) {
                 data.childElement.setAttribute("data-bound-if-gt", "5");
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 data.childElement.setAttribute("data-bound-if-gt", "4");
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         },
         {
             name: "Greater Than Or Equal",
             method(data) {
                 data.childElement.setAttribute("data-bound-if-gte", "56");
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 data.childElement.setAttribute("data-bound-if-gte", "5");
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         },
         {
             name: "Not",
             method(data) {
                 data.childElement.setAttribute("data-bound-if-not", "");
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 data.context.checkedValue = false;
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         },
         {
             name: "Conditional Binding",
             method(data) {
                 data.childElement.setAttribute("data-bound-if-eq", "${conditionValue}");
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 0);
+                assertExpectedValue(data.domElement.childElementCount, 0);
 
                 data.context.conditionValue = 5;
                 boundElement.renderWithContext(data.context);
-                assertExpectedValue(data.element.childElementCount, 1);
+                assertExpectedValue(data.domElement.childElementCount, 1);
             }
         }
     ]
@@ -753,7 +753,7 @@ TestSuites.suites.push({
             name: "Creation",
             method(data) {
                 let elementArray = new DataBoundElementArray(data.childElement);
-                let baseChild = data.element.childNodes[0];
+                let baseChild = data.domElement.childNodes[0];
                 assert(baseChild != data.childElement, "Child element should've been replaced.");
             }
         },
@@ -762,7 +762,7 @@ TestSuites.suites.push({
             method(data) {
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context);
-                assertExpectedValue(data.element.childNodes.length, data.context.items.length + 1,
+                assertExpectedValue(data.domElement.childNodes.length, data.context.items.length + 1,
                     "Expecting child nodes to be equal to number of items plus 1 (for anchor element).");
             }
         },
@@ -772,7 +772,7 @@ TestSuites.suites.push({
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
-                    let childNode = data.element.childNodes[i];
+                    let childNode = data.domElement.childNodes[i];
                     let childContext = data.context.items[i];
                     assertExpectedValue(childNode.innerHTML, i + ": " + childContext.text);
                 }
@@ -785,7 +785,7 @@ TestSuites.suites.push({
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
-                    let childNode = data.element.childNodes[i];
+                    let childNode = data.domElement.childNodes[i];
                     assertExpectedValue(childNode.attributes.class.nodeValue, data.context.itemClass);
                 }
             }
@@ -798,7 +798,7 @@ TestSuites.suites.push({
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
-                    let childNode = data.element.childNodes[i];
+                    let childNode = data.domElement.childNodes[i];
                     assertExpectedValue(childNode.innerHTML, data.context.items[i]);
                 }
             }
@@ -810,7 +810,7 @@ TestSuites.suites.push({
                 let elementArray = new DataBoundElementArray(data.childElement);
                 elementArray.renderWithContext(data.context, data.dataBoundContext);
                 for (let i=0; i<data.context.items.length; i++) {
-                    let childNode = data.element.childNodes[i];
+                    let childNode = data.domElement.childNodes[i];
                     assertExpectedValue(childNode.innerHTML, i + ": " + data.dataBoundContext.itemValue);
                 }
             }
@@ -826,7 +826,7 @@ TestSuites.suites.push({
                 data.context.items.push({text: "Item 7"});
                 elementArray.renderWithContext(data.context, data.dataBoundContext);
 
-                assertExpectedValue(data.element.childNodes.length, data.context.items.length + 1,
+                assertExpectedValue(data.domElement.childNodes.length, data.context.items.length + 1,
                     "Expecting child nodes to be equal to number of items plus 1 (for anchor element).");
             }
         },
@@ -840,7 +840,7 @@ TestSuites.suites.push({
                 data.context.items.pop();
                 elementArray.renderWithContext(data.context, data.dataBoundContext);
 
-                assertExpectedValue(data.element.childNodes.length, data.context.items.length + 1,
+                assertExpectedValue(data.domElement.childNodes.length, data.context.items.length + 1,
                     "Expecting child nodes to be equal to number of items plus 1 (for anchor element).");
             }
         },
@@ -853,17 +853,17 @@ TestSuites.suites.push({
                 data.context.items.splice(1, 2);
                 elementArray.renderWithContext(data.context, data.dataBoundContext);
 
-                assertExpectedValue(data.element.childNodes[0].innerHTML, "0: Item 1");
-                assertExpectedValue(data.element.childNodes[1].innerHTML, "1: Item 4");
+                assertExpectedValue(data.domElement.childNodes[0].innerHTML, "0: Item 1");
+                assertExpectedValue(data.domElement.childNodes[1].innerHTML, "1: Item 4");
             }
         },
         {
             name: "Child Count After Creation As Child",
             method(data) {
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context, data.dataBoundContext);
 
-                assertExpectedValue(data.element.childNodes.length, data.context.items.length + 1,
+                assertExpectedValue(data.domElement.childNodes.length, data.context.items.length + 1,
                     "Expecting child nodes to be equal to number of items plus 1 (for anchor element).");
             }
         }
@@ -900,7 +900,7 @@ TestSuites.suites.push({
         {
             name: "Simple Reference",
             method(data) {
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 assert(boundElement.refs.child1.domElement === data.refChild,
                     "Expecting reference on bound element to exactly equal refChild.");
             }
@@ -910,7 +910,7 @@ TestSuites.suites.push({
             method(data) {
                 data.refChild.setAttribute("data-bound-ref", "");
                 data.refChild.setAttribute("id", "child1");
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 assert(boundElement.refs.child1.domElement === data.refChild,
                     "Expecting reference on bound element to exactly equal refChild.");
             }
@@ -941,7 +941,7 @@ TestSuites.suites.push({
         {
             name: "Simple Ignore",
             method(data) {
-                let boundElement = new DataBoundElement(data.element);
+                let boundElement = new DataBoundElement(data.domElement);
                 boundElement.renderWithContext(data.context);
                 assertExpectedValue(data.child.innerHTML, "${childText}");
             }

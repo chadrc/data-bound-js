@@ -397,14 +397,14 @@ class DataBoundElement {
 
         let newContext = null;
         if (extendDataBoundContext && dataBoundContext) {
-            dataBoundContext.element = this.domElement;
+            dataBoundContext.domElement = this.domElement;
             dataBoundContext.boundElement = this;
             newContext = dataBoundContext;
         } else {
             newContext = {
                 parent: dataBoundContext,
                 boundElement: this,
-                element: this.domElement
+                domElement: this.domElement
             };
         }
 
@@ -457,7 +457,7 @@ class DataBoundIfNode {
 
     renderWithContext(context, dataBoundContext, rootContext) {
         if (dataBoundContext) {
-            dataBoundContext.element = this.domElement;
+            dataBoundContext.domElement = this.domElement;
             dataBoundContext.boundElement = this.boundElement;
         } else {
             dataBoundContext = {
