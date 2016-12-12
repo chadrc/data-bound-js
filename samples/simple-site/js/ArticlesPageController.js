@@ -2,12 +2,10 @@
  * Created by chad on 12/10/16.
  */
 
-class ArticlesPageController {
-    constructor(boundElement) {
+class ArticlesPageController extends PageController {
+    constructor() {
+        super();
         this.title = "Some Light Reading";
         this.subTitle = "Enjoy";
-
-        this.boundElement = boundElement;
-        this.boundElement.renderWithContext(this);
     }
 }

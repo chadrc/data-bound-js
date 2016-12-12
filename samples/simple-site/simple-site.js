@@ -8,7 +8,13 @@ class RootController {
     constructor() {
 
         this.currentPage = "home";
-        this.pages = {};
+        this.pages = {
+            home: new HomePageController(),
+            about: new AboutPageController(),
+            gallery: new GalleryPageController(),
+            projects: new ProjectsPageController(),
+            articles: new ArticlesPageController()
+        };
 
         this.selectPage = this.selectPage.bind(this);
         this.activeClass = this.activeClass.bind(this);
@@ -16,15 +22,11 @@ class RootController {
         this.rootElement = new DataBoundElement(document.getElementById("simpleSiteRoot"));
         this.rootElement.renderWithContext(this);
 
-        this.pages = {
-            home: new HomePageController(this.rootElement.subContexts.home),
-            about: new AboutPageController(this.rootElement.subContexts.about),
-            gallery: new GalleryPageController(this.rootElement.subContexts.gallery),
-            projects: new ProjectsPageController(this.rootElement.subContexts.projects),
-            articles: new ArticlesPageController(this.rootElement.subContexts.articles)
-        };
-
-        this.rootElement.renderWithContext(this);
+        for (let p in this.pages) {
+            if (this.pages.hasOwnProperty(p)) {
+                this.pages[p].contextElement = this.rootElement.subContexts[p];
+            }
+        }
     }
 
     get currentPageName() {
@@ -50,6 +52,13 @@ class RootController {
     selectPage(event, dataBoundContext) {
         this.currentPage = event.srcElement.dataset.page;
         this.rootElement.renderWithContext(this);
+    }
+}
+
+class PageController {
+    set contextElement(c) {
+        this.boundElement = c;
+        c.renderWithContext(this);
     }
 }
 
