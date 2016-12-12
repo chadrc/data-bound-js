@@ -26,7 +26,7 @@
         class DateContext {
             constructor(domElement) {
                 this.now = new Date();
-                this.domElement = element;
+                this.domElement = domElement;
 
                 this.tick = this.tick.bind(this);
                 setInterval(this.tick, 1000);

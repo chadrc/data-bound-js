@@ -263,7 +263,7 @@ TestSuites.suites.push({
             index: 3
         };
         return {
-            element: element,
+            domElement: element,
             context: {
                 classes: "alert-warning",
                 isHidden: true,
@@ -475,7 +475,7 @@ TestSuites.suites.push({
         element.setAttribute('checked', '${checkedValue}');
         element.setAttribute('data-bound-checked-eq', '${checkedCondition}');
         return {
-            element: element,
+            domElement: element,
             context: {
                 checkedValue: "checked",
                 checkedCondition: "checked",
@@ -607,7 +607,7 @@ TestSuites.suites.push({
         childElement.setAttribute('data-bound-if', '${checkedValue}');
         element.appendChild(childElement);
         return {
-            element: element,
+            domElement: element,
             childElement: childElement,
             context: {
                 checkedValue: 5,
@@ -732,7 +732,7 @@ TestSuites.suites.push({
         childElement.innerHTML = "${.dataBoundIndex}: ${text}";
         baseElement.appendChild(childElement);
         return {
-            element: baseElement,
+            domElement: baseElement,
             childElement: childElement,
             context: {
                 itemClass: "item-class",
@@ -885,7 +885,7 @@ TestSuites.suites.push({
         };
 
         return {
-            element: element,
+            domElement: element,
             refChild: refChild,
             context: {
                 childReference: "contextChildReference",
@@ -930,7 +930,7 @@ TestSuites.suites.push({
         element.appendChild(ignoreChild);
 
         return {
-            element: element,
+            domElement: element,
             child: ignoreChild,
             context: {
                 childText: "This text shouldn't appear."

@@ -461,7 +461,7 @@ class DataBoundIfNode {
             dataBoundContext.boundElement = this.boundElement;
         } else {
             dataBoundContext = {
-                element: this.domElement,
+                domElement: this.domElement,
                 boundElement: this.boundElement
             }
         }
