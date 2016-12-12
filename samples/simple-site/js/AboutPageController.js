@@ -34,14 +34,8 @@ class AboutPageController extends PageController {
             message: event.srcElement.elements.contactMessage.value.trim()
         };
 
-        if (this.contactInfo.message) {
-            this.contactRequestModalRef.renderWithContext(this);
-            this.contactRequstModal.modal("show");
-            event.srcElement.reset();
-        } else {
-            this.contactRequestErrorMessage = "You must fill in the message field to submit a request.";
-            this.contactRequestErrorModalRef.renderWithContext(this);
-            this.contactRequestErrorModal.modal("show");
-        }
+        this.contactRequestModalRef.renderWithContext(this);
+        this.contactRequstModal.modal("show");
+        event.srcElement.reset();
     }
 }
