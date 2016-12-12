@@ -34,3 +34,41 @@
 a.hover-underline.active, .hover-underline:hover {
     border-bottom: 0.2rem solid white;
 }
+
+.w-50 {
+    width: 50%;
+}
+
+.home-page-card {
+    overflow: hidden;
+}
+
+.home-page-card>.home-page-card-name {
+    opacity: 0;
+    transition: opacity .25s;
+}
+
+.home-page-card:hover>.home-page-card-name {
+    opacity: 1.0;
+}
+
+.bs-mt-buf {
+    margin-top: 15px;
+}
+
+.pos-rel {
+    position: relative;
+}
+
+.pos-abs {
+    position: absolute;
+}
+
+.abs-bl {
+    bottom: 0;
+    left: 0;
+}
+
+.bg-faded {
+    background-color: rgba(55, 58, 60, .9);
+}

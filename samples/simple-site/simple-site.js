@@ -54,7 +54,7 @@ class RootController {
     }
 
     selectPage(event, dataBoundContext) {
-        this.currentPage = event.target.getAttribute("href").slice(1);
+        this.currentPage = event.srcElement.dataset.page;
         this.rootElement.renderWithContext(this);
     }
 }
