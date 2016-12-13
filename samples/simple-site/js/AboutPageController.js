@@ -14,6 +14,8 @@ class AboutPageController extends PageController {
             message: ""
         };
 
+        this.data = AboutData;
+
         this.submitContactRequest = this.submitContactRequest.bind(this);
     }
 
@@ -21,8 +23,9 @@ class AboutPageController extends PageController {
         super.contextElement = value;
         this.contactRequestModalRef = this.subContext.boundElement.refs.contactRequestModal;
         this.contactRequstModal = $(this.contactRequestModalRef.domElement);
-        this.contactRequestErrorModalRef = this.subContext.boundElement.refs.contactRequestError;
-        this.contactRequestErrorModal = $(this.contactRequestErrorModalRef.domElement);
+
+        this.aboutArticle = this.subContext.boundElement.refs.aboutArticle;
+        this.aboutArticle.domElement.innerHTML = this.data.text;
     }
 
 
@@ -31,7 +34,7 @@ class AboutPageController extends PageController {
         this.contactInfo = {
             name: event.srcElement.elements.contactName.value,
             email: event.srcElement.elements.contactEmail.value,
-            message: event.srcElement.elements.contactMessage.value.trim()
+            message: event.srcElement.elements.contactMessage.value
         };
 
         this.contactRequestModalRef.renderWithContext(this);
