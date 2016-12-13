@@ -7,5 +7,7 @@ class ProjectsPageController extends PageController {
         super();
         this.title = "Our Work";
         this.subTitle = "Just Keeping Busy";
+
+        this.data = ProjectsData;
     }
 }
