@@ -174,6 +174,12 @@ class DataBoundPropString {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
+        this.lastContexts = {
+            context: context,
+            dataBoundContext: dataBoundContext,
+            rootContext: rootContext
+        };
+
         let renderStr = this.originalStr;
         for (let i=0; i<this.matches.length; i++) {
             let value = this.getValueWithContext(i, context, dataBoundContext, rootContext);
@@ -196,7 +202,14 @@ class DataBoundAttribute {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
+        this.lastContexts = {
+            context: context,
+            dataBoundContext: dataBoundContext,
+            rootContext: rootContext
+        };
+
         this.node.nodeValue = this.propString.renderWithContext(context, dataBoundContext, rootContext);
+
     }
 }
 
@@ -212,6 +225,12 @@ class DataBoundTextNode {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
+        this.lastContexts = {
+            context: context,
+            dataBoundContext: dataBoundContext,
+            rootContext: rootContext
+        };
+
         this.node.nodeValue = this.propString.renderWithContext(context, dataBoundContext, rootContext);
     }
 }
@@ -244,6 +263,12 @@ class DataBoundConditional {
     }
 
     getValueWithContext(context, dataBoundContext, rootContext) {
+        this.lastContexts = {
+            context: context,
+            dataBoundContext: dataBoundContext,
+            rootContext: rootContext
+        };
+
         let conditionValue = null;
         if (this.conditionAttr) {
             if (this.conditionPropString) {
@@ -272,9 +297,18 @@ class DataBoundBooleanAttribute {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
+        this.lastContexts = {
+            context: context,
+            dataBoundContext: dataBoundContext,
+            rootContext: rootContext
+        };
+
         if (this.propString.matches.length > 0) {
             let contextValue = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
             let conditionValue = this.boundConditional.getValueWithContext(context, dataBoundContext, rootContext);
+            if (contextValue instanceof Function) {
+                contextValue = contextValue(dataBoundContext);
+            }
             if (this.boundConditional.conditionMethod(contextValue, conditionValue)) {
                 this.nodeOwner.setAttribute(this.attrName, '');
             } else {
@@ -304,6 +338,12 @@ class DataBoundMethodAttribute {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
+        this.lastContexts = {
+            context: context,
+            dataBoundContext: dataBoundContext,
+            rootContext: rootContext
+        };
+
         this.lastBoundContext = dataBoundContext;
         this.method = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (this.method && this.method instanceof Function) {
@@ -390,6 +430,12 @@ class DataBoundElement {
 
     renderWithContext(context, dataBoundContext, rootContext,
                       extendContext, extendDataBoundContext, extendRootContext) {
+        this.lastContexts = {
+            context: context,
+            dataBoundContext: dataBoundContext,
+            rootContext: rootContext
+        };
+
         if (!rootContext) {
             rootContext = context;
         }
@@ -432,6 +478,12 @@ class DataBoundSubContext {
     }
 
     renderWithContext(context) {
+        this.lastContexts = {
+            context: context,
+            dataBoundContext: null,
+            rootContext: null
+        };
+
         this.boundElement.renderWithContext(context, null, this.currentRootContext);
     }
 }
@@ -455,6 +507,12 @@ class DataBoundIfNode {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
+        this.lastContexts = {
+            context: context,
+            dataBoundContext: dataBoundContext,
+            rootContext: rootContext
+        };
+
         if (dataBoundContext) {
             dataBoundContext.domElement = this.domElement;
             dataBoundContext.boundElement = this.boundElement;
@@ -510,6 +568,12 @@ class DataBoundElementArray {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
+        this.lastContexts = {
+            context: context,
+            dataBoundContext: dataBoundContext,
+            rootContext: rootContext
+        };
+
         let contextArray = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (!(contextArray instanceof Array)) {
             this.anchorNode.data = "DataBoundElementArray: [No Context]";
