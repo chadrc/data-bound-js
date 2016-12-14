@@ -8,7 +8,7 @@ let ProjectsData = {
             name: "Websites",
             image: "blue-square.png",
             article:
-                `<p>
+                `<p><img class="float-xs-left" src="images/blue-square.png" width="300px" height="300px">
                     Pellentesque nec urna consectetur mi suscipit eleifend. Phasellus viverra magna risus, dapibus
                     suscipit velit rhoncus ut. Pellentesque fermentum viverra sagittis. Integer non consequat elit, 
                     sed congue ligula. Nullam quis ligula ut enim egestas finibus id sed elit. Nam commodo dictum 
@@ -17,7 +17,7 @@ let ProjectsData = {
                     elit leo, cursus eget ligula ut, feugiat eleifend odio. Sed eu eros sed risus vulputate ultrices 
                     quis id lectus. Integer feugiat finibus enim ut hendrerit. Vivamus scelerisque lacus at commodo 
                     porttitor. Donec enim velit, lobortis vitae mauris ut, rhoncus malesuada turpis.
-                    <img class="float-xs-left" src="images/blue-square.png" width="300px" height="300px">
+                    
                 </p>`
         },
         {
@@ -84,9 +84,10 @@ let ProjectsData = {
                     dignissim dictum tellus. Morbi ullamcorper tincidunt lectus, fringilla pharetra nunc volutpat ut. 
                     Ut molestie, sem at porttitor mattis, tortor nibh consequat odio, at sollicitudin lorem neque nec
                     purus. Duis ac ipsum sem.
-                    <img class="float-xs-left" src="images/blue-square.png" width="150px" height="300px">
+                    
                 </p>
                 <p>
+                    <img class="float-xs-left" src="images/blue-square.png" width="150px" height="300px">
                     <img class="float-xs-right" src="images/blue-square.png" width="400px" height="250px">
                     Donec facilisis pulvinar sem, eu sollicitudin risus. Suspendisse porttitor, sapien eget finibus 
                     vehicula, metus diam convallis erat, nec dictum erat arcu eu erat. Donec hendrerit nulla nunc, 

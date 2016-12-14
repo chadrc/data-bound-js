@@ -225,7 +225,24 @@
             </section>
             <section hidden="${~currentPageName}" data-bound-hidden-neq="projects">
                 <div id="projects" data-bound-context>
-                    <p>Projects</p>
+                    <section class="carou-nav mb-2">
+                        <div class="carou-nav-inner">
+                            <div data-bound-array="${data.projects}"
+                                 class="carou-nav-item ${.arrayContext.selectedClass}"
+                                 onclick="${.arrayContext.selectProject}">
+                                <img src="images/${image}">
+                            </div>
+                        </div>
+                    </section>
+                    <section class="w-75 mx-auto">
+                        <div data-bound-array="${data.projects}"
+                             hidden="${.arrayContext.selected}"
+                             data-bound-hidden-not
+                             class="article">
+                            <h3>${name}</h3>
+                            <div data-html="${.arrayContext.setProjectArticle}"></div>
+                        </div>
+                    </section>
                 </div>
             </section>
             <section hidden="${~currentPageName}" data-bound-hidden-neq="gallery">

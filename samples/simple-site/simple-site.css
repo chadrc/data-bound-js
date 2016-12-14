@@ -39,6 +39,10 @@ a.hover-underline.active, .hover-underline:hover {
     width: 50%;
 }
 
+.w-75 {
+    width: 75%;
+}
+
 .bs-mt-buf {
     margin-top: 15px;
 }
@@ -60,6 +64,13 @@ a.hover-underline.active, .hover-underline:hover {
     background-color: rgba(55, 58, 60, .9);
 }
 
+.hr-tapper {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right,rgba(55, 58, 60,0),rgba(55, 58, 60,.75),rgba(55, 58, 60,0));
+}
+
+
 .home-page-card {
     overflow: hidden;
 }
@@ -73,8 +84,49 @@ a.hover-underline.active, .hover-underline:hover {
     opacity: 1.0;
 }
 
-.hr-tapper {
-    border: 0;
-    height: 1px;
-    background-image: linear-gradient(to right,rgba(55, 58, 60,0),rgba(55, 58, 60,.75),rgba(55, 58, 60,0));
+.carou-nav {
+
+}
+
+.carou-nav-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carou-nav-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    width: 150px;
+    cursor: pointer;
+}
+
+.carou-nav-item>img {
+    height: 100px;
+    width: 100px;
+    transition: width .25s, height .25s;
+}
+
+.carou-nav-item:hover>img {
+    height: 125px;
+    width: 125px;
+}
+
+.carou-nav-item.selected>img {
+    height: 125px;
+    width: 125px;
+}
+
+.carou-nav-item.selected>img:hover {
+    cursor: default;
+}
+
+.article img.float-xs-right {
+    margin-left: 1rem;
+}
+
+.article img.float-xs-left {
+    margin-right: 1rem;
 }
