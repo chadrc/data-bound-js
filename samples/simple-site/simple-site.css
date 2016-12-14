@@ -28,7 +28,8 @@
 }
 
 .hover-underline {
-    border: 0.2rem solid transparent;
+    padding: .2rem .2rem 0 .2rem;
+    border-bottom: 0.2rem solid transparent;
 }
 
 a.hover-underline.active, .hover-underline:hover {
