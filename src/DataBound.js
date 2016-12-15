@@ -23,33 +23,6 @@ class DataBoundUtils {
         return [];
     }
 
-    static extractConditionalAttr(attributes, prefix) {
-        let info = {
-            conditionAttr: null,
-            conditionPropString: null,
-            conditionMethod: (value) => {return value;}
-        };
-        for (let i=0; i<attributes.length; i++) {
-            let attr = attributes[i];
-            if (attr.name.startsWith(prefix)) {
-                info.conditionAttr = attr;
-                info.conditionPropString = new DataBoundPropString(attr.nodeValue);
-                if (info.conditionPropString.matches.length == 0) {
-                    info.conditionPropString = null;
-                }
-                let condition = attr.name.slice(prefix.length);
-                info.conditionMethod = DataBoundUtils.booleanConditionalAttributes[condition];
-                if (!info.conditionMethod) {
-                    console.warn("Unknown conditional attribute '", condition,
-                        "' used for boolean attribute '", info.attrName, "'.");
-                    this.conditionMethod = (value) => {return value;};
-                }
-                break;
-            }
-        }
-        return info;
-    }
-
     static registerDBObject(obj) {
         if (DataBoundUtils.debugMode) {
             obj.dataBoundId = DataBoundUtils.boundObjectCounter++;
@@ -190,77 +163,65 @@ class DataBoundPropString {
     }
 }
 
-class DataBoundAttribute {
-    constructor(attrNode) {
+class DataBoundRenderable {
+    constructor(node, propString) {
         DataBoundUtils.registerDBObject(this);
-        this.node = attrNode;
-        this.propString = new DataBoundPropString(attrNode.nodeValue);
+        this.node = node;
+        this.nodeOwner = node ? node.ownerElement : null;
+        this.attrName = node ? node.nodeName : null;
+        this.propString = propString ? new DataBoundPropString(propString) : null;
     }
 
     get isBound() {
-        return this.propString.matches.length > 0;
+        return this.propString ? this.propString.matches.length > 0 : false;
     }
 
-    renderWithContext(context, dataBoundContext, rootContext) {
+    renderWithContext(context, dataBoundContext, rootContext, extendContext, extendBoundContext, extendRootContext) {
         this.lastContexts = {
             context: context,
             dataBoundContext: dataBoundContext,
             rootContext: rootContext
         };
 
-        this.node.nodeValue = this.propString.renderWithContext(context, dataBoundContext, rootContext);
+        this.render(context, dataBoundContext, rootContext, extendContext, extendBoundContext, extendRootContext);
+    }
 
+    render() {throw "DataBoundRenderable does not implemented 'render' method."}
+}
+
+class DataBoundAttribute extends DataBoundRenderable {
+    constructor(attrNode) {
+        super(attrNode, attrNode.nodeValue);
+    }
+
+    render(context, dataBoundContext, rootContext) {
+        this.node.nodeValue = this.propString.renderWithContext(context, dataBoundContext, rootContext);
     }
 }
 
-class DataBoundHTMLAttribute {
+class DataBoundHTMLAttribute extends DataBoundRenderable {
     constructor(attrNode) {
-        DataBoundUtils.registerDBObject(this);
-        this.node = attrNode;
-        this.nodeOwner = attrNode.ownerElement;
-        this.propString = new DataBoundPropString(attrNode.nodeValue);
+        super(attrNode, attrNode.nodeValue);
     }
 
-    get isBound() {
-        return this.propString.matches.length > 0;
-    }
-
-    renderWithContext(context, dataBoundContext, rootContext) {
-        this.lastContexts = {
-            context: context,
-            dataBoundContext: dataBoundContext,
-            rootContext: rootContext
-        };
-
+    render(context, dataBoundContext, rootContext) {
         this.nodeOwner.innerHTML = this.propString.renderWithContext(context, dataBoundContext, rootContext);
     }
 }
 
-class DataBoundTextNode {
+class DataBoundTextNode extends DataBoundRenderable {
     constructor(textNode) {
-        DataBoundUtils.registerDBObject(this);
-        this.node = textNode;
-        this.propString = new DataBoundPropString(textNode.nodeValue);
-    }
-
-    get isBound() {
-        return this.propString.matches.length > 0;
+        super(textNode, textNode.nodeValue);
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
-        this.lastContexts = {
-            context: context,
-            dataBoundContext: dataBoundContext,
-            rootContext: rootContext
-        };
-
         this.node.nodeValue = this.propString.renderWithContext(context, dataBoundContext, rootContext);
     }
 }
 
-class DataBoundConditional {
+class DataBoundConditional extends DataBoundRenderable {
     constructor(attributes, prefix) {
-        DataBoundUtils.registerDBObject(this);
+        super(null, null);
         this.conditionAttr = null;
         this.conditionPropString = null;
         this.conditionMethod = (value) => {return value;};
@@ -286,12 +247,6 @@ class DataBoundConditional {
     }
 
     getValueWithContext(context, dataBoundContext, rootContext) {
-        this.lastContexts = {
-            context: context,
-            dataBoundContext: dataBoundContext,
-            rootContext: rootContext
-        };
-
         let conditionValue = null;
         if (this.conditionAttr) {
             if (this.conditionPropString) {
@@ -304,28 +259,15 @@ class DataBoundConditional {
     }
 }
 
-class DataBoundBooleanAttribute {
+class DataBoundBooleanAttribute extends DataBoundRenderable {
     constructor(attrNode) {
-        DataBoundUtils.registerDBObject(this);
-        this.nodeOwner = attrNode.ownerElement;
-        this.attrName = attrNode.nodeName;
-        this.propString = new DataBoundPropString(attrNode.nodeValue);
+        super(attrNode, attrNode.nodeValue);
         attrNode.nodeValue = '';
         let conditionAttrPrefix = 'data-bound-' + this.attrName + '-';
         this.boundConditional = new DataBoundConditional(this.nodeOwner.attributes, conditionAttrPrefix);
     }
 
-    get isBound() {
-        return this.propString.matches.length > 0;
-    }
-
-    renderWithContext(context, dataBoundContext, rootContext) {
-        this.lastContexts = {
-            context: context,
-            dataBoundContext: dataBoundContext,
-            rootContext: rootContext
-        };
-
+    render(context, dataBoundContext, rootContext) {
         if (this.propString.matches.length > 0) {
             let contextValue = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
             let conditionValue = this.boundConditional.getValueWithContext(context, dataBoundContext, rootContext);
@@ -341,32 +283,18 @@ class DataBoundBooleanAttribute {
     }
 }
 
-class DataBoundMethodAttribute {
+class DataBoundMethodAttribute extends DataBoundRenderable {
     constructor(attrNode) {
-        DataBoundUtils.registerDBObject(this);
-        this.nodeOwner = attrNode.ownerElement;
-        this.attrName = attrNode.nodeName;
-        if (!this.attrName.startsWith("on")) {
+        if (!attrNode.nodeName.startsWith("on")) {
             throw "DataBoundMethodAttribute can only be bound to an attribute that begins with 'on'.";
         }
-
-        this.propString = new DataBoundPropString(attrNode.nodeValue);
+        super(attrNode, attrNode.nodeValue);
         this.eventName = this.attrName.slice(2);
         this.nodeOwner.addEventListener(this.eventName, this.eventCall.bind(this));
         this.nodeOwner.removeAttribute(this.attrName);
     }
 
-    get isBound() {
-        return this.propString.matches.length > 0;
-    }
-
-    renderWithContext(context, dataBoundContext, rootContext) {
-        this.lastContexts = {
-            context: context,
-            dataBoundContext: dataBoundContext,
-            rootContext: rootContext
-        };
-
+    render(context, dataBoundContext, rootContext) {
         this.lastBoundContext = dataBoundContext;
         this.method = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (this.method && this.method instanceof Function) {
@@ -384,10 +312,10 @@ class DataBoundMethodAttribute {
     }
 }
 
-class DataBoundElement {
+class DataBoundElement extends DataBoundRenderable {
     constructor(element, creatingElement) {
-        DataBoundUtils.registerDBObject(this);
-        this.domElement = element;
+        super(element, null);
+        this.domElement = this.node;
         this.bindings = [];
         this.refs = creatingElement ? creatingElement.refs : [];
         this.subContexts = creatingElement ? creatingElement.subContexts : [];
@@ -453,14 +381,7 @@ class DataBoundElement {
         return this.bindings.length > 0;
     }
 
-    renderWithContext(context, dataBoundContext, rootContext,
-                      extendContext, extendDataBoundContext, extendRootContext) {
-        this.lastContexts = {
-            context: context,
-            dataBoundContext: dataBoundContext,
-            rootContext: rootContext
-        };
-
+    render(context, dataBoundContext, rootContext, extendContext, extendDataBoundContext, extendRootContext) {
         if (!rootContext) {
             rootContext = context;
         }
@@ -485,39 +406,29 @@ class DataBoundElement {
 
         for(let i=0; i<this.subContexts.length; i++) {
             let sub = this.subContexts[i];
-            sub.rootContext = rootContext;
+            sub.currentRootContext = rootContext;
         }
     }
 }
 
-class DataBoundSubContext {
+class DataBoundSubContext extends DataBoundRenderable {
     constructor(element) {
-        DataBoundUtils.registerDBObject(this);
-        this.domElement = element;
+        super(element, null);
+        this.domElement = this.node;
         this.boundElement = DataBoundUtils.bindElement(element);
         this.currentRootContext = null;
     }
 
-    set rootContext(context) {
-        this.currentRootContext = context;
-    }
-
-    renderWithContext(context) {
-        this.lastContexts = {
-            context: context,
-            dataBoundContext: null,
-            rootContext: null
-        };
-
+    render(context) {
         this.boundElement.renderWithContext(context, null, this.currentRootContext);
     }
 }
 
-class DataBoundIfNode {
+class DataBoundIfNode extends DataBoundRenderable {
     constructor(element) {
+        super(element, element.attributes["data-bound-if"].nodeValue);
         DataBoundUtils.registerDBObject(this);
-        this.domElement = element;
-        this.propString = new DataBoundPropString(this.domElement.attributes["data-bound-if"].nodeValue);
+        this.domElement = this.node;
         this.domElement.removeAttribute("data-bound-if");
         this.boundElement = new DataBoundElement(this.domElement);
         this.baseElement = this.domElement.parentElement;
@@ -527,17 +438,7 @@ class DataBoundIfNode {
         this.boundConditional = new DataBoundConditional(this.domElement.attributes, "data-bound-if-");
     }
 
-    get isBound() {
-        return this.propString.matches.length > 0;
-    }
-
-    renderWithContext(context, dataBoundContext, rootContext) {
-        this.lastContexts = {
-            context: context,
-            dataBoundContext: dataBoundContext,
-            rootContext: rootContext
-        };
-
+    render(context, dataBoundContext, rootContext) {
         if (dataBoundContext) {
             dataBoundContext.domElement = this.domElement;
             dataBoundContext.boundElement = this.boundElement;
@@ -575,11 +476,10 @@ class DataBoundIfNode {
     }
 }
 
-class DataBoundElementArray {
+class DataBoundElementArray extends DataBoundRenderable {
     constructor(element) {
-        DataBoundUtils.registerDBObject(this);
-        this.domElement = element;
-        this.propString = new DataBoundPropString(this.domElement.attributes["data-bound-array"].nodeValue);
+        super(element, element.attributes["data-bound-array"].nodeValue);
+        this.domElement = this.node;
         this.domElement.removeAttribute("data-bound-array");
         this.baseElement = this.domElement.parentElement;
         this.anchorNode = document.createComment("DataBoundElementArray: [No Context]");
@@ -588,17 +488,7 @@ class DataBoundElementArray {
         this.elementArray = [];
     }
 
-    get isBound() {
-        return this.propString.matches.length > 0;
-    }
-
-    renderWithContext(context, dataBoundContext, rootContext) {
-        this.lastContexts = {
-            context: context,
-            dataBoundContext: dataBoundContext,
-            rootContext: rootContext
-        };
-
+    render(context, dataBoundContext, rootContext) {
         let contextArray = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (!(contextArray instanceof Array)) {
             this.anchorNode.data = "DataBoundElementArray: [No Context]";
