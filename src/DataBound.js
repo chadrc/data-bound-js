@@ -213,6 +213,29 @@ class DataBoundAttribute {
     }
 }
 
+class DataBoundHTMLAttribute {
+    constructor(attrNode) {
+        DataBoundUtils.registerDBObject(this);
+        this.node = attrNode;
+        this.nodeOwner = attrNode.ownerElement;
+        this.propString = new DataBoundPropString(attrNode.nodeValue);
+    }
+
+    get isBound() {
+        return this.propString.matches.length > 0;
+    }
+
+    renderWithContext(context, dataBoundContext, rootContext) {
+        this.lastContexts = {
+            context: context,
+            dataBoundContext: dataBoundContext,
+            rootContext: rootContext
+        };
+
+        this.nodeOwner.innerHTML = this.propString.renderWithContext(context, dataBoundContext, rootContext);
+    }
+}
+
 class DataBoundTextNode {
     constructor(textNode) {
         DataBoundUtils.registerDBObject(this);
@@ -376,6 +399,8 @@ class DataBoundElement {
                 binding = new DataBoundBooleanAttribute(attr);
             } else if (attr.name.startsWith("on")) {
                 binding = new DataBoundMethodAttribute(attr);
+            } else if (attr.name == "data-bound-html") {
+                binding = new DataBoundHTMLAttribute(attr);
             } else {
                 binding = new DataBoundAttribute(attr);
             }

@@ -462,6 +462,16 @@ TestSuites.suites.push({
                 boundIf.renderWithContext(data.context);
                 assertExpectedValue(data.domElement.childElementCount, 1);
             }
+        },
+        {
+            name: "Inner Html Binding",
+            method(data) {
+                data.context.htmlValue = "<p>Some paragraph text with a <a href='#'>link</a>.</p>";
+                data.domElement.setAttribute("data-bound-html", "${htmlValue}");
+                let boundElement = new DataBoundElement(data.domElement);
+                boundElement.renderWithContext(data.context);
+                assert(data.domElement.childElementCount === 1, "Expected dom element to have a child element.");
+            }
         }
     ]
 });
