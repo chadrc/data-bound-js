@@ -147,12 +147,6 @@ class DataBoundPropString {
     }
 
     renderWithContext(context, dataBoundContext, rootContext) {
-        this.lastContexts = {
-            context: context,
-            dataBoundContext: dataBoundContext,
-            rootContext: rootContext
-        };
-
         let renderStr = this.originalStr;
         for (let i=0; i<this.matches.length; i++) {
             let value = this.getValueWithContext(i, context, dataBoundContext, rootContext);
