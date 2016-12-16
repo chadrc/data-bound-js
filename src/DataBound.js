@@ -215,8 +215,21 @@ class DataBoundTextNode extends DataBoundRenderable {
         super(textNode, textNode.nodeValue);
     }
 
-    renderWithContext(context, dataBoundContext, rootContext) {
+    render(context, dataBoundContext, rootContext) {
         this.node.nodeValue = this.propString.renderWithContext(context, dataBoundContext, rootContext);
+    }
+}
+
+class DataBoundProxy extends DataBoundRenderable {
+    constructor(node, forAttr) {
+        super(node, node.nodeValue);
+        this.forAttr = forAttr;
+    }
+
+    render(context, dataBoundContext, rootContext) {
+        this.nodeOwner.setAttribute(this.forAttr,
+            this.propString.renderWithContext(context, dataBoundContext, rootContext));
+        this.nodeOwner.setAttribute(this.attrName, this.propString.boundName);
     }
 }
 
@@ -332,6 +345,8 @@ class DataBoundElement extends DataBoundRenderable {
                 binding = new DataBoundMethodAttribute(attr);
             } else if (attr.name == "data-bound-html") {
                 binding = new DataBoundHTMLAttribute(attr);
+            } else if (attr.name == "data-bound-src") {
+                binding = new DataBoundProxy(attr, "src");
             } else {
                 binding = new DataBoundAttribute(attr);
             }

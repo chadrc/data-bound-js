@@ -472,6 +472,16 @@ TestSuites.suites.push({
                 boundElement.renderWithContext(data.context);
                 assert(data.domElement.childElementCount === 1, "Expected dom element to have a child element.");
             }
+        },
+        {
+            name: "Image Src Binding",
+            method(data) {
+                data.context.imageSrc= "https://www.site.com/myimage";
+                data.domElement.setAttribute("data-bound-src", "${imageSrc}");
+                let boundElement = new DataBoundElement(data.domElement);
+                boundElement.renderWithContext(data.context);
+                assertExpectedValue(data.domElement.getAttribute('src'), data.context.imageSrc);
+            }
         }
     ]
 });
