@@ -13,18 +13,11 @@ class ProjectsPageController extends PageController {
         this.selected = this.selected.bind(this);
         this.selectedClass = this.selectedClass.bind(this);
         this.selectProject = this.selectProject.bind(this);
-        this.setProjectArticle = this.setProjectArticle.bind(this);
         this.selectedProjectIndex = 0;
     }
 
     set contextElement(value) {
         super.contextElement = value;
-        console.log(value);
-    }
-
-    setProjectArticle(dataBoundContext) {
-        dataBoundContext.domElement.innerHTML = this.data.projects[dataBoundContext.dataBoundIndex].article;
-        return "InnerHTML Bound";
     }
 
     selectProject(event, dataBoundContext) {

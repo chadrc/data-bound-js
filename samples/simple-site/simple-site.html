@@ -153,8 +153,7 @@
                      hidden="${~currentPageName}"
                      data-bound-hidden-neq="about">
                 <div id="about" data-bound-context>
-                    <article class="row" data-bound-ref="aboutArticle">
-
+                    <article data-bound-html="${text}">
                     </article>
                     <hr class="hr-tapper">
                     <form onsubmit="${submitContactRequest}">
@@ -240,7 +239,7 @@
                              data-bound-hidden-not
                              class="article">
                             <h3>${name}</h3>
-                            <div data-html="${.arrayContext.setProjectArticle}"></div>
+                            <div data-bound-html="${article}"></div>
                         </div>
                     </section>
                 </div>

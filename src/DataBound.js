@@ -146,6 +146,12 @@ class DataBoundPropString {
         }
     }
 
+    get boundName() {
+        let propName = this.getPropName(0);
+        return this.lastContextUsed && propName ?
+            this.lastContextUsed.constructor.name + "." + propName : "[Unbound]";
+    }
+
     renderWithContext(context, dataBoundContext, rootContext) {
         let renderStr = this.originalStr;
         for (let i=0; i<this.matches.length; i++) {
@@ -200,6 +206,7 @@ class DataBoundHTMLAttribute extends DataBoundRenderable {
 
     render(context, dataBoundContext, rootContext) {
         this.nodeOwner.innerHTML = this.propString.renderWithContext(context, dataBoundContext, rootContext);
+        this.nodeOwner.setAttribute('data-bound-html', this.propString.boundName);
     }
 }
 
@@ -257,17 +264,20 @@ class DataBoundBooleanAttribute extends DataBoundRenderable {
     constructor(attrNode) {
         super(attrNode, attrNode.nodeValue);
         attrNode.nodeValue = '';
-        let conditionAttrPrefix = 'data-bound-' + this.attrName + '-';
-        this.boundConditional = new DataBoundConditional(this.nodeOwner.attributes, conditionAttrPrefix);
+        this.boundConditional = new DataBoundConditional(this.nodeOwner.attributes,
+            'data-bound-' + this.attrName + '-');
     }
 
     render(context, dataBoundContext, rootContext) {
         if (this.propString.matches.length > 0) {
             let contextValue = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
-            let conditionValue = this.boundConditional.getValueWithContext(context, dataBoundContext, rootContext);
+            this.nodeOwner.setAttribute('data-bound-boolean-' + this.attrName, this.propString.boundName);
             if (contextValue instanceof Function) {
                 contextValue = contextValue(dataBoundContext);
             }
+
+            let conditionValue = this.boundConditional.getValueWithContext(context, dataBoundContext, rootContext);
+
             if (this.boundConditional.conditionMethod(contextValue, conditionValue)) {
                 this.nodeOwner.setAttribute(this.attrName, '');
             } else {
@@ -292,8 +302,7 @@ class DataBoundMethodAttribute extends DataBoundRenderable {
         this.lastBoundContext = dataBoundContext;
         this.method = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (this.method && this.method instanceof Function) {
-            this.nodeOwner.setAttribute('data-bound-method-' + this.attrName,
-                this.propString.lastContextUsed.constructor.name + "." + this.propString.getPropName(0));
+            this.nodeOwner.setAttribute('data-bound-method-' + this.attrName, this.propString.boundName);
         } else {
             this.nodeOwner.setAttribute('data-bound-method-' + this.attrName, "[No Bound Method]");
         }

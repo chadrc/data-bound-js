@@ -19,13 +19,13 @@ class AboutPageController extends PageController {
         this.submitContactRequest = this.submitContactRequest.bind(this);
     }
 
+    get text() {
+        return this.data.text;
+    }
+
     set contextElement(value) {
         super.contextElement = value;
         this.contactRequestModalRef = this.subContext.boundElement.refs.contactRequestModal;
-        this.contactRequstModal = $(this.contactRequestModalRef.domElement);
-
-        this.aboutArticle = this.subContext.boundElement.refs.aboutArticle;
-        this.aboutArticle.domElement.innerHTML = this.data.text;
     }
 
 
