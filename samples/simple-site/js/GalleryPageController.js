@@ -7,5 +7,15 @@ class GalleryPageController extends PageController {
         super();
         this.title = "Thousands Of Words";
         this.subTitle = "Without Text";
+
+        this.data = galleryData;
+    }
+
+    get images() {
+        return this.data.images;
+    }
+
+    get categories() {
+        return this.data.categories;
     }
 }
