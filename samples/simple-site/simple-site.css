@@ -131,3 +131,11 @@ a.hover-underline.active, .hover-underline:hover {
 .article img.float-xs-left {
     margin-right: 1rem;
 }
+
+.gallery {
+    margin-top: .75rem;
+}
+
+.gallery-img {
+    width: 100%;
+}

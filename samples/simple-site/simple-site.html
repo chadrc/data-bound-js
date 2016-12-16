@@ -247,7 +247,24 @@
             </section>
             <section hidden="${~currentPageName}" data-bound-hidden-neq="gallery">
                 <div id="gallery" data-bound-context>
-                    <p>Gallery</p>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item" data-bound-array="${categories}">
+                            <a class="nav-link ${.arrayContext.activeCat}"
+                                onclick="${.arrayContext.selectCat}">
+                                ${.contextValue}
+                                <span class="tag tag-pill tag-default ml-1">
+                                    ${.arrayContext.catImageCount}
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <section class="card-columns gallery">
+                        <div class="card" data-bound-array="${images}">
+                            <img class="card-img-top gallery-img"
+                                 src="" data-bound-src="images/${src}"
+                                 height="${height}px">
+                        </div>
+                    </section>
                 </div>
             </section>
             <section hidden="${~currentPageName}" data-bound-hidden-neq="articles">
