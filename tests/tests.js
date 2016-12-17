@@ -744,7 +744,7 @@ TestSuites.suites.push({
 });
 
 TestSuites.suites.push({
-    name: "Bound Element Arrays",
+    name: "Bound Collections - Foreach",
     getData() {
         let baseElement = document.createElement("ul");
         let childElement = document.createElement("li");
