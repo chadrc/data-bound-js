@@ -50,7 +50,7 @@ describe("Bindings", function () {
   };
 
   describe("Attribute Binding", function () {
-    it('should equal ' + data.context.classes + ' after render', function () {
+    it('should equal have value "' + data.context.classes + '" after render', function () {
       let data = setup();
       let attrBinding = new DataBoundAttribute(data.element.attributes.class);
       attrBinding.renderWithContext(data.context, data.boundContext, null);
