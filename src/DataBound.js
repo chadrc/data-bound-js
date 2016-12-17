@@ -1,4 +1,14 @@
 
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function (prefix) {
+        if (prefix.length > this.length) {
+            return false;
+        }
+        let begin = this.slice(0, prefix.length);
+        return (prefix === begin);
+    }
+}
+
 class DataBoundUtils {
     static extractPropsFromString(propStr) {
         let match = propStr.match(DataBoundUtils.propStringRegex);
