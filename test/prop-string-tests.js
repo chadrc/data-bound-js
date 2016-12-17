@@ -3,7 +3,7 @@
  */
 
 describe("Prop Strings", function () {
-  var context = {
+  let context = {
     helloProp: "Hello World!",
     myProp: "My Prop",
     nullProp: null,
@@ -23,15 +23,15 @@ describe("Prop Strings", function () {
     }
   };
 
-  var dataBoundContext = {
+  let dataBoundContext = {
     myProp: "My Bound Context"
   };
 
-  var rootContext = {
+  let rootContext = {
     myProp: "Root Context"
   };
 
-  var tests = [
+  let tests = [
     {str: "${myProp}", expected: context.myProp},
     {str: "${myProp} is ${helloProp}", expected: (context.myProp + " is " + context.helloProp)},
     {str: "${.myProp}", expected: dataBoundContext.myProp},
@@ -50,8 +50,8 @@ describe("Prop Strings", function () {
   tests.forEach(function (test) {
     describe("'" + test.str + "'", function () {
       it('should have value "' + test.expected + '"', function () {
-        var propString = new DataBoundPropString(test.str);
-        var render = propString.renderWithContext(context, dataBoundContext, rootContext);
+        let propString = new DataBoundPropString(test.str);
+        let render = propString.renderWithContext(context, dataBoundContext, rootContext);
         expect(render).to.deep.equal(test.expected);
       })
     })
@@ -59,26 +59,26 @@ describe("Prop Strings", function () {
 
   describe("Null Context", function () {
     it('should been undefined', function () {
-      var propString = new DataBoundPropString("${nullProp}");
-      var render = propString.renderWithContext(null, null, null);
+      let propString = new DataBoundPropString("${nullProp}");
+      let render = propString.renderWithContext(null, null, null);
       expect(render).to.deep.equal("undefined");
     })
   });
 
   describe("'${numberProp} ${booleanProp} ${myProp}'", function () {
-    var propString = new DataBoundPropString("${numberProp} ${booleanProp} ${myProp}");
+    let propString = new DataBoundPropString("${numberProp} ${booleanProp} ${myProp}");
     it("first value should equal '" + context.numberProp + "'", function () {
-      var numberVal = propString.getValueWithContext(0, context, dataBoundContext, rootContext);
+      let numberVal = propString.getValueWithContext(0, context, dataBoundContext, rootContext);
       expect(numberVal).to.deep.equal(context.numberProp);
     });
 
     it("second value should equal '" + context.booleanProp + "'", function () {
-      var booleanVal = propString.getValueWithContext(1, context, dataBoundContext, rootContext);
+      let booleanVal = propString.getValueWithContext(1, context, dataBoundContext, rootContext);
       expect(booleanVal).to.deep.equal(context.booleanProp);
     });
 
     it("third value should equal '" + context.myProp + "'", function () {
-      var stringVal = propString.getValueWithContext(2, context, dataBoundContext, rootContext);
+      let stringVal = propString.getValueWithContext(2, context, dataBoundContext, rootContext);
       expect(stringVal).to.deep.equal(context.myProp);
     });
   })

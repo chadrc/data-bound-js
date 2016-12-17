@@ -8,7 +8,9 @@
     "to-es2015": "babel src --out-file dist/DataBound.js",
     "minify": "babel dist/DataBound.js --out-file dist/DataBound.min.js --presets babili",
     "watch": "babel src --watch --out-file dist/DataBound.js --source-maps",
-    "test": "mocha-phantomjs test/mocha.html"
+    "test": "npm run build-tests&&mocha-phantomjs test/mocha.html",
+    "build-tests": "babel test --out-dir test/build",
+    "watch-tests": "babel test --watch --out-dir test/build"
   },
   "keywords": [
     "library",

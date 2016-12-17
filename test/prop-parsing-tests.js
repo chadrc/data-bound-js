@@ -4,7 +4,7 @@
 
 describe('Prop Parsing', function () {
 
-  var tests = [
+  let tests = [
     {
       propStr: "${myProp}", expectedLength: 1,
       expectedValues: [
@@ -134,16 +134,16 @@ describe('Prop Parsing', function () {
 
   tests.forEach(function (test) {
     describe("'" + test.propStr + "'", function () {
-      var result = DataBoundUtils.extractPropsFromString(test.propStr);
+      let result = DataBoundUtils.extractPropsFromString(test.propStr);
 
       it('result should have ' + test.expectedLength + ' prop' + (test.expectedLength == 1 ? "" : "s"),
         function () {
           expect(result).to.have.length(test.expectedLength);
         });
 
-      for (var i = 0; i < result.length; i++) {
-        var value = result[i];
-        var expectedValue = test.expectedValues[i];
+      for (let i = 0; i < result.length; i++) {
+        let value = result[i];
+        let expectedValue = test.expectedValues[i];
         it('prop ' + (i + 1) + ' should have field "prop" with "' + expectedValue.expectedProp + '" as value',
           function () {
             expect(value.prop).to.deep.equal(expectedValue.expectedProp);
