@@ -4,8 +4,7 @@ if (!String.prototype.startsWith) {
         if (prefix.length > this.length) {
             return false;
         }
-        let begin = this.slice(0, prefix.length);
-        return (prefix === begin);
+        return (prefix === (this.slice(0, prefix.length)));
     }
 }
 
