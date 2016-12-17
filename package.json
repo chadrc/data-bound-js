@@ -8,7 +8,8 @@
     "to-es2015": "babel src --out-file dist/DataBound.js",
     "minify": "babel dist/DataBound.js --out-file dist/DataBound.min.js --presets babili",
     "watch": "babel src --watch --out-file dist/DataBound.js --source-maps",
-    "test": "npm run build-tests&&mocha-phantomjs test/mocha.html",
+    "test": "npm run build&&npm run build-tests&&npm run phantom-test",
+    "phantom-test": "mocha-phantomjs test/mocha.html",
     "build-tests": "babel test/src --out-dir test/build",
     "watch-tests": "babel test/src --watch --out-dir test/build"
   },
@@ -31,7 +32,6 @@
     "babel-preset-babili": "0.0.9",
     "babel-preset-es2015": "^6.18.0",
     "chai": "^3.5.0",
-    "jasmine": "^2.5.2",
     "mocha": "^3.2.0",
     "mocha-phantomjs": "^4.1.0",
     "mocha-phantomjs-core": "^2.1.1"
