@@ -43,8 +43,8 @@ class DataBoundUtils {
 
     static bindElement(domElement, creator) {
         let elementBinding = null;
-        if (domElement.attributes["data-bound-array"]) {
-            elementBinding = new DataBoundElementArray(domElement);
+        if (domElement.attributes["data-bound-foreach"]) {
+            elementBinding = new DataBoundCollection(domElement);
         } else if (domElement.attributes["data-bound-if"]) {
             elementBinding = new DataBoundIfNode(domElement);
         } else {
@@ -494,13 +494,13 @@ class DataBoundIfNode extends DataBoundRenderable {
     }
 }
 
-class DataBoundElementArray extends DataBoundRenderable {
+class DataBoundCollection extends DataBoundRenderable {
     constructor(element) {
-        super(element, element.attributes["data-bound-array"].nodeValue);
+        super(element, element.attributes["data-bound-foreach"].nodeValue);
         this.domElement = this.node;
-        this.domElement.removeAttribute("data-bound-array");
+        this.domElement.removeAttribute("data-bound-foreach");
         this.baseElement = this.domElement.parentElement;
-        this.anchorNode = document.createComment("DataBoundElementArray: [No Context]");
+        this.anchorNode = document.createComment("DataBoundCollection: [No Context]");
         this.baseElement.insertBefore(this.anchorNode, this.domElement);
         this.baseElement.removeChild(this.domElement);
         this.elementArray = [];
@@ -509,16 +509,16 @@ class DataBoundElementArray extends DataBoundRenderable {
     render(context, dataBoundContext, rootContext) {
         let contextArray = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
         if (!(contextArray instanceof Array)) {
-            this.anchorNode.data = "DataBoundElementArray: [No Context]";
+            this.anchorNode.data = "DataBoundCollection: [No Context]";
             if (contextArray) {
-                throw "Cannot render a DataBoundElementArray with non-Array type.";
+                throw "Cannot render a DataBoundCollection with non-Array type.";
             } else {
                 // null and undefined are allowed values, but still can't render, so just return
                 return;
             }
         }
 
-        this.anchorNode.data = "DataBoundElementArray: " +
+        this.anchorNode.data = "DataBoundCollection: " +
             context.constructor.name + "." + this.propString.getPropName(0);
 
         if (contextArray.length != this.elementArray.length) {

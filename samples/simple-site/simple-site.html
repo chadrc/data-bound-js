@@ -227,7 +227,7 @@
                 <div id="projects" data-bound-context>
                     <section class="carou-nav mb-2">
                         <div class="carou-nav-inner">
-                            <div data-bound-array="${data.projects}"
+                            <div data-bound-foreach="${data.projects}"
                                  class="carou-nav-item ${.arrayContext.selectedClass}"
                                  onclick="${.arrayContext.selectProject}">
                                 <img src="" data-bound-src="images/${image}">
@@ -235,7 +235,7 @@
                         </div>
                     </section>
                     <section class="w-75 mx-auto">
-                        <div data-bound-array="${data.projects}"
+                        <div data-bound-foreach="${data.projects}"
                              hidden="${.arrayContext.selected}"
                              data-bound-hidden-not
                              class="article">
@@ -248,7 +248,7 @@
             <section hidden="${~currentPageName}" data-bound-hidden-neq="gallery">
                 <div id="gallery" data-bound-context>
                     <ul class="nav nav-tabs">
-                        <li class="nav-item" data-bound-array="${categories}">
+                        <li class="nav-item" data-bound-foreach="${categories}">
                             <a class="nav-link ${.arrayContext.activeCat}"
                                 onclick="${.arrayContext.selectCat}">
                                 ${.contextValue}
@@ -259,7 +259,7 @@
                         </li>
                     </ul>
                     <section class="card-columns gallery">
-                        <div class="card" data-bound-array="${images}">
+                        <div class="card" data-bound-foreach="${images}">
                             <img class="card-img-top gallery-img"
                                  src="" data-bound-src="images/${src}"
                                  height="${height}px">

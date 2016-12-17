@@ -748,7 +748,7 @@ TestSuites.suites.push({
     getData() {
         let baseElement = document.createElement("ul");
         let childElement = document.createElement("li");
-        childElement.setAttribute("data-bound-array", "${items}");
+        childElement.setAttribute("data-bound-foreach", "${items}");
         childElement.innerHTML = "${.dataBoundIndex}: ${text}";
         baseElement.appendChild(childElement);
         return {
@@ -772,7 +772,7 @@ TestSuites.suites.push({
         {
             name: "Creation",
             method(data) {
-                let elementArray = new DataBoundElementArray(data.childElement);
+                let elementArray = new DataBoundCollection(data.childElement);
                 let baseChild = data.domElement.childNodes[0];
                 assert(baseChild != data.childElement, "Child element should've been replaced.");
             }
@@ -780,7 +780,7 @@ TestSuites.suites.push({
         {
             name: "Child Count After Render",
             method(data) {
-                let elementArray = new DataBoundElementArray(data.childElement);
+                let elementArray = new DataBoundCollection(data.childElement);
                 elementArray.renderWithContext(data.context);
                 assertExpectedValue(data.domElement.childNodes.length, data.context.items.length + 1,
                     "Expecting child nodes to be equal to number of items plus 1 (for anchor element).");
@@ -789,7 +789,7 @@ TestSuites.suites.push({
         {
             name: "Item Render Values",
             method(data) {
-                let elementArray = new DataBoundElementArray(data.childElement);
+                let elementArray = new DataBoundCollection(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
                     let childNode = data.domElement.childNodes[i];
@@ -802,7 +802,7 @@ TestSuites.suites.push({
             name: "Item Reference Parent Context",
             method(data) {
                 data.childElement.setAttribute("class", "${.arrayContext.itemClass}");
-                let elementArray = new DataBoundElementArray(data.childElement);
+                let elementArray = new DataBoundCollection(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
                     let childNode = data.domElement.childNodes[i];
@@ -815,7 +815,7 @@ TestSuites.suites.push({
             method(data) {
                 data.context.items = ["Item 1", "Item 2", "Item 3", "Item 4"];
                 data.childElement.innerHTML = "${.contextValue}";
-                let elementArray = new DataBoundElementArray(data.childElement);
+                let elementArray = new DataBoundCollection(data.childElement);
                 elementArray.renderWithContext(data.context);
                 for (let i=0; i<data.context.items.length; i++) {
                     let childNode = data.domElement.childNodes[i];
@@ -827,7 +827,7 @@ TestSuites.suites.push({
             name: "Reference Parent Data Bound Context",
             method(data) {
                 data.childElement.innerHTML = "${.dataBoundIndex}: ${.parent.itemValue}";
-                let elementArray = new DataBoundElementArray(data.childElement);
+                let elementArray = new DataBoundCollection(data.childElement);
                 elementArray.renderWithContext(data.context, data.dataBoundContext);
                 for (let i=0; i<data.context.items.length; i++) {
                     let childNode = data.domElement.childNodes[i];
@@ -838,7 +838,7 @@ TestSuites.suites.push({
         {
             name: "Count After Adding Items",
             method(data) {
-                let elementArray = new DataBoundElementArray(data.childElement);
+                let elementArray = new DataBoundCollection(data.childElement);
                 elementArray.renderWithContext(data.context, data.dataBoundContext);
 
                 data.context.items.push({text: "Item 5"});
@@ -853,7 +853,7 @@ TestSuites.suites.push({
         {
             name: "Count After Removing Items",
             method(data) {
-                let elementArray = new DataBoundElementArray(data.childElement);
+                let elementArray = new DataBoundCollection(data.childElement);
                 elementArray.renderWithContext(data.context, data.dataBoundContext);
 
                 data.context.items.pop();
@@ -867,7 +867,7 @@ TestSuites.suites.push({
         {
             name: "Order After Removing Items",
             method(data) {
-                let elementArray = new DataBoundElementArray(data.childElement);
+                let elementArray = new DataBoundCollection(data.childElement);
                 elementArray.renderWithContext(data.context, data.dataBoundContext);
 
                 data.context.items.splice(1, 2);

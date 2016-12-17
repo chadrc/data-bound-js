@@ -61,7 +61,7 @@
                     </div>
                 </form>
                 <ul class="list-unstyled mt-1">
-                    <li data-bound-array="${lists}"
+                    <li data-bound-foreach="${lists}"
                         onclick="${.arrayContext.selectList}"
                         class="rounded list-item clearfix pointer">
                         ${name}
@@ -86,7 +86,7 @@
                                class="form-control">
                     </form>
                     <ul class="list-unstyled mt-1">
-                        <li data-bound-array="${currentList.items}"
+                        <li data-bound-foreach="${currentList.items}"
                             class="rounded list-item clearfix">
                             <span>${.contextValue}</span>
                             <button type="button"
