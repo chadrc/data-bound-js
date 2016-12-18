@@ -52,7 +52,7 @@ class DataBoundUtils {
   static bindElement(domElement, creator) {
     let elementBinding = null;
     if (domElement.attributes["data-bound-foreach"]) {
-      elementBinding = new DataBoundCollection(domElement);
+      elementBinding = new DataBoundCollection(domElement, "foreach");
     } else if (domElement.attributes["data-bound-if"]) {
       elementBinding = new DataBoundIfNode(domElement);
     } else {
@@ -509,10 +509,12 @@ class DataBoundIfNode extends DataBoundRenderable {
 }
 
 class DataBoundCollection extends DataBoundRenderable {
-  constructor(element) {
-    super(element, element.attributes["data-bound-foreach"].nodeValue);
+  constructor(element, type) {
+    let attrName = "data-bound-" + type;
+    super(element, element.attributes[attrName].nodeValue);
+    this.type = type;
     this.domElement = this.node;
-    this.domElement.removeAttribute("data-bound-foreach");
+    this.domElement.removeAttribute(attrName);
     this.baseElement = this.domElement.parentElement;
     this.anchorNode = document.createComment("DataBoundCollection: [No Context]");
     this.baseElement.insertBefore(this.anchorNode, this.domElement);
@@ -525,7 +527,7 @@ class DataBoundCollection extends DataBoundRenderable {
     if (!(contextArray instanceof Array)) {
       this.anchorNode.data = "DataBoundCollection: [No Context]";
       if (contextArray) {
-        throw "Cannot render a DataBoundCollection with non-Array type.";
+        //throw "Cannot render a DataBoundCollection with non-Array type.";
       } else {
         // null and undefined are allowed values, but still can't render, so just return
         return;
@@ -535,36 +537,71 @@ class DataBoundCollection extends DataBoundRenderable {
     this.anchorNode.data = "DataBoundCollection: " +
       context.constructor.name + "." + this.propString.getPropName(0);
 
-    if (contextArray.length != this.elementArray.length) {
-      if (contextArray.length < this.elementArray.length) {
-        // Remove Nodes
-        let removed = this.elementArray.splice(contextArray.length,
-          this.elementArray.length - contextArray.length);
+    if (this.type === "foreach") {
+      if (contextArray.length != this.elementArray.length) {
+        if (contextArray.length < this.elementArray.length) {
+          // Remove Nodes
+          let removed = this.elementArray.splice(contextArray.length,
+            this.elementArray.length - contextArray.length);
 
+          for (let i = 0; i < removed.length; i++) {
+            this.baseElement.removeChild(removed[i].domElement);
+          }
+        } else if (contextArray.length > this.elementArray.length) {
+          // Add Nodes
+          let dif = contextArray.length - this.elementArray.length;
+          for (let i = 0; i < dif; i++) {
+            let clone = this.domElement.cloneNode(true);
+            let boundElement = DataBoundUtils.bindElement(clone);
+            this.elementArray.push(boundElement);
+            this.baseElement.insertBefore(clone, this.anchorNode);
+          }
+        }
+      }
+
+      for (let i = 0; i < this.elementArray.length; i++) {
+        let child = this.elementArray[i];
+        let childDataBoundContext = {
+          dataBoundIndex: i,
+          arrayContext: context,
+          contextValue: contextArray[i],
+          parent: dataBoundContext
+        };
+        child.renderWithContext(contextArray[i], childDataBoundContext, rootContext, false, true, false);
+      }
+    } else if (this.type === "forin") {
+      let i = 0;
+      for (let key in contextArray) {
+        if (contextArray.hasOwnProperty(key)) {
+          let value = contextArray[key];
+
+          if (i >= this.elementArray.length) {
+            let clone = this.domElement.cloneNode(true);
+            let boundElement = DataBoundUtils.bindElement(clone);
+            this.elementArray.push(boundElement);
+            this.baseElement.insertBefore(clone, this.anchorNode);
+          }
+
+          let child = this.elementArray[i];
+          let childDataBoundContext = {
+            index: i,
+            key: key,
+            arrayContext: context,
+            value: value,
+            parent: dataBoundContext
+          };
+          child.renderWithContext(contextArray[key], childDataBoundContext, rootContext, false, true, false);
+          i++;
+        }
+      }
+
+      if (this.elementArray.length > i ) {
+        let removed = this.elementArray.splice(i,
+          this.elementArray.length - i);
         for (let i = 0; i < removed.length; i++) {
           this.baseElement.removeChild(removed[i].domElement);
         }
-      } else if (contextArray.length > this.elementArray.length) {
-        // Add Nodes
-        let dif = contextArray.length - this.elementArray.length;
-        for (let i = 0; i < dif; i++) {
-          let clone = this.domElement.cloneNode(true);
-          let boundElement = DataBoundUtils.bindElement(clone);
-          this.elementArray.push(boundElement);
-          this.baseElement.insertBefore(clone, this.anchorNode);
-        }
       }
-    }
-
-    for (let i = 0; i < this.elementArray.length; i++) {
-      let child = this.elementArray[i];
-      let childDataBoundContext = {
-        dataBoundIndex: i,
-        arrayContext: context,
-        contextValue: contextArray[i],
-        parent: dataBoundContext
-      };
-      child.renderWithContext(contextArray[i], childDataBoundContext, rootContext, false, true, false);
     }
   }
 }
