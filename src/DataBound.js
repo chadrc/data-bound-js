@@ -52,7 +52,7 @@ class DataBoundUtils {
   static bindElement(domElement, creator) {
     let elementBinding = null;
     if (domElement.attributes["data-bound-foreach"]) {
-      elementBinding = new DataBoundCollection(domElement, "foreach");
+      elementBinding = new DataBoundForEachCollection(domElement);
     } else if (domElement.attributes["data-bound-if"]) {
       elementBinding = new DataBoundIfNode(domElement);
     } else {
@@ -537,24 +537,12 @@ class DataBoundCollection extends DataBoundRenderable {
     this.anchorNode.data = "DataBoundCollection: " +
       context.constructor.name + "." + this.propString.getPropName(0);
 
-    if (this.type === "foreach") {
-      let i;
-      for (i = 0; i < contextArray.length; i++) {
-        this.checkCreate(i);
-        this.renderChild(i, contextArray[i], i, contextArray[i], context, dataBoundContext, rootContext);
-      }
-      this.cleanUp(i);
-    } else if (this.type === "forin") {
-      let i = 0;
-      for (let key in contextArray) {
-        if (contextArray.hasOwnProperty(key)) {
-          this.checkCreate(i);
-          this.renderChild(i, contextArray[key], key, contextArray[key], context, dataBoundContext, rootContext);
-          i++;
-        }
-      }
-      this.cleanUp(i);
-    }
+    let count = this.renderCollection(contextArray, context, dataBoundContext, rootContext);
+    this.cleanUp(count);
+  }
+
+  renderCollection() {
+    throw "DataBoundCollection does not implement renderCollection and cannot render anything.";
   }
 
   renderChild(index, childContext, key, value, context, parent, rootContext) {
@@ -589,5 +577,38 @@ class DataBoundCollection extends DataBoundRenderable {
         this.baseElement.removeChild(removed[i].domElement);
       }
     }
+  }
+}
+
+class DataBoundForEachCollection extends DataBoundCollection {
+  constructor(element) {
+    super(element, "foreach");
+  }
+
+  renderCollection(contextObject, context, boundContext, rootContext) {
+    let i;
+    for (i = 0; i < contextObject.length; i++) {
+      this.checkCreate(i);
+      this.renderChild(i, contextObject[i], i, contextObject[i], context, boundContext, rootContext);
+    }
+    return i;
+  }
+}
+
+class DataBoundForInCollection extends DataBoundCollection {
+  constructor(element) {
+    super(element, "forin");
+  }
+
+  renderCollection(contextObject, context,  boundContext, rootContext) {
+    let i = 0;
+    for (let key in contextObject) {
+      if (contextObject.hasOwnProperty(key)) {
+        this.checkCreate(i);
+        this.renderChild(i, contextObject[key], key, contextObject[key], context, boundContext, rootContext);
+        i++;
+      }
+    }
+    return i;
   }
 }

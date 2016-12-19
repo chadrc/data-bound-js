@@ -29,7 +29,7 @@ describe("Bound Collection - Foreach", function () {
 
   describe("Creating", function () {
     let data = setup();
-    let elementArray = new DataBoundCollection(data.childElement, "foreach");
+    let elementArray = new DataBoundForEachCollection(data.childElement);
     let baseChild = data.domElement.childNodes[0];
     it(`original child node should be replaced`, function () {
       expect(baseChild).to.not.deep.equal(data.childElement);
@@ -38,7 +38,7 @@ describe("Bound Collection - Foreach", function () {
 
   describe("Child Count", function () {
     let data = setup();
-    let elementArray = new DataBoundCollection(data.childElement, "foreach");
+    let elementArray = new DataBoundForEachCollection(data.childElement);
     elementArray.renderWithContext(data.context);
     it(`child count of element should be equal to number of items plus one (for anchor)`, function () {
       expect(data.domElement.childNodes.length).to.deep.equal(data.context.items.length + 1);
@@ -47,7 +47,7 @@ describe("Bound Collection - Foreach", function () {
 
   describe("Child Rendered Values", function () {
     let data = setup();
-    let elementArray = new DataBoundCollection(data.childElement, "foreach");
+    let elementArray = new DataBoundForEachCollection(data.childElement);
     elementArray.renderWithContext(data.context);
     for (let i=0; i<data.context.items.length; i++) {
       let childNode = data.domElement.childNodes[i];
@@ -61,7 +61,7 @@ describe("Bound Collection - Foreach", function () {
   describe("Child value referencing parent context", function () {
     let data = setup();
     data.childElement.setAttribute("class", "${.context.itemClass}");
-    let elementArray = new DataBoundCollection(data.childElement, "foreach");
+    let elementArray = new DataBoundForEachCollection(data.childElement);
     elementArray.renderWithContext(data.context);
     for (let i=0; i<data.context.items.length; i++) {
       let childNode = data.domElement.childNodes[i];
@@ -75,7 +75,7 @@ describe("Bound Collection - Foreach", function () {
     let data = setup();
     data.context.items = ["Item 1", "Item 2", "Item 3", "Item 4"];
     data.childElement.innerHTML = "${.value}";
-    let elementArray = new DataBoundCollection(data.childElement, "foreach");
+    let elementArray = new DataBoundForEachCollection(data.childElement);
     elementArray.renderWithContext(data.context);
     for (let i=0; i<data.context.items.length; i++) {
       let childNode = data.domElement.childNodes[i];
@@ -88,7 +88,7 @@ describe("Bound Collection - Foreach", function () {
   describe("Reference parent bound context", function () {
     let data = setup();
     data.childElement.innerHTML = "${.index}: ${.parent.itemValue}";
-    let elementArray = new DataBoundCollection(data.childElement, "foreach");
+    let elementArray = new DataBoundForEachCollection(data.childElement);
     elementArray.renderWithContext(data.context, data.dataBoundContext);
     for (let i=0; i<data.context.items.length; i++) {
       let childNode = data.domElement.childNodes[i];
@@ -100,7 +100,7 @@ describe("Bound Collection - Foreach", function () {
 
   describe("Child count after adding items", function () {
     let data = setup();
-    let elementArray = new DataBoundCollection(data.childElement, "foreach");
+    let elementArray = new DataBoundForEachCollection(data.childElement);
     elementArray.renderWithContext(data.context, data.dataBoundContext);
 
     data.context.items.push({text: "Item 5"});
@@ -115,7 +115,7 @@ describe("Bound Collection - Foreach", function () {
 
   describe("Child count after removing items", function () {
     let data = setup();
-    let elementArray = new DataBoundCollection(data.childElement, "foreach");
+    let elementArray = new DataBoundForEachCollection(data.childElement);
     elementArray.renderWithContext(data.context, data.dataBoundContext);
 
     data.context.items.pop();
@@ -129,7 +129,7 @@ describe("Bound Collection - Foreach", function () {
 
   describe("Order of children after removing items", function () {
     let data = setup();
-    let elementArray = new DataBoundCollection(data.childElement, "foreach");
+    let elementArray = new DataBoundForEachCollection(data.childElement);
     elementArray.renderWithContext(data.context, data.dataBoundContext);
 
     data.context.items.splice(1, 2);

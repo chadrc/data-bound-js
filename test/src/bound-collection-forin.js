@@ -28,7 +28,7 @@ describe("Bound Collection - ForIn", function () {
 
   describe("Child Count", function () {
     let data = setup();
-    let elementArray = new DataBoundCollection(data.childElement, "forin");
+    let elementArray = new DataBoundForInCollection(data.childElement);
     elementArray.renderWithContext(data.context);
     it(`child count of element should be equal to number of items plus one (for anchor)`, function () {
       expect(data.domElement.childNodes.length).to.deep.equal(Object.keys(data.context.obj).length + 1);
@@ -37,7 +37,7 @@ describe("Bound Collection - ForIn", function () {
 
   describe("Child Rendered Values", function () {
     let data = setup();
-    let elementArray = new DataBoundCollection(data.childElement, "forin");
+    let elementArray = new DataBoundForInCollection(data.childElement);
     elementArray.renderWithContext(data.context);
     let i = 0;
     for (let key in data.context.obj) {
@@ -54,7 +54,7 @@ describe("Bound Collection - ForIn", function () {
 
   describe("Child count after adding items", function () {
     let data = setup();
-    let elementArray = new DataBoundCollection(data.childElement, "forin");
+    let elementArray = new DataBoundForInCollection(data.childElement);
     elementArray.renderWithContext(data.context, data.dataBoundContext);
 
     data.context.obj.colorPref = "red";
@@ -68,7 +68,7 @@ describe("Bound Collection - ForIn", function () {
 
   describe("Child count after removing items", function () {
     let data = setup();
-    let elementArray = new DataBoundCollection(data.childElement, "forin");
+    let elementArray = new DataBoundForInCollection(data.childElement);
     elementArray.renderWithContext(data.context, data.dataBoundContext);
 
     delete data.context.obj.lastName;
