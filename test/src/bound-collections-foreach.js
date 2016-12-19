@@ -7,7 +7,7 @@ describe("Bound Collection - Foreach", function () {
     let baseElement = document.createElement("ul");
     let childElement = document.createElement("li");
     childElement.setAttribute("data-bound-foreach", "${items}");
-    childElement.innerHTML = "${.dataBoundIndex}: ${text}";
+    childElement.innerHTML = "${.index}: ${text}";
     baseElement.appendChild(childElement);
     return {
       domElement: baseElement,
@@ -60,7 +60,7 @@ describe("Bound Collection - Foreach", function () {
 
   describe("Child value referencing parent context", function () {
     let data = setup();
-    data.childElement.setAttribute("class", "${.arrayContext.itemClass}");
+    data.childElement.setAttribute("class", "${.context.itemClass}");
     let elementArray = new DataBoundCollection(data.childElement, "foreach");
     elementArray.renderWithContext(data.context);
     for (let i=0; i<data.context.items.length; i++) {
@@ -74,7 +74,7 @@ describe("Bound Collection - Foreach", function () {
   describe("Reference item value directly", function () {
     let data = setup();
     data.context.items = ["Item 1", "Item 2", "Item 3", "Item 4"];
-    data.childElement.innerHTML = "${.contextValue}";
+    data.childElement.innerHTML = "${.value}";
     let elementArray = new DataBoundCollection(data.childElement, "foreach");
     elementArray.renderWithContext(data.context);
     for (let i=0; i<data.context.items.length; i++) {
@@ -87,7 +87,7 @@ describe("Bound Collection - Foreach", function () {
 
   describe("Reference parent bound context", function () {
     let data = setup();
-    data.childElement.innerHTML = "${.dataBoundIndex}: ${.parent.itemValue}";
+    data.childElement.innerHTML = "${.index}: ${.parent.itemValue}";
     let elementArray = new DataBoundCollection(data.childElement, "foreach");
     elementArray.renderWithContext(data.context, data.dataBoundContext);
     for (let i=0; i<data.context.items.length; i++) {
