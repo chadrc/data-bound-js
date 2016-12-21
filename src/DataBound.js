@@ -106,7 +106,7 @@ DataBoundUtils.booleanConditionalAttributes = {
   }
 };
 
-DataBoundUtils.propStringRegex = new RegExp(/\$\{ *(~(?!\.))?[\w.]*\w{1} *}/g);
+DataBoundUtils.propStringRegex = new RegExp(/\$\{ *(~(?!\.))?[\w.]*\w *}/g);
 
 class DataBoundPropString {
   constructor(str) {
