@@ -130,6 +130,15 @@ describe('Prop Parsing', function () {
           expectedRootRef: false, expectedBoundRef: true
         }]
     },
+    {
+      propStr: "${0}", expectedLength: 1,
+      expectedValues: [
+        {
+          expectedProp: "0", expectedMatch: "${0}",
+          expectedRootRef: false, expectedBoundRef: false
+        }
+      ]
+    }
   ];
 
   tests.forEach(function (test) {
