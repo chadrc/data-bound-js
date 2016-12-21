@@ -620,6 +620,9 @@ class DataBoundForOfCollection extends DataBoundCollection {
 
   renderCollection(contextObject, context, boundContext, rootContext) {
     let i = 0;
+    if (contextObject instanceof Function) {
+      contextObject = contextObject();
+    }
     for (let item of contextObject) {
       this.checkCreate(i);
       this.renderChild(i, item, i, item, context, boundContext, rootContext);
