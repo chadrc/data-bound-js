@@ -523,21 +523,21 @@ class DataBoundCollection extends DataBoundRenderable {
   }
 
   render(context, dataBoundContext, rootContext) {
-    let contextArray = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
-    if (!(contextArray instanceof Array)) {
+    let contextObject = this.propString.getValueWithContext(0, context, dataBoundContext, rootContext);
+    if (!contextObject) {
       this.anchorNode.data = "DataBoundCollection: [No Context]";
-      if (contextArray) {
-        //throw "Cannot render a DataBoundCollection with non-Array type.";
-      } else {
-        // null and undefined are allowed values, but still can't render, so just return
-        return;
-      }
+      // null and undefined are allowed values, but can't render, so just return
+      return;
+    }
+
+    if (contextObject instanceof Function) {
+      contextObject = contextObject();
     }
 
     this.anchorNode.data = "DataBoundCollection: " +
       context.constructor.name + "." + this.propString.getPropName(0);
 
-    let count = this.renderCollection(contextArray, context, dataBoundContext, rootContext);
+    let count = this.renderCollection(contextObject, context, dataBoundContext, rootContext);
     this.cleanUp(count);
   }
 
@@ -620,9 +620,6 @@ class DataBoundForOfCollection extends DataBoundCollection {
 
   renderCollection(contextObject, context, boundContext, rootContext) {
     let i = 0;
-    if (contextObject instanceof Function) {
-      contextObject = contextObject();
-    }
     for (let item of contextObject) {
       this.checkCreate(i);
       this.renderChild(i, item, i, item, context, boundContext, rootContext);
