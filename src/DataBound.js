@@ -612,3 +612,19 @@ class DataBoundForInCollection extends DataBoundCollection {
     return i;
   }
 }
+
+class DataBoundForOfCollection extends DataBoundCollection {
+  constructor(element) {
+    super(element, "forof");
+  }
+
+  renderCollection(contextObject, context, boundContext, rootContext) {
+    let i = 0;
+    for (let item of contextObject) {
+      this.checkCreate(i);
+      this.renderChild(i, item, i, item, context, boundContext, rootContext);
+      i++;
+    }
+    return i;
+  }
+}
