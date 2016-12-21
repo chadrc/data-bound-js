@@ -46,7 +46,6 @@ describe("Bound Collection - Forof", function () {
     let i = 0;
     for(let item of context.iterableObj) {
       let index = i;
-      console.log(item);
       it(`Item ${index}'s innerHTML should equal '${item[0]}: ${item[1]}'`, function () {
         expect(data.element.children[index].innerHTML).to.deep.equal(`${item[0]}: ${item[1]}`);
       });
@@ -72,7 +71,37 @@ describe("Bound Collection - Forof", function () {
     let i = 0;
     for(let item of context.iterableObj()) {
       let index = i;
-      console.log(item);
+      it(`Item ${index}'s innerHTML should equal '${index}: ${item}'`, function () {
+        expect(data.element.children[index].innerHTML).to.deep.equal(`${index}: ${item}`);
+      });
+      i++;
+    }
+  });
+
+  describe("Iterable Object", function () {
+    let data = setup();
+    let context = {
+      iterableObj: {
+        [Symbol.iterator]() {
+          return {
+            i: 0,
+            next() {
+              if (this.i < 10) {
+                return { value: this.i++, done: false };
+              }
+              return { value: undefined, done: true };
+            }
+          };
+        }
+      }
+    };
+    data.collectionElement.innerHTML = "${.index}: ${.value}";
+    let boundCollection = new DataBoundForOfCollection(data.collectionElement);
+    boundCollection.renderWithContext(context);
+
+    let i = 0;
+    for(let item of context.iterableObj) {
+      let index = i;
       it(`Item ${index}'s innerHTML should equal '${index}: ${item}'`, function () {
         expect(data.element.children[index].innerHTML).to.deep.equal(`${index}: ${item}`);
       });
