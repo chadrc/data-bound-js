@@ -269,8 +269,72 @@
                 </div>
             </section>
             <section hidden="${~currentPageName}" data-bound-hidden-neq="articles">
-                <div id="articles" data-bound-context>
-                    <p>Articles</p>
+                <div id="articles" class="row" data-bound-context>
+                    <div class="col-xs-3 filter-group">
+                        <ul class="list-group">
+                            <li class="list-group-item active clearfix">
+                                <h5 class="col-xs-9 list-group-item-heading">
+                                    Categories
+                                </h5>
+                                <div class="form-check col-xs-3 text-xs-right mb-0">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               value="allCats"
+                                                onchange="${allCatToggleChanged}">
+                                    </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item clearfix"
+                                data-bound-foreach="${data.categories}">
+                                <span class="col-xs-9">
+                                    ${.value}
+                                </span>
+                                <div class="form-check col-xs-3 text-xs-right mb-0">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               value="${.value}"
+                                                onchange="${.context.catToggleChanged}">
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <ul class="list-group mt-1">
+                            <li class="list-group-item active clearfix">
+                                <h5 class="col-xs-9 list-group-item-heading">
+                                    Tags
+                                </h5>
+                                <div class="form-check col-xs-3 text-xs-right mb-0">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               value="allTags"
+                                               onchange="${allTagToggleChanged}">
+                                    </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item clearfix"
+                                data-bound-foreach="${data.tags}">
+                                <span class="col-xs-9">
+                                    ${.value}
+                                </span>
+                                <div class="form-check col-xs-3 text-xs-right mb-0">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               value="${.value}"
+                                               onchange="${.context.tagToggleChanged}">
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-xs-9">
+
+                    </div>
                 </div>
             </section>
         </section>

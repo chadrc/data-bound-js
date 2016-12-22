@@ -139,3 +139,8 @@ a.hover-underline.active, .hover-underline:hover {
 .gallery-img {
     width: 100%;
 }
+
+.filter-group .list-group .list-group-item.active {
+    background-color: rgb(55, 58, 60);
+    border-color: rgb(55, 58, 60);
+}
