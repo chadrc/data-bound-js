@@ -7,5 +7,7 @@ class ArticlesPageController extends PageController {
         super();
         this.title = "Some Light Reading";
         this.subTitle = "Enjoy";
+
+        this.data = ArticlesData;
     }
 }
