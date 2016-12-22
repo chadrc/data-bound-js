@@ -74,13 +74,22 @@ let paragraphs = [
 ];
 
 let articles = [];
+let catCounts = articleCats.map(()=>{return 0;});
+let tagCounts = articleTags.map(()=>{return 0;});
+let untaggedCount = 0;
 
 for (let i=0; i<articleCount; i++) {
   let catIndex = Math.floor(Math.random() * articleCats.length);
+  catCounts[catIndex]++;
   let tagCount = Math.floor(Math.random() * articleTags.length);
+  if (tagCount == 0) {
+    untaggedCount++;
+  }
   let tags = [];
   for (let j=0; j<tagCount; j++) {
-    tags.push(articleTags[Math.floor(Math.random() * articleTags.length)]);
+    let tagIndex = Math.floor(Math.random() * articleTags.length);
+    tagCounts[tagIndex]++;
+    tags.push(articleTags[tagIndex]);
   }
   let pCount = Math.floor(Math.random() * 5) + 3;
   let ps = [];
@@ -99,5 +108,8 @@ for (let i=0; i<articleCount; i++) {
 let ArticlesData = {
   categories: articleCats,
   tags: articleTags,
-  articles: articles
+  articles: articles,
+  catCounts: catCounts,
+  tagCounts: tagCounts,
+  untaggedCount: untaggedCount
 };

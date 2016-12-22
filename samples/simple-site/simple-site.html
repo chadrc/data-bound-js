@@ -288,6 +288,9 @@
                             <li class="list-group-item clearfix"
                                 data-bound-foreach="${data.categories}">
                                 <span class="col-xs-9">
+                                    <span class="tag tag-pill tag-default">
+                                        ${.context.getCatCount}
+                                    </span>
                                     ${.value}
                                 </span>
                                 <div class="form-check col-xs-3 text-xs-right mb-0">
@@ -318,6 +321,9 @@
                             <li class="list-group-item clearfix"
                                 data-bound-foreach="${data.tags}">
                                 <span class="col-xs-9">
+                                    <span class="tag tag-pill tag-default">
+                                        ${.context.getTagCount}
+                                    </span>
                                     ${.value}
                                 </span>
                                 <div class="form-check col-xs-3 text-xs-right mb-0">
@@ -326,6 +332,22 @@
                                                type="checkbox"
                                                value="${.value}"
                                                onchange="${.context.tagToggleChanged}">
+                                    </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item clearfix">
+                                <span class="col-xs-9">
+                                    <span class="tag tag-pill tag-default">
+                                        ${getUntaggedCount}
+                                    </span>
+                                    Untagged
+                                </span>
+                                <div class="form-check col-xs-3 text-xs-right mb-0">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               value="untagged"
+                                               onchange="${untaggedToggleChanged}">
                                     </label>
                                 </div>
                             </li>
