@@ -97,5 +97,7 @@ for (let i=0; i<articleCount; i++) {
 }
 
 let ArticlesData = {
+  categories: articleCats,
+  tags: articleTags,
   articles: articles
 };
