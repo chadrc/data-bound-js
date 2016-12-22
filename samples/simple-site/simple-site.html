@@ -35,331 +35,332 @@
     <link rel="stylesheet" href="simple-site.css">
 </head>
 <body>
-    <div id="simpleSiteRoot" class="container">
-        <header class="bb-xl row">
-            <section class="col-xs-6">
-                <h1 class="display-3">
-                    Simple Site
-                </h1>
-                <h4 class="ml-3 text-muted">
-                    Showing Multi-View with DateBoundJS
-                </h4>
-            </section>
-            <section class="col-xs-6 mt-3 p-0">
-                <nav class="nav nav-inline float-xs-right bg-inverse p-h">
-                    <a class="text-white nav-link hover-underline ${activeClass}"
-                       href="#home"
-                       onclick="${selectPage}"
-                       data-page="home">
-                        Home
-                    </a>
-                    <a class="text-white nav-link hover-underline ${activeClass}"
-                       href="#about"
-                       onclick="${selectPage}"
-                       data-page="about">
-                        About
-                    </a>
-                    <a class="text-white nav-link hover-underline ${activeClass}"
-                       href="#projects"
-                       onclick="${selectPage}"
-                       data-page="projects">
-                        Projects
-                    </a>
-                    <a class="text-white nav-link hover-underline ${activeClass}"
-                       href="#gallery"
-                       onclick="${selectPage}"
-                       data-page="gallery">
-                        Gallery
-                    </a>
-                    <a class="text-white nav-link hover-underline ${activeClass}"
-                       href="#articles"
-                       onclick="${selectPage}"
-                       data-page="articles">
-                        Articles
-                    </a>
-                </nav>
-            </section>
+<div id="simpleSiteRoot" class="container">
+    <header class="bb-xl row">
+        <section class="col-xs-6">
+            <h1 class="display-3">
+                Simple Site
+            </h1>
+            <h4 class="ml-3 text-muted">
+                Showing Multi-View with DateBoundJS
+            </h4>
+        </section>
+        <section class="col-xs-6 mt-3 p-0">
+            <nav class="nav nav-inline float-xs-right bg-inverse p-h">
+                <a class="text-white nav-link hover-underline ${activeClass}"
+                   href="#home"
+                   onclick="${selectPage}"
+                   data-page="home">
+                    Home
+                </a>
+                <a class="text-white nav-link hover-underline ${activeClass}"
+                   href="#about"
+                   onclick="${selectPage}"
+                   data-page="about">
+                    About
+                </a>
+                <a class="text-white nav-link hover-underline ${activeClass}"
+                   href="#projects"
+                   onclick="${selectPage}"
+                   data-page="projects">
+                    Projects
+                </a>
+                <a class="text-white nav-link hover-underline ${activeClass}"
+                   href="#gallery"
+                   onclick="${selectPage}"
+                   data-page="gallery">
+                    Gallery
+                </a>
+                <a class="text-white nav-link hover-underline ${activeClass}"
+                   href="#articles"
+                   onclick="${selectPage}"
+                   data-page="articles">
+                    Articles
+                </a>
+            </nav>
+        </section>
+    </header>
+    <section class="row">
+        <header class="text-xs-center mt-1 mb-2">
+            <h1 class="display-5">${currentPageTitle}</h1>
+            <h5 class="text-muted">${currentPageSubTitle}</h5>
         </header>
-        <section class="row">
-            <header class="text-xs-center mt-1 mb-2">
-                <h1 class="display-5">${currentPageTitle}</h1>
-                <h5 class="text-muted">${currentPageSubTitle}</h5>
-            </header>
-            <section class="row"
-                     hidden="${~currentPageName}"
-                     data-bound-hidden-neq="home">
-                <div id="home" data-bound-context>
-                    <div class="col-xs-3"></div>
-                    <div class="col-xs-6">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <div class="home-page-card card pos-rel">
-                                    <a href="#about" onclick="${~selectPage}">
-                                        <img src="images/blue-square.png"
-                                             data-page="about"
-                                             class="card-img-top img-thumbnail" alt="About Page">
-                                    </a>
-                                    <div class="home-page-card-name pos-abs abs-bl w-100 text-xs-center
+        <section class="row"
+                 hidden="${~currentPageName}"
+                 data-bound-hidden-neq="home">
+            <div id="home" data-bound-context>
+                <div class="col-xs-3"></div>
+                <div class="col-xs-6">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="home-page-card card pos-rel">
+                                <a href="#about" onclick="${~selectPage}">
+                                    <img src="images/blue-square.png"
+                                         data-page="about"
+                                         class="card-img-top img-thumbnail" alt="About Page">
+                                </a>
+                                <div class="home-page-card-name pos-abs abs-bl w-100 text-xs-center
                                                 bg-faded pt-1 pb-1 rounded-bottom">
-                                        <h4 class="text-white align-top">About</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="home-page-card card pos-rel">
-                                    <a href="#projects" onclick="${~selectPage}">
-                                        <img src="images/blue-square.png"
-                                             data-page="projects"
-                                             class="card-img-top img-thumbnail" alt="Projects Page">
-                                    </a>
-                                    <div class="home-page-card-name pos-abs abs-bl w-100 text-xs-center
-                                                bg-faded pt-1 pb-1 rounded-bottom">
-                                        <h4 class="text-white align-top">Projects</h4>
-                                    </div>
+                                    <h4 class="text-white align-top">About</h4>
                                 </div>
                             </div>
                         </div>
-                        <div class="row bs-mt-buf">
-                            <div class="col-xs-6">
-                                <div class="home-page-card card pos-rel">
-                                    <a href="#gallery" onclick="${~selectPage}">
-                                        <img src="images/blue-square.png"
-                                             data-page="gallery"
-                                             class="card-img-top img-thumbnail" alt="Gallery Page">
-                                    </a>
-                                    <div class="home-page-card-name pos-abs abs-bl w-100 text-xs-center
+                        <div class="col-xs-6">
+                            <div class="home-page-card card pos-rel">
+                                <a href="#projects" onclick="${~selectPage}">
+                                    <img src="images/blue-square.png"
+                                         data-page="projects"
+                                         class="card-img-top img-thumbnail" alt="Projects Page">
+                                </a>
+                                <div class="home-page-card-name pos-abs abs-bl w-100 text-xs-center
                                                 bg-faded pt-1 pb-1 rounded-bottom">
-                                        <h4 class="text-white align-top">Gallery</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="home-page-card card pos-rel">
-                                    <a href="#articles" onclick="${~selectPage}">
-                                        <img src="images/blue-square.png"
-                                             data-page="articles"
-                                             class="card-img-top img-thumbnail" alt="Articles Page">
-                                    </a>
-                                    <div class="home-page-card-name pos-abs abs-bl w-100 text-xs-center
-                                                bg-faded pt-1 pb-1 rounded-bottom">
-                                        <h4 class="text-white align-top">Articles</h4>
-                                    </div>
+                                    <h4 class="text-white align-top">Projects</h4>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-3"></div>
-                </div>
-            </section>
-            <section class="row"
-                     hidden="${~currentPageName}"
-                     data-bound-hidden-neq="about">
-                <div id="about" data-bound-context>
-                    <article data-bound-html="${text}">
-                    </article>
-                    <hr class="hr-tapper">
-                    <form onsubmit="${submitContactRequest}">
-                        <div class="row">
-                            <div class="col-xs-3"></div>
-                            <div class="col-xs-6">
-                                <h4 class="text-xs-center">Contact Us</h4>
-                                <div class="form-group">
-                                    <label for="contactName">
-                                        Your Name:
-                                    </label>
-                                    <input id="contactName"
-                                           name="contactName"
-                                           type="text"
-                                           class="form-control"
-                                           placeholder="Name"
-                                           required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="contactEmail">
-                                        Your Email:
-                                    </label>
-                                    <input id="contactEmail"
-                                           name="contactEmail"
-                                           type="email"
-                                           class="form-control"
-                                           placeholder="Name"
-                                           required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="contactMessage">
-                                        Message:
-                                    </label>
-                                    <textarea id="contactMessage"
-                                              name="contactMessage"
-                                              class="form-control"
-                                              rows="6"
-                                              required></textarea>
-                                </div>
-                                <div class="text-xs-center">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <div class="row bs-mt-buf">
+                        <div class="col-xs-6">
+                            <div class="home-page-card card pos-rel">
+                                <a href="#gallery" onclick="${~selectPage}">
+                                    <img src="images/blue-square.png"
+                                         data-page="gallery"
+                                         class="card-img-top img-thumbnail" alt="Gallery Page">
+                                </a>
+                                <div class="home-page-card-name pos-abs abs-bl w-100 text-xs-center
+                                                bg-faded pt-1 pb-1 rounded-bottom">
+                                    <h4 class="text-white align-top">Gallery</h4>
                                 </div>
                             </div>
-                            <div class="col-xs-3"></div>
                         </div>
-                    </form>
-                    <div id="contactRequestModal" class="modal fade" role="dialog" data-bound-ref>
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    <h4 class="modal-title">Your submission has been received</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p>
-                                        Thank you, ${contactInfo.name}, for your contact request has been submitted.
-                                        We will contact you by email at <strong>${contactInfo.email}</strong> as soon as we are able.
-                                    </p>
-                                    <p>Your submission:</p>
-                                    <p>${contactInfo.message}</p>
+                        <div class="col-xs-6">
+                            <div class="home-page-card card pos-rel">
+                                <a href="#articles" onclick="${~selectPage}">
+                                    <img src="images/blue-square.png"
+                                         data-page="articles"
+                                         class="card-img-top img-thumbnail" alt="Articles Page">
+                                </a>
+                                <div class="home-page-card-name pos-abs abs-bl w-100 text-xs-center
+                                                bg-faded pt-1 pb-1 rounded-bottom">
+                                    <h4 class="text-white align-top">Articles</h4>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-            <section hidden="${~currentPageName}" data-bound-hidden-neq="projects">
-                <div id="projects" data-bound-context>
-                    <section class="carou-nav mb-2">
-                        <div class="carou-nav-inner">
-                            <div data-bound-foreach="${data.projects}"
-                                 class="carou-nav-item ${.arrayContext.selectedClass}"
-                                 onclick="${.arrayContext.selectProject}">
-                                <img src="" data-bound-src="images/${image}">
+                <div class="col-xs-3"></div>
+            </div>
+        </section>
+        <section class="row"
+                 hidden="${~currentPageName}"
+                 data-bound-hidden-neq="about">
+            <div id="about" data-bound-context>
+                <article data-bound-html="${text}">
+                </article>
+                <hr class="hr-tapper">
+                <form onsubmit="${submitContactRequest}">
+                    <div class="row">
+                        <div class="col-xs-3"></div>
+                        <div class="col-xs-6">
+                            <h4 class="text-xs-center">Contact Us</h4>
+                            <div class="form-group">
+                                <label for="contactName">
+                                    Your Name:
+                                </label>
+                                <input id="contactName"
+                                       name="contactName"
+                                       type="text"
+                                       class="form-control"
+                                       placeholder="Name"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">
+                                    Your Email:
+                                </label>
+                                <input id="contactEmail"
+                                       name="contactEmail"
+                                       type="email"
+                                       class="form-control"
+                                       placeholder="Name"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage">
+                                    Message:
+                                </label>
+                                <textarea id="contactMessage"
+                                          name="contactMessage"
+                                          class="form-control"
+                                          rows="6"
+                                          required></textarea>
+                            </div>
+                            <div class="text-xs-center">
+                                <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
-                    </section>
-                    <section class="w-75 mx-auto">
+                        <div class="col-xs-3"></div>
+                    </div>
+                </form>
+                <div id="contactRequestModal" class="modal fade" role="dialog" data-bound-ref>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title">Your submission has been received</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    Thank you, ${contactInfo.name}, for your contact request has been submitted.
+                                    We will contact you by email at <strong>${contactInfo.email}</strong> as soon as we
+                                    are able.
+                                </p>
+                                <p>Your submission:</p>
+                                <p>${contactInfo.message}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section hidden="${~currentPageName}" data-bound-hidden-neq="projects">
+            <div id="projects" data-bound-context>
+                <section class="carou-nav mb-2">
+                    <div class="carou-nav-inner">
                         <div data-bound-foreach="${data.projects}"
-                             hidden="${.arrayContext.selected}"
-                             data-bound-hidden-not
-                             class="article">
-                            <h3>${name}</h3>
-                            <div data-bound-html="${article}"></div>
+                             class="carou-nav-item ${.context.selectedClass}"
+                             onclick="${.context.selectProject}">
+                            <img src="" data-bound-src="images/${image}">
                         </div>
-                    </section>
-                </div>
-            </section>
-            <section hidden="${~currentPageName}" data-bound-hidden-neq="gallery">
-                <div id="gallery" data-bound-context>
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item" data-bound-foreach="${categories}">
-                            <a class="nav-link ${.arrayContext.activeCat}"
-                                onclick="${.arrayContext.selectCat}">
-                                ${.contextValue}
-                                <span class="tag tag-pill tag-default">
-                                    ${.arrayContext.catImageCount}
+                    </div>
+                </section>
+                <section class="w-75 mx-auto">
+                    <div data-bound-foreach="${data.projects}"
+                         hidden="${.context.selected}"
+                         data-bound-hidden-not
+                         class="article">
+                        <h3>${name}</h3>
+                        <div data-bound-html="${article}"></div>
+                    </div>
+                </section>
+            </div>
+        </section>
+        <section hidden="${~currentPageName}" data-bound-hidden-neq="gallery">
+            <div id="gallery" data-bound-context>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item" data-bound-foreach="${categories}">
+                        <a class="nav-link ${.context.activeCat}"
+                           onclick="${.context.selectCat}">
+                            ${.value}
+                            <span class="tag tag-pill tag-default">
+                                    ${.context.catImageCount}
                                 </span>
-                            </a>
+                        </a>
+                    </li>
+                </ul>
+                <section class="card-columns gallery">
+                    <div class="card" data-bound-foreach="${images}">
+                        <img class="card-img-top gallery-img"
+                             src="" data-bound-src="images/${src}"
+                             height="${height}px">
+                    </div>
+                </section>
+            </div>
+        </section>
+        <section hidden="${~currentPageName}" data-bound-hidden-neq="articles">
+            <div id="articles" class="row" data-bound-context>
+                <div class="col-xs-3 filter-group">
+                    <ul class="list-group">
+                        <li class="list-group-item active clearfix">
+                            <h5 class="col-xs-9 list-group-item-heading">
+                                Categories
+                            </h5>
+                            <div class="form-check col-xs-3 text-xs-right mb-0">
+                                <label class="form-check-label">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value="allCats"
+                                           onchange="${allCatToggleChanged}">
+                                </label>
+                            </div>
                         </li>
-                    </ul>
-                    <section class="card-columns gallery">
-                        <div class="card" data-bound-foreach="${images}">
-                            <img class="card-img-top gallery-img"
-                                 src="" data-bound-src="images/${src}"
-                                 height="${height}px">
-                        </div>
-                    </section>
-                </div>
-            </section>
-            <section hidden="${~currentPageName}" data-bound-hidden-neq="articles">
-                <div id="articles" class="row" data-bound-context>
-                    <div class="col-xs-3 filter-group">
-                        <ul class="list-group">
-                            <li class="list-group-item active clearfix">
-                                <h5 class="col-xs-9 list-group-item-heading">
-                                    Categories
-                                </h5>
-                                <div class="form-check col-xs-3 text-xs-right mb-0">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               value="allCats"
-                                                onchange="${allCatToggleChanged}">
-                                    </label>
-                                </div>
-                            </li>
-                            <li class="list-group-item clearfix"
-                                data-bound-foreach="${data.categories}">
+                        <li class="list-group-item clearfix"
+                            data-bound-foreach="${data.categories}">
                                 <span class="col-xs-9">
                                     <span class="tag tag-pill tag-default">
                                         ${.context.getCatCount}
                                     </span>
                                     ${.value}
                                 </span>
-                                <div class="form-check col-xs-3 text-xs-right mb-0">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               value="${.value}"
-                                                onchange="${.context.catToggleChanged}">
-                                    </label>
-                                </div>
-                            </li>
-                        </ul>
+                            <div class="form-check col-xs-3 text-xs-right mb-0">
+                                <label class="form-check-label">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value="${.value}"
+                                           onchange="${.context.catToggleChanged}">
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
 
-                        <ul class="list-group mt-1">
-                            <li class="list-group-item active clearfix">
-                                <h5 class="col-xs-9 list-group-item-heading">
-                                    Tags
-                                </h5>
-                                <div class="form-check col-xs-3 text-xs-right mb-0">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               value="allTags"
-                                               onchange="${allTagToggleChanged}">
-                                    </label>
-                                </div>
-                            </li>
-                            <li class="list-group-item clearfix"
-                                data-bound-foreach="${data.tags}">
+                    <ul class="list-group mt-1">
+                        <li class="list-group-item active clearfix">
+                            <h5 class="col-xs-9 list-group-item-heading">
+                                Tags
+                            </h5>
+                            <div class="form-check col-xs-3 text-xs-right mb-0">
+                                <label class="form-check-label">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value="allTags"
+                                           onchange="${allTagToggleChanged}">
+                                </label>
+                            </div>
+                        </li>
+                        <li class="list-group-item clearfix"
+                            data-bound-foreach="${data.tags}">
                                 <span class="col-xs-9">
                                     <span class="tag tag-pill tag-default">
                                         ${.context.getTagCount}
                                     </span>
                                     ${.value}
                                 </span>
-                                <div class="form-check col-xs-3 text-xs-right mb-0">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               value="${.value}"
-                                               onchange="${.context.tagToggleChanged}">
-                                    </label>
-                                </div>
-                            </li>
-                            <li class="list-group-item clearfix">
+                            <div class="form-check col-xs-3 text-xs-right mb-0">
+                                <label class="form-check-label">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value="${.value}"
+                                           onchange="${.context.tagToggleChanged}">
+                                </label>
+                            </div>
+                        </li>
+                        <li class="list-group-item clearfix">
                                 <span class="col-xs-9">
                                     <span class="tag tag-pill tag-default">
                                         ${getUntaggedCount}
                                     </span>
                                     Untagged
                                 </span>
-                                <div class="form-check col-xs-3 text-xs-right mb-0">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               value="untagged"
-                                               onchange="${untaggedToggleChanged}">
-                                    </label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="col-xs-9">
-
-                    </div>
+                            <div class="form-check col-xs-3 text-xs-right mb-0">
+                                <label class="form-check-label">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value="untagged"
+                                           onchange="${untaggedToggleChanged}">
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </section>
+
+                <div class="col-xs-9">
+
+                </div>
+            </div>
         </section>
-    </div>
+    </section>
+</div>
 </body>
 </html>

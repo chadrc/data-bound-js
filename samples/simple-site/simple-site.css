@@ -68,20 +68,19 @@ a.hover-underline.active, .hover-underline:hover {
 .hr-tapper {
     border: 0;
     height: 1px;
-    background-image: linear-gradient(to right,rgba(55, 58, 60,0),rgba(55, 58, 60,.75),rgba(55, 58, 60,0));
+    background-image: linear-gradient(to right, rgba(55, 58, 60, 0), rgba(55, 58, 60, .75), rgba(55, 58, 60, 0));
 }
-
 
 .home-page-card {
     overflow: hidden;
 }
 
-.home-page-card>.home-page-card-name {
+.home-page-card > .home-page-card-name {
     opacity: 0;
     transition: opacity .25s;
 }
 
-.home-page-card:hover>.home-page-card-name {
+.home-page-card:hover > .home-page-card-name {
     opacity: 1.0;
 }
 
@@ -104,23 +103,23 @@ a.hover-underline.active, .hover-underline:hover {
     cursor: pointer;
 }
 
-.carou-nav-item>img {
+.carou-nav-item > img {
     height: 100px;
     width: 100px;
     transition: width .25s, height .25s;
 }
 
-.carou-nav-item:hover>img {
+.carou-nav-item:hover > img {
     height: 125px;
     width: 125px;
 }
 
-.carou-nav-item.selected>img {
+.carou-nav-item.selected > img {
     height: 125px;
     width: 125px;
 }
 
-.carou-nav-item.selected>img:hover {
+.carou-nav-item.selected > img:hover {
     cursor: default;
 }
 
