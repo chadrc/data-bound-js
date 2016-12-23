@@ -358,7 +358,8 @@
                 <div class="col-xs-9">
                     <ul class="list-unstyled">
                         <li data-bound-foreach="${data.articles}"
-                            class="article-list-item">
+                            class="article-list-item"
+                            onclick="${.context.articleItemClicked}">
                             <h4>${title}</h4>
                             <ul class="pl-0">
                                 <li class="d-inline">
