@@ -56,5 +56,8 @@ class ArticlesPageController extends PageController {
     articleItemClicked(event, boundContext) {
         let article = this.data.articles[boundContext.index];
         console.log(article);
+        let modal = this.subContext.boundElement.subContexts.articleModal;
+        modal.renderWithContext(article);
+        $(modal.domElement).modal("show");
     }
 }

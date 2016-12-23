@@ -373,6 +373,29 @@
                         </li>
                     </ul>
                 </div>
+                <div id="articleModal" class="modal fade" role="dialog" data-bound-context>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <header class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h1 class="modal-title">${title}</h1>
+                                <div>
+                                    <span class="text-muted h4">${category}</span>
+                                    <ul class="list-unstyled float-xs-right mb-0">
+                                        <li data-bound-foreach="${tags}"
+                                            class="tag tag-default ml-1">
+                                            ${.value}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </header>
+                            <section class="modal-body clearfix" data-bound-html="${text}">
+                            </section>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </section>

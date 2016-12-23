@@ -164,3 +164,15 @@ a.hover-underline.active, .hover-underline:hover {
 .list-group.unrounded>.list-group-item:last-child {
     border-radius: 0;
 }
+
+#articleModal img {
+    margin: .5rem;
+}
+
+#articleModal img.float-xs-left {
+    margin-left: 0;
+}
+
+#articleModal img.float-xs-right {
+    margin-right: 0;
+}
