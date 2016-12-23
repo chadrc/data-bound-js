@@ -99,7 +99,7 @@ for (let i=0; i<articleCount; i++) {
 
   articles.push({
     title: "Article " + i,
-    category: categories[catIndex],
+    category: articleCats[catIndex],
     tags: tags,
     text: ps.join('')
   })

@@ -143,3 +143,24 @@ a.hover-underline.active, .hover-underline:hover {
     background-color: rgb(55, 58, 60);
     border-color: rgb(55, 58, 60);
 }
+
+.article-list-item {
+    margin-bottom: 1rem;
+    background-color: rgba(55, 58, 60, .1);
+    cursor: pointer;
+    padding: .5rem;
+    transition: background-color .25s;
+}
+
+.article-list-item:hover {
+    background-color: rgba(55, 58, 60, 0);
+}
+
+.d-inline {
+    display: inline;
+}
+
+.list-group.unrounded>.list-group-item:first-child,
+.list-group.unrounded>.list-group-item:last-child {
+    border-radius: 0;
+}
