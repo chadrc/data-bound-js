@@ -26,8 +26,8 @@ class AboutPageController extends PageController {
     set contextElement(value) {
         super.contextElement = value;
         this.contactRequestModalRef = this.subContext.boundElement.refs.contactRequestModal;
+        this.contactRequestModal = $(this.contactRequestModalRef);
     }
-
 
     submitContactRequest(event, dataBoundContext) {
         event.preventDefault();
@@ -38,7 +38,7 @@ class AboutPageController extends PageController {
         };
 
         this.contactRequestModalRef.renderWithContext(this);
-        this.contactRequstModal.modal("show");
+        this.contactRequestModal.modal("show");
         event.srcElement.reset();
     }
 }
